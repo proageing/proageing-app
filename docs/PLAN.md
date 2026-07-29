@@ -262,12 +262,21 @@ Everything else in this phase needs your account/billing access — see the
 manual list above. Nothing else is blocking the codebase from here.
 
 **Phase 1 — MVP (6–8 weeks)**
-- Free assessment (the 9 ProAgeing Steps checks) → per-step dashboard
-- 90-day programme structure live (content can stage in — first weeks
+- [x] Free assessment (the 9 ProAgeing Steps checks) → per-step dashboard.
+      All 9 assessment types now have a real in-app form
+      (app/assess/<type>), each ported faithfully from proageing-site's
+      actual scoring logic and citations, not reinvented — see the
+      commit history for the specific validated instrument behind each
+      one (Ikigai-9, SLAS Risk Index, Heart Rate Ratio Method, PSQI,
+      LSNS-6/UCLA-3, Rikli & Jones chair-stand test, One-Leg Standing
+      Test). sit-to-stand and balance intentionally drop the source's
+      live camera mirror and demo video — AV aids around the test, not
+      the measurement itself.
+- [ ] 90-day programme structure live (content can stage in — first weeks
   produced, rest scheduled)
-- Daily check-ins, habit streaks, push notifications (FCM)
-- Video via Vimeo Business
-- Stripe subscription paywall
+- [ ] Daily check-ins, habit streaks, push notifications (FCM)
+- [ ] Video via Vimeo Business
+- [ ] Stripe subscription paywall
 - Explicitly OUT of scope for MVP: wearable integration, AI meal
   recognition, social feed, telemedicine, complex analytics, Sanity CMS,
   WhatsApp/Twilio, Redis
