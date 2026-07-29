@@ -53,28 +53,28 @@ export default function VO2MaxPage() {
     <main className="mx-auto max-w-xl px-6 py-12">
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Cardiorespiratory Fitness · ~3 minutes</p>
-          <h1 className="mt-1 text-2xl font-semibold text-neutral-900">VO2 Max & Resting Heart Rate</h1>
-          <p className="mt-3 text-neutral-600">
+          <p className="text-xs font-semibold uppercase tracking-wide text-movement-dark">Cardiorespiratory Fitness · ~3 minutes</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">VO2 Max & Resting Heart Rate</h1>
+          <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             VO2 max measures how efficiently your heart, lungs, and muscles use oxygen during
             exercise. It&apos;s one of the strongest predictors of healthy longevity found in
             ageing research — in one study of over 122,000 adults, the fittest group had an 80%
             lower risk of death than the least fit (Mandsager et al., JAMA Network Open, 2018).
           </p>
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
             We&apos;ll estimate yours from your resting heart rate using the Heart Rate Ratio
             Method (Uth et al., 2004) — no treadmill needed.
           </p>
           <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50 p-4">
-            <h3 className="font-semibold text-neutral-900">📏 Before you begin</h3>
-            <p className="mt-1 text-sm text-neutral-700">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">📏 Before you begin</h3>
+            <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
               For the most accurate result, measure your resting heart rate first thing in the
               morning, before getting out of bed. Count your pulse for a full 60 seconds.
             </p>
           </div>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white"
+            className="mt-6 rounded bg-movement px-4 py-2 font-medium text-white"
           >
             Let&apos;s begin
           </button>
@@ -83,39 +83,39 @@ export default function VO2MaxPage() {
 
       {screen === "questions" && (
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900">Tell us about yourself</h2>
-          <p className="mt-1 text-sm text-neutral-500">Just three numbers — no equipment needed beyond a watch or phone timer.</p>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Tell us about yourself</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Just three numbers — no equipment needed beyond a watch or phone timer.</p>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-neutral-400">About you</p>
-          <div className="mt-2 rounded-lg border border-neutral-200 p-4">
-            <p className="font-medium text-neutral-800">Your age</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">About you</p>
+          <div className="mt-2 rounded-lg border border-border dark:border-border-dark p-4">
+            <p className="font-medium text-ink dark:text-ink-dark">Your age</p>
             <div className="mt-2 flex items-center gap-4">
               <button
                 onClick={() => setAnswers((p) => ({ ...p, age: Math.max(18, Math.min(100, p.age - 1)) }))}
-                className="h-10 w-10 rounded-full border border-neutral-300 text-lg"
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
               >
                 −
               </button>
               <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.age}</span>
               <button
                 onClick={() => setAnswers((p) => ({ ...p, age: Math.max(18, Math.min(100, p.age + 1)) }))}
-                className="h-10 w-10 rounded-full border border-neutral-300 text-lg"
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
               >
                 +
               </button>
-              <span className="text-sm text-neutral-500">years</span>
+              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">years</span>
             </div>
           </div>
 
-          <div className="mt-3 rounded-lg border border-neutral-200 p-4">
-            <p className="font-medium text-neutral-800">Your sex</p>
+          <div className="mt-3 rounded-lg border border-border dark:border-border-dark p-4">
+            <p className="font-medium text-ink dark:text-ink-dark">Your sex</p>
             <div className="mt-2 flex gap-2">
               {(["m", "f"] as Sex[]).map((s) => (
                 <button
                   key={s}
                   onClick={() => setAnswers((p) => ({ ...p, sex: s }))}
                   className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                    answers.sex === s ? "border-primary bg-primary-light text-primary-dark" : "border-neutral-300 text-neutral-600"
+                    answers.sex === s ? "border-movement bg-movement-tint text-movement-dark" : "border-border text-ink-soft"
                   }`}
                 >
                   {s === "m" ? "Male" : "Female"}
@@ -124,35 +124,35 @@ export default function VO2MaxPage() {
             </div>
           </div>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-neutral-400">Your resting heart rate</p>
-          <div className="mt-2 rounded-lg border border-neutral-200 p-4">
-            <p className="font-medium text-neutral-800">Pulse count (60 seconds, at rest)</p>
-            <p className="mt-1 text-xs text-neutral-500">
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Your resting heart rate</p>
+          <div className="mt-2 rounded-lg border border-border dark:border-border-dark p-4">
+            <p className="font-medium text-ink dark:text-ink-dark">Pulse count (60 seconds, at rest)</p>
+            <p className="mt-1 text-xs text-ink-soft dark:text-ink-dark-soft">
               Count your pulse for a full minute while sitting calmly, ideally first thing in the
               morning.
             </p>
             <div className="mt-2 flex items-center gap-4">
               <button
                 onClick={() => setAnswers((p) => ({ ...p, rhr: Math.max(35, Math.min(120, p.rhr - 1)) }))}
-                className="h-10 w-10 rounded-full border border-neutral-300 text-lg"
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
               >
                 −
               </button>
               <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.rhr}</span>
               <button
                 onClick={() => setAnswers((p) => ({ ...p, rhr: Math.max(35, Math.min(120, p.rhr + 1)) }))}
-                className="h-10 w-10 rounded-full border border-neutral-300 text-lg"
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
               >
                 +
               </button>
-              <span className="text-sm text-neutral-500">beats per minute</span>
+              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">beats per minute</span>
             </div>
           </div>
 
           <button
             onClick={() => answers.sex && setScreen("results")}
             disabled={!answers.sex}
-            className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-8 rounded bg-movement px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             See my results
           </button>
@@ -161,40 +161,40 @@ export default function VO2MaxPage() {
 
       {screen === "results" && category && result && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-movement-dark">Your result</p>
           <div className="mt-2 text-center">
-            <div className="text-5xl font-bold text-primary-dark">{score.vo2max}</div>
-            <div className="text-sm font-medium text-neutral-500">estimated VO2 max (mL/kg/min)</div>
+            <div className="text-5xl font-bold text-movement-dark">{score.vo2max}</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">estimated VO2 max (mL/kg/min)</div>
           </div>
 
-          <p className="mt-6 rounded-full bg-primary-light px-3 py-1 text-center text-sm font-semibold text-primary-dark">
+          <p className="mt-6 rounded-full bg-movement-tint px-3 py-1 text-center text-sm font-semibold text-movement-dark">
             {category.label}
           </p>
 
           <div className="mt-4 flex justify-center gap-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-neutral-800">{score.hrMax}</div>
-              <div className="text-xs text-neutral-500">Max HR (bpm)</div>
+              <div className="text-2xl font-bold text-ink dark:text-ink-dark">{score.hrMax}</div>
+              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">Max HR (bpm)</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-neutral-800">{answers.rhr}</div>
-              <div className="text-xs text-neutral-500">Resting HR (bpm)</div>
+              <div className="text-2xl font-bold text-ink dark:text-ink-dark">{answers.rhr}</div>
+              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">Resting HR (bpm)</div>
             </div>
           </div>
 
-          <p className="mt-4 text-xs text-neutral-400 text-center">
+          <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint text-center">
             Estimate for age {answers.age}, {answers.sex === "m" ? "male" : "female"}. Categories
             from Cooper Institute / ACSM norms.
           </p>
 
-          <div className="mt-6 rounded-lg border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-neutral-600">{result.text}</p>
+          <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
           </div>
 
-          <div className="mt-4 rounded-lg border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">✅ Suggested next steps</h3>
-            <ul className="mt-2 list-disc pl-5 text-sm text-neutral-600">
+          <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
               {result.nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
@@ -203,7 +203,7 @@ export default function VO2MaxPage() {
             </ul>
           </div>
 
-          <p className="mt-4 text-xs text-neutral-400">
+          <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
             This is a formula-based estimate, not a lab measurement — individual accuracy varies,
             and it tends to underestimate VO2 max in fitter people. It&apos;s a screening tool, not
             a diagnosis. Always check with your doctor before starting a new exercise programme.
@@ -212,7 +212,7 @@ export default function VO2MaxPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-6 w-full rounded bg-movement px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

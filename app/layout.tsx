@@ -3,8 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ProAgeing — Add life to your years",
-  description:
-    "A guided 90-day healthy longevity transformation programme for adults 45–70.",
+  description: "The 21-Day ProAgeing Challenge — try the 7 ProAgeing Steps for healthy longevity.",
   manifest: "/manifest.json",
 };
 

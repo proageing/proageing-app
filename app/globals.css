@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Warm paper/ink neutrals, matching proageing.org rather than stark
+   white/black. Dark mode follows the same values used there. */
+:root {
+  --paper: #faf9f7;
+  --ink: #444444;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1e1d1b;
+    --ink: #f2f0ea;
+  }
+}
+
 body {
-  background-color: #faf9f7;
+  background-color: var(--paper);
+  color: var(--ink);
 }

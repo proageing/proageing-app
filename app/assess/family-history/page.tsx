@@ -18,8 +18,8 @@ import {
 type Screen = "welcome" | "questions" | "results";
 
 const FLAG_STYLES: Record<string, string> = {
-  none: "bg-neutral-100 text-neutral-500",
-  present: "bg-primary-light text-primary-dark",
+  none: "bg-border/40 text-ink-soft dark:bg-border-dark dark:text-ink-dark-soft",
+  present: "bg-healthrisk-tint text-healthrisk-dark",
   elevated: "bg-red-100 text-red-700",
 };
 const FLAG_LABELS: Record<string, string> = {
@@ -87,22 +87,22 @@ export default function FamilyHistoryPage() {
     <main className="mx-auto max-w-xl px-6 py-12">
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Family History · ~2 minutes</p>
-          <h1 className="mt-1 text-2xl font-semibold text-neutral-900">Family History: Know Your Risk</h1>
-          <p className="mt-3 text-neutral-600">
+          <p className="text-xs font-semibold uppercase tracking-wide text-healthrisk-dark">Family History · ~2 minutes</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Family History: Know Your Risk</h1>
+          <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             Knowing your family's medical history tells you which risks to watch most closely.
             Answer a few short questions to map your inherited risk across the main categories
             that run in families — then share the answers with your doctor to guide earlier,
             smarter screening.
           </p>
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
             Wherever Singapore-specific guidance exists (MOH Clinical Practice Guidelines), we use
             it — it's often stricter or differently calibrated than international guidelines.
             Where it doesn't, we fall back to international standards, and say so.
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white"
+            className="mt-6 rounded bg-healthrisk px-4 py-2 font-medium text-white"
           >
             Let&apos;s begin
           </button>
@@ -111,15 +111,15 @@ export default function FamilyHistoryPage() {
 
       {screen === "questions" && (
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900">Has this run in your family?</h2>
-          <p className="mt-1 text-sm text-neutral-500">
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Has this run in your family?</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
             For each category, tell us if a first-degree relative (parent, sibling, or child) has
             been diagnosed — and at what age, if you know it.
           </p>
 
-          <div className="mt-6 rounded-lg border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">Your sex</h3>
-            <p className="mt-1 text-xs text-neutral-500">
+          <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">Your sex</h3>
+            <p className="mt-1 text-xs text-ink-soft dark:text-ink-dark-soft">
               Used only to apply the right cardiovascular screening threshold (Singapore MOH:
               male &lt;50, female &lt;60).
             </p>
@@ -129,7 +129,7 @@ export default function FamilyHistoryPage() {
                   key={s}
                   onClick={() => setSex(s)}
                   className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold capitalize ${
-                    answers.sex === s ? "border-primary bg-primary-light text-primary-dark" : "border-neutral-300 text-neutral-600"
+                    answers.sex === s ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark" : "border-border text-ink-soft"
                   }`}
                 >
                   {s}
@@ -141,14 +141,14 @@ export default function FamilyHistoryPage() {
           {FAMILY_HISTORY_CATEGORIES.map(({ key, title, sub }) => {
             const d = answers[key];
             return (
-              <div key={key} className="mt-4 rounded-lg border border-neutral-200 p-4">
-                <h3 className="font-semibold text-neutral-900">{title}</h3>
-                <p className="mt-1 text-xs text-neutral-500">{sub}</p>
+              <div key={key} className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
+                <h3 className="font-semibold text-ink dark:text-ink-dark">{title}</h3>
+                <p className="mt-1 text-xs text-ink-soft dark:text-ink-dark-soft">{sub}</p>
                 <div className="mt-3 flex gap-2">
                   <button
                     onClick={() => setHas(key, true)}
                     className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                      d.has === true ? "border-primary bg-primary-light text-primary-dark" : "border-neutral-300 text-neutral-600"
+                      d.has === true ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark" : "border-border text-ink-soft"
                     }`}
                   >
                     Yes
@@ -156,7 +156,7 @@ export default function FamilyHistoryPage() {
                   <button
                     onClick={() => setHas(key, false)}
                     className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                      d.has === false ? "border-primary bg-primary-light text-primary-dark" : "border-neutral-300 text-neutral-600"
+                      d.has === false ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark" : "border-border text-ink-soft"
                     }`}
                   >
                     No
@@ -164,8 +164,8 @@ export default function FamilyHistoryPage() {
                 </div>
 
                 {d.has && (
-                  <div className="mt-3 border-t border-neutral-200 pt-3">
-                    <label className="text-xs text-neutral-500">
+                  <div className="mt-3 border-t border-border dark:border-border-dark pt-3">
+                    <label className="text-xs text-ink-soft dark:text-ink-dark-soft">
                       Age of the youngest relative when diagnosed (your best estimate is fine)
                     </label>
                     <input
@@ -175,14 +175,14 @@ export default function FamilyHistoryPage() {
                       max={110}
                       value={d.age ?? ""}
                       onChange={(e) => setAge(key, e.target.value === "" ? null : parseInt(e.target.value, 10))}
-                      className="mt-1 w-24 rounded border border-neutral-300 px-2 py-1 text-center"
+                      className="mt-1 w-24 rounded border border-border dark:border-border-dark px-2 py-1 text-center"
                     />
                   </div>
                 )}
 
                 {key === "cancer" && d.has && (
-                  <div className="mt-3 border-t border-neutral-200 pt-3">
-                    <label className="text-xs text-neutral-500">Which type, mainly? (pick the one you know best)</label>
+                  <div className="mt-3 border-t border-border dark:border-border-dark pt-3">
+                    <label className="text-xs text-ink-soft dark:text-ink-dark-soft">Which type, mainly? (pick the one you know best)</label>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {CANCER_TYPE_OPTIONS.map((opt) => (
                         <button
@@ -190,8 +190,8 @@ export default function FamilyHistoryPage() {
                           onClick={() => setCancerType(opt.value)}
                           className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
                             answers.cancer.type === opt.value
-                              ? "border-primary bg-primary-light text-primary-dark"
-                              : "border-neutral-300 text-neutral-600"
+                              ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark"
+                              : "border-border text-ink-soft"
                           }`}
                         >
                           {opt.label}
@@ -207,7 +207,7 @@ export default function FamilyHistoryPage() {
           <button
             onClick={() => isFamilyHistoryComplete(answers) && setScreen("results")}
             disabled={!isFamilyHistoryComplete(answers)}
-            className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-8 rounded bg-healthrisk px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             See my results
           </button>
@@ -216,10 +216,10 @@ export default function FamilyHistoryPage() {
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-healthrisk-dark">Your result</p>
           <div className="mt-2 text-center">
-            <div className="text-4xl font-bold text-primary-dark">{summary.flaggedCount}</div>
-            <div className="text-sm font-medium text-neutral-500">
+            <div className="text-4xl font-bold text-healthrisk-dark">{summary.flaggedCount}</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">
               of 4 categories show family history
               {summary.elevatedCount > 0 ? ` (${summary.elevatedCount} early-onset)` : ""}
             </div>
@@ -229,20 +229,20 @@ export default function FamilyHistoryPage() {
             {FAMILY_HISTORY_CATEGORIES.map(({ key, title }) => {
               const r = summary.results[key];
               return (
-                <div key={key} className="rounded-lg border border-neutral-200 p-4">
+                <div key={key} className="rounded-lg border border-border dark:border-border-dark p-4">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-semibold text-neutral-900">{title}</h3>
+                    <h3 className="font-semibold text-ink dark:text-ink-dark">{title}</h3>
                     <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${FLAG_STYLES[r.level]}`}>
                       {FLAG_LABELS[r.level]}
                     </span>
                   </div>
                   {r.source && (
-                    <p className="mt-2 inline-block rounded-full border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-xs font-semibold text-neutral-500">
+                    <p className="mt-2 inline-block rounded-full border border-border dark:border-border-dark bg-paper px-2 py-0.5 text-xs font-semibold text-ink-soft dark:bg-white/5 dark:text-ink-dark-soft">
                       {r.source}
                     </p>
                   )}
-                  <p className="mt-2 text-sm text-neutral-600">{r.text}</p>
-                  <ul className="mt-2 list-disc pl-5 text-sm text-neutral-600">
+                  <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{r.text}</p>
+                  <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
                     {r.steps.map((step) => (
                       <li key={step} className="mt-1">
                         {step}
@@ -254,7 +254,7 @@ export default function FamilyHistoryPage() {
             })}
           </div>
 
-          <p className="mt-4 text-xs text-neutral-400">
+          <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
             This is an informational screening tool, not a diagnosis. Only a doctor can properly
             assess your personal and family risk — please share these answers with them,
             especially for any category flagged above.
@@ -263,7 +263,7 @@ export default function FamilyHistoryPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-6 w-full rounded bg-healthrisk px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

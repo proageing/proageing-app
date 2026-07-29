@@ -58,21 +58,21 @@ export default function NutritionProteinPage() {
     <main className="mx-auto max-w-xl px-6 py-12">
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Nutrition & Protein · ~3 minutes</p>
-          <h1 className="mt-1 text-2xl font-semibold text-neutral-900">Nutrition & Protein Check</h1>
-          <p className="mt-3 text-neutral-600">
+          <p className="text-xs font-semibold uppercase tracking-wide text-nutrition-dark">Nutrition & Protein · ~3 minutes</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Nutrition & Protein Check</h1>
+          <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             Older adults need more protein per kg of body weight than younger adults do, just to
             maintain the same muscle — but intake often quietly falls short. This check screens
             how often you're eating protein-rich foods across a typical week.
           </p>
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
             Adapted from the Protein Screener 55+ (a validated Dutch tool) using food items
             confirmed relevant to Singapore's multi-ethnic diet. It's a directional guide, not a
             lab-grade measurement.
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white"
+            className="mt-6 rounded bg-nutrition px-4 py-2 font-medium text-white"
           >
             Let&apos;s begin
           </button>
@@ -81,13 +81,13 @@ export default function NutritionProteinPage() {
 
       {screen === "questions" && (
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900">How often do you eat these?</h2>
-          <p className="mt-1 text-sm text-neutral-500">Think about a normal week for you — no right or wrong answers.</p>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often do you eat these?</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Think about a normal week for you — no right or wrong answers.</p>
 
           <div className="mt-6 flex flex-col gap-6">
             {PROTEIN_FOOD_QUESTIONS.map((q) => (
               <div key={q.key}>
-                <p className="font-medium text-neutral-800">{q.label}</p>
+                <p className="font-medium text-ink dark:text-ink-dark">{q.label}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {FREQUENCY_OPTIONS.map((opt) => (
                     <button
@@ -95,8 +95,8 @@ export default function NutritionProteinPage() {
                       onClick={() => setAnswer(q.key, opt.value)}
                       className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
                         answers[q.key] === opt.value
-                          ? "border-primary bg-primary-light text-primary-dark"
-                          : "border-neutral-300 text-neutral-600"
+                          ? "border-nutrition bg-nutrition-tint text-nutrition-dark"
+                          : "border-border text-ink-soft"
                       }`}
                     >
                       {opt.label}
@@ -107,7 +107,7 @@ export default function NutritionProteinPage() {
             ))}
 
             <div>
-              <p className="font-medium text-neutral-800">
+              <p className="font-medium text-ink dark:text-ink-dark">
                 At your main meal, how much meat, fish, tofu, or eggs do you usually have?
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -117,8 +117,8 @@ export default function NutritionProteinPage() {
                     onClick={() => setAnswer("portion", opt.value)}
                     className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
                       answers.portion === opt.value
-                        ? "border-primary bg-primary-light text-primary-dark"
-                        : "border-neutral-300 text-neutral-600"
+                        ? "border-nutrition bg-nutrition-tint text-nutrition-dark"
+                        : "border-border text-ink-soft"
                     }`}
                   >
                     {opt.label}
@@ -131,7 +131,7 @@ export default function NutritionProteinPage() {
           <button
             onClick={() => isNutritionComplete(answers) && setScreen("results")}
             disabled={!isNutritionComplete(answers)}
-            className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-8 rounded bg-nutrition px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             See my results
           </button>
@@ -140,24 +140,24 @@ export default function NutritionProteinPage() {
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-nutrition-dark">Your result</p>
           <div className="mt-2 text-center">
-            <div className="text-5xl font-bold text-primary-dark">{score}</div>
-            <div className="text-sm font-medium text-neutral-500">protein-source frequency score · out of 32</div>
+            <div className="text-5xl font-bold text-nutrition-dark">{score}</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">protein-source frequency score · out of 32</div>
           </div>
 
-          <p className="mt-6 rounded-full bg-primary-light px-3 py-1 text-center text-sm font-semibold text-primary-dark">
+          <p className="mt-6 rounded-full bg-nutrition-tint px-3 py-1 text-center text-sm font-semibold text-nutrition-dark">
             {result.label}
           </p>
 
-          <div className="mt-6 rounded-lg border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-neutral-600">{result.text}</p>
+          <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
           </div>
 
-          <div className="mt-4 rounded-lg border border-neutral-200 p-4">
-            <h3 className="font-semibold text-neutral-900">✅ Suggested next steps</h3>
-            <ul className="mt-2 list-disc pl-5 text-sm text-neutral-600">
+          <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
+            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
               {result.nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
@@ -166,7 +166,7 @@ export default function NutritionProteinPage() {
             </ul>
           </div>
 
-          <p className="mt-4 text-xs text-neutral-400">
+          <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
             This is an informational screening tool, not a diagnosis. For a precise measurement
             of your protein intake, ask your doctor for a referral to a dietitian.
           </p>
@@ -174,7 +174,7 @@ export default function NutritionProteinPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className="mt-6 w-full rounded bg-nutrition px-4 py-2 font-medium text-white disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

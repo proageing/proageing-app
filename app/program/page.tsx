@@ -14,6 +14,7 @@ import {
   type ProgramEnrollment,
 } from "@/lib/program";
 import { contentForDay } from "@/lib/program21";
+import { Logo } from "@/components/Logo";
 
 type LoadState = "loading" | "no-enrollment" | "ready";
 
@@ -108,7 +109,7 @@ export default function ProgramPage() {
   if (loadState === "loading") {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-neutral-500">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
       </main>
     );
   }
@@ -116,15 +117,20 @@ export default function ProgramPage() {
   if (loadState === "no-enrollment") {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
-        <h1 className="text-2xl font-semibold text-neutral-900">The 21-Day ProAgeing Challenge</h1>
-        <p className="mt-3 text-neutral-600">
+        <div className="mx-auto">
+          <Logo size={48} />
+        </div>
+        <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+          The 21-Day ProAgeing Challenge
+        </h1>
+        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
           Try out and start living the 7 ProAgeing Steps — one check and one small action a day.
           Day 1 begins today.
         </p>
         <button
           onClick={handleStart}
           disabled={starting}
-          className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+          className="mt-6 rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
         >
           {starting ? "Starting…" : "Begin day 1"}
         </button>
@@ -140,16 +146,16 @@ export default function ProgramPage() {
       <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
         Day {currentDay} of {PROGRAM_LENGTH_DAYS}
       </p>
-      <h1 className="mt-1 text-2xl font-semibold text-neutral-900">{content.pillar}</h1>
+      <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
 
       {streak > 0 && (
-        <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark">
+        <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
           🔥 {streak} day{streak === 1 ? "" : "s"} streak
         </p>
       )}
 
       {content.isProfileReveal && (
-        <div className="mt-4 rounded-lg border border-primary bg-primary-light p-4">
+        <div className="mt-4 rounded-xl border border-primary bg-primary-light p-4 dark:bg-primary-light-dark">
           <p className="text-sm font-semibold text-primary-dark">
             All 7 ProAgeing Steps checked — see your full Healthy Longevity Profile on your{" "}
             <Link href="/dashboard" className="underline">
@@ -160,45 +166,45 @@ export default function ProgramPage() {
         </div>
       )}
 
-      <div className="mt-6 rounded-lg border border-neutral-200 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Learn</p>
-        <p className="mt-2 text-sm text-neutral-700">{content.learn}</p>
-        <label className="mt-3 flex items-center gap-2 text-sm text-neutral-600">
-          <input type="checkbox" checked={learned} onChange={(e) => setLearned(e.target.checked)} className="h-4 w-4 accent-orange-500" />
+      <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Learn</p>
+        <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
+        <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+          <input type="checkbox" checked={learned} onChange={(e) => setLearned(e.target.checked)} className="h-4 w-4 accent-primary" />
           Read today&apos;s insight
         </label>
       </div>
 
-      <div className="mt-4 rounded-lg border border-neutral-200 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Act</p>
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Act</p>
         {content.assessments && content.assessments.length > 0 && (
           <div className="mt-2 flex flex-col gap-2">
             {content.assessments.map((a) => (
               <Link
                 key={a.href}
                 href={a.href}
-                className="rounded border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark"
+                className="rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark transition hover:bg-primary-light dark:hover:bg-primary-light-dark"
               >
                 {a.label} →
               </Link>
             ))}
           </div>
         )}
-        <p className="mt-3 text-sm text-neutral-700">{content.action}</p>
-        <label className="mt-3 flex items-center gap-2 text-sm text-neutral-600">
-          <input type="checkbox" checked={actionDone} onChange={(e) => setActionDone(e.target.checked)} className="h-4 w-4 accent-orange-500" />
+        <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">{content.action}</p>
+        <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+          <input type="checkbox" checked={actionDone} onChange={(e) => setActionDone(e.target.checked)} className="h-4 w-4 accent-primary" />
           {content.isClose ? "Done — retaken & Keystone Habit declared" : "Done for today"}
         </label>
       </div>
 
-      <div className="mt-4 rounded-lg border border-neutral-200 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Reflect</p>
-        <p className="mt-2 text-sm font-medium text-neutral-800">{content.reflect}</p>
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Reflect</p>
+        <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         <textarea
           value={reflection}
           onChange={(e) => setReflection(e.target.value)}
           rows={3}
-          className="mt-2 w-full rounded border border-neutral-300 px-3 py-2"
+          className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
           placeholder="Your answer…"
         />
       </div>
@@ -206,11 +212,11 @@ export default function ProgramPage() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+        className="mt-6 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
       >
         {saving ? "Saving…" : "Save today's progress"}
       </button>
-      {saveStatus && <p className="mt-2 text-sm text-neutral-600">{saveStatus}</p>}
+      {saveStatus && <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{saveStatus}</p>}
     </main>
   );
 }

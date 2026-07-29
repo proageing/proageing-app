@@ -49,11 +49,11 @@ export default function ImportCallbackPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
-      {state === "working" && <p className="text-neutral-500">Importing your history…</p>}
+      {state === "working" && <p className="text-ink-soft dark:text-ink-dark-soft">Importing your history…</p>}
 
       {state === "needs-primary-signin" && (
         <>
-          <p className="text-neutral-700">
+          <p className="text-ink-soft dark:text-ink-dark-soft">
             Sign in to your ProAgeing account first, then use the import link from your
             dashboard again.
           </p>
@@ -65,7 +65,7 @@ export default function ImportCallbackPage() {
 
       {state === "done" && (
         <>
-          <p className="text-neutral-700">{message}</p>
+          <p className="text-ink-soft dark:text-ink-dark-soft">{message}</p>
           <Link href="/dashboard" className="mt-4 text-primary underline">
             Back to dashboard
           </Link>

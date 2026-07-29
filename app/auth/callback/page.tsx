@@ -29,7 +29,7 @@ export default function AuthCallbackPage() {
           </a>
         </>
       ) : (
-        <p className="text-neutral-500">Signing you in…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">Signing you in…</p>
       )}
     </main>
   );

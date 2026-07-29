@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
+import { Logo } from "@/components/Logo";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -80,7 +82,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-neutral-500">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
       </main>
     );
   }
@@ -90,34 +92,42 @@ export default function DashboardPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-neutral-900">Your longevity dashboard</h1>
-        <button onClick={handleSignOut} className="text-sm text-neutral-500 underline">
+        <Logo size={36} />
+        <button onClick={handleSignOut} className="text-sm text-ink-faint underline dark:text-ink-dark-faint">
           Sign out
         </button>
       </div>
 
-      <p className="mt-2 text-sm text-neutral-600">
+      <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+        Your longevity dashboard
+      </h1>
+
+      <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
         {completedCount} of {ASSESSMENT_TYPES.length} checks completed
       </p>
-      <div className="mt-2 h-2 w-full rounded-full bg-neutral-200">
+      <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
         <div
-          className="h-2 rounded-full bg-primary"
+          className="h-2 rounded-full bg-primary transition-all"
           style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
         />
       </div>
 
-      <ul className="mt-8 divide-y divide-neutral-200">
-        {ASSESSMENT_TYPES.map(({ type, title, href }) => {
+      <ul className="mt-8 divide-y divide-border dark:divide-border-dark">
+        {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
           const row = latestByType.get(type);
+          const style = PILLAR_STYLES[color];
           return (
             <li key={type} className="flex items-center justify-between py-4">
-              <span className="font-medium text-neutral-900">{title}</span>
+              <span className="flex items-center gap-3">
+                <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
+                <span className="font-medium text-ink dark:text-ink-dark">{title}</span>
+              </span>
               {href ? (
-                <Link href={href} className="text-primary underline">
+                <Link href={href} className={`text-sm font-semibold underline ${style.eyebrow}`}>
                   {row ? `${formatEntryData(type, row.entry_data)} · Retake` : "Start"}
                 </Link>
               ) : (
-                <span className="text-neutral-600">
+                <span className="text-sm text-ink-soft dark:text-ink-dark-soft">
                   {row ? formatEntryData(type, row.entry_data) : "Not started"}
                 </span>
               )}
@@ -128,12 +138,12 @@ export default function DashboardPage() {
 
       <Link
         href="/program"
-        className="mt-8 block rounded-lg bg-primary-light px-4 py-3 text-center font-semibold text-primary-dark"
+        className="mt-8 block rounded-xl bg-primary-light px-4 py-3 text-center font-semibold text-primary-dark transition hover:brightness-95 dark:bg-primary-light-dark"
       >
         Go to your 21-Day ProAgeing Challenge
       </Link>
 
-      <Link href="/import" className="mt-4 inline-block text-sm text-primary underline">
+      <Link href="/import" className="mt-4 inline-block text-sm text-primary-dark underline">
         Import your ProAgeing Steps history from proageing.org
       </Link>
     </main>
