@@ -107,14 +107,20 @@ export default function DashboardPage() {
       </div>
 
       <ul className="mt-8 divide-y divide-neutral-200">
-        {ASSESSMENT_TYPES.map(({ type, title }) => {
+        {ASSESSMENT_TYPES.map(({ type, title, href }) => {
           const row = latestByType.get(type);
           return (
             <li key={type} className="flex items-center justify-between py-4">
               <span className="font-medium text-neutral-900">{title}</span>
-              <span className="text-neutral-600">
-                {row ? formatEntryData(type, row.entry_data) : "Not started"}
-              </span>
+              {href ? (
+                <Link href={href} className="text-primary underline">
+                  {row ? `${formatEntryData(type, row.entry_data)} · Retake` : "Start"}
+                </Link>
+              ) : (
+                <span className="text-neutral-600">
+                  {row ? formatEntryData(type, row.entry_data) : "Not started"}
+                </span>
+              )}
             </li>
           );
         })}
