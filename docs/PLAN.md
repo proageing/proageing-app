@@ -272,9 +272,16 @@ manual list above. Nothing else is blocking the codebase from here.
       Test). sit-to-stand and balance intentionally drop the source's
       live camera mirror and demo video — AV aids around the test, not
       the measurement itself.
-- [ ] 90-day programme structure live (content can stage in — first weeks
-  produced, rest scheduled)
-- [ ] Daily check-ins, habit streaks, push notifications (FCM)
+- [x] 90-day programme mechanism — enrollment, day-number tracking
+      against a real start date, phase lookup (Foundation / Strength &
+      Metabolism / Future Health), and a daily checklist (video watched
+      / habit completed / note) that upserts into day_progress
+      (app/program, lib/program.ts). Actual day-by-day video/habit
+      content is still a placeholder — that's real editorial content
+      that needs producing, not something to fabricate. "Content can
+      stage in" still applies once that content exists.
+- [x] Habit streaks — consecutive completed-day count, shown on
+      app/program. Push notifications (FCM) not started.
 - [ ] Video via Vimeo Business
 - [ ] Stripe subscription paywall
 - Explicitly OUT of scope for MVP: wearable integration, AI meal
