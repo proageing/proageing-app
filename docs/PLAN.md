@@ -247,11 +247,12 @@ Prepared and ready:
 - [x] Repo location — `proageing/proageing-app`, a separate repo from
       CelebrateYouHub, matching `proageing-site`'s pattern. Next.js 15 +
       TypeScript + Tailwind scaffold committed.
+- [x] Read-path/import mechanism — built client-side, no service-role key
+      needed; see §Open decisions item 5. Untested until this app's own
+      Supabase project exists.
 
-Still open, blocks starting the actual codebase:
-- [ ] Read-path/import mechanism itself — RLS now confirms it can be done
-      client-side with the user's own session (no service-role key needed),
-      but the actual implementation isn't built yet
+Everything else in this phase needs your account/billing access — see the
+manual list above. Nothing else is blocking the codebase from here.
 
 **Phase 1 — MVP (6–8 weeks)**
 - Free assessment (the 9 ProAgeing Steps checks) → per-step dashboard
@@ -299,14 +300,18 @@ code:
 4. **Shared identity between apps** — not yet decided whether a user in
    both *Celebrate You!* and ProAgeing should have any linked account. Not
    assumed in the data model above.
-5. **Results read-path from the shared project** — a user's existing
-   assessment history (in the CelebrateYouHub/proageing.org shared Supabase
-   project, `xdmamjeqqqsglqiltzvn`) needs to reach the new app's own,
-   isolated Supabase project somehow. User indicated a workaround is
-   planned; mechanism not yet specified here. Candidates once defined: pull
-   via that project's API at signup (matched by email/user id) vs. a
-   scheduled sync job. Update this doc once decided — don't let the
-   mechanism live only in someone's head.
+5. ~~Results read-path from the shared project~~ — **resolved and
+   implemented**: `lib/sharedSupabase.ts`, `lib/importHistory.ts`, and
+   `app/import/page.tsx`. A user enters their email, gets a one-time code
+   against the shared project (`xdmamjeqqqsglqiltzvn`), and on verification
+   their `proageing_results` rows (scoped to their own `auth.uid()` there
+   by the RLS policy in item 6) are copied into this app's own
+   `assessment_results` table under the signed-in user here, tagged
+   `source='proageing_site_import'`. Idempotent — re-running skips rows
+   already imported (deduped on `assessment_type` + `created_at`). No
+   service-role key involved on either side. Untested end-to-end since
+   this app's own Supabase project doesn't exist yet (Phase 0 manual step);
+   ready to verify once it does.
 6. ~~`proageing_results` RLS policy~~ — **resolved**:
    ```
    DELETE  "Users can delete their own proageing results"  USING (auth.uid() = user_id)
