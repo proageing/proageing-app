@@ -6,22 +6,16 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
+import { formatEntryData, greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { HomeCards } from "@/components/HomeCards";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
   assessment_type: AssessmentType;
   entry_data: Record<string, unknown>;
   created_at: string;
-}
-
-function formatEntryData(type: AssessmentType, entryData: Record<string, unknown>): string {
-  if (type === "family-history") {
-    const flagged = entryData.elevated_count;
-    return typeof flagged === "number" ? `${flagged} area${flagged === 1 ? "" : "s"} flagged` : "—";
-  }
-  return typeof entryData.score === "number" ? String(entryData.score) : "—";
 }
 
 const WELCOME_STEPS = [
@@ -42,6 +36,7 @@ const WELCOME_STEPS = [
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [greetingName, setGreetingName] = useState("there");
   const [latestByType, setLatestByType] = useState<Map<AssessmentType, ResultRow>>(new Map());
 
   useEffect(() => {
@@ -56,6 +51,8 @@ export default function DashboardPage() {
         router.push("/signin");
         return;
       }
+
+      setGreetingName(greetingNameFromEmail(user.email));
 
       const { data, error } = await supabase
         .from("assessment_results")
@@ -110,18 +107,16 @@ export default function DashboardPage() {
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
       <AppHeader onSignOut={handleSignOut} />
 
-      {isFirstVisit ? (
-        <>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-primary-dark">Welcome to ProAge</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-            Let&apos;s find out how you&apos;re really ageing.
-          </h1>
-          <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
-            Healthy longevity isn&apos;t one number — it&apos;s 7 steps working together. Here&apos;s how this app
-            works.
-          </p>
+      <p className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
+      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
+        {isFirstVisit ? "Here's how ProAge works." : "Here's your longevity activity."}
+      </p>
 
-          <div className="mt-6 flex flex-col gap-4">
+      <HomeCards completedCount={completedCount} totalCount={ASSESSMENT_TYPES.length} />
+
+      {isFirstVisit && (
+        <>
+          <div className="mt-8 flex flex-col gap-4">
             {WELCOME_STEPS.map((step, i) => (
               <div
                 key={step.title}
@@ -137,24 +132,22 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
+        </>
+      )}
 
-          <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
-            Your 9 checks
-          </p>
-        </>
-      ) : (
-        <>
-          <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Welcome back</h1>
-          <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-            {completedCount} of {ASSESSMENT_TYPES.length} checks completed
-          </p>
-          <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
-            <div
-              className="h-2 rounded-full bg-primary transition-all"
-              style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
-            />
-          </div>
-        </>
+      <p
+        id="checks-list"
+        className="mt-8 scroll-mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint"
+      >
+        Your 9 checks
+      </p>
+      {!isFirstVisit && (
+        <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
+          <div
+            className="h-2 rounded-full bg-primary transition-all"
+            style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
+          />
+        </div>
       )}
 
       <ul className="mt-4 divide-y divide-border dark:divide-border-dark">
@@ -181,14 +174,7 @@ export default function DashboardPage() {
         })}
       </ul>
 
-      <Link
-        href="/program"
-        className="mt-8 block rounded-xl bg-primary-light px-4 py-3 text-center font-semibold text-primary-dark transition hover:brightness-95 dark:bg-primary-light-dark"
-      >
-        Go to your 21-Day ProAgeing Challenge
-      </Link>
-
-      <Link href="/import" className="mt-4 inline-block text-sm text-primary-dark underline">
+      <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
         Import your ProAgeing Steps history from proageing.org
       </Link>
 

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Warm paper/ink neutrals, matching proageing.org rather than stark
    white/black. Dark mode follows the same values used there. */
 :root {
