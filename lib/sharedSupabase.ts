@@ -13,9 +13,11 @@ const SHARED_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SHARED_SUPABASE_ANON_KE
 
 // A distinct storage key so this client's session never collides with, or
 // gets overwritten by, the primary app's own Supabase auth session in the
-// same browser (see lib/supabase.ts).
+// same browser (see lib/supabase.ts). detectSessionInUrl is off for the
+// same cross-client-collision reason explained in lib/supabase.ts.
 export const sharedSupabase = createClient(SHARED_SUPABASE_URL, SHARED_SUPABASE_ANON_KEY, {
   auth: {
     storageKey: "proageing-shared-auth",
+    detectSessionInUrl: false,
   },
 });

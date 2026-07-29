@@ -19,25 +19,22 @@ interface SharedResultRow {
   created_at: string;
 }
 
-// Step 1: send a one-time passcode to the user's email against the shared
+// Step 1: send a magic sign-in link to the user's email against the shared
 // project. Client-side only — no service-role key involved (docs/PLAN.md
-// §Open decisions item 6).
-export async function sendSharedProjectOtp(email: string): Promise<{ error: string | null }> {
-  const { error } = await sharedSupabase.auth.signInWithOtp({ email });
-  return { error: error?.message ?? null };
-}
-
-// Step 2: verify the emailed code, establishing a session against the
-// shared project.
-export async function verifySharedProjectOtp(
+// §Open decisions item 6). Magic link, not a typed code, so it works with
+// Supabase's default email service — no custom SMTP/template setup needed.
+export async function sendSharedProjectMagicLink(
   email: string,
-  token: string
+  redirectTo: string
 ): Promise<{ error: string | null }> {
-  const { error } = await sharedSupabase.auth.verifyOtp({ email, token, type: "email" });
+  const { error } = await sharedSupabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: redirectTo },
+  });
   return { error: error?.message ?? null };
 }
 
-// Step 3: pull the signed-in user's own rows from the shared project
+// Step 2: pull the signed-in user's own rows from the shared project
 // (RLS-scoped to their auth.uid() there) and copy any not already imported
 // into this app's own assessment_results table, tagged
 // source='proageing_site_import'. Idempotent — safe to re-run.
