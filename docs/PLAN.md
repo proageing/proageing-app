@@ -176,22 +176,23 @@ a small paid traffic run, to get real conversion and CAC numbers.
 | Layer | Choice |
 |---|---|
 | Frontend | Next.js 15 + TypeScript + Tailwind, as an installable PWA |
-| Backend | Express or NestJS (pick based on team familiarity) on Cloud Run — for Stripe/business logic needing a service key, same pattern as CelebrateYouHub's Vercel function |
+| Backend | **Next.js API routes** (serverless functions on Vercel) — for Stripe/business logic needing a service key, same pattern as CelebrateYouHub's existing Vercel function. **Changed 2026-07-29**: originally a separate Express/NestJS service on Cloud Run; dropped once Hosting (below) moved to Vercel, since API routes cover the same need without a second service to deploy and operate. |
 | Database | **Supabase (new, dedicated project)** — not Cloud SQL. Supabase is already hosted Postgres + Auth + RLS, satisfies the "relational, not Firestore" goal, and the team already runs it successfully for both CelebrateYouHub and proageing-site. **Isolated from those two existing projects** (confirmed decision) — not shared, to keep subscription/payment/corporate data separate from the free-hub and public-assessment data. See §3 for the read-path needed back into proageing-site's project. |
-| Cache | Redis (Memorystore) — **defer until load requires it**, not needed at MVP scale |
+| Cache | Redis — **defer until load requires it**, not needed at MVP scale. Provider TBD at that point (e.g. Upstash, which fits a Vercel deployment more directly than GCP Memorystore did under the old hosting choice). |
 | Auth | **Supabase Auth**, magic-link/OTP first — matches the pattern already proven in both CelebrateYouHub and proageing-site rather than introducing a fourth auth system (Firebase). Social/corporate SSO later, same as originally planned. |
 | Video | Vimeo Business (embed, privacy, analytics, captions — avoid self-hosting) |
 | Payments | Stripe Singapore |
 | Analytics | PostHog (product) + GA4 (marketing) |
-| Notifications | Firebase Cloud Messaging (push) |
+| Notifications | Firebase Cloud Messaging (push) — a lightweight Firebase project for this alone, not the GCP hosting environment below |
 | CMS | **Deferred** — Sanity CMS later, not at MVP |
 | WhatsApp nudges | **Deferred** — Twilio/WhatsApp later, not at MVP |
-| Hosting | Google Cloud Platform (same environment as existing Flourish) |
-| CI/CD | GitHub Actions |
+| Hosting | **Vercel.** **Changed 2026-07-29** — originally Google Cloud Platform, "same environment as existing Flourish". Reversed once we noticed the plan was internally inconsistent: the Backend row above already modeled itself on "CelebrateYouHub's Vercel function," but CelebrateYouHub itself runs on Vercel, not GCP — so "alongside Flourish" and "same pattern as CelebrateYouHub" pointed two different ways. Vercel wins: it's the reference deployment target for Next.js (zero-config, no Dockerfile/Cloud Run service to maintain), and it matches the real precedent already running in this product family. Tradeoff: this app no longer shares infrastructure with Flourish's GCP environment — revisit if that turns out to matter (e.g. a future need to share GCP-side services or billing). |
+| CI/CD | Vercel's native git integration (auto-deploy on push to `main`, preview deploys per PR) — GitHub Actions still optional for running tests/lint before merge, not for deployment itself |
 
-Rationale for Postgres-over-Firestore, Cloud Run, and the deferred items is
-unchanged from the original architecture reference — see chat history for
-the full "why" per component if needed.
+Rationale for Postgres-over-Firestore and the deferred items is unchanged
+from the original architecture reference — see chat history for the full
+"why" per component if needed. Hosting/Backend rationale is above, dated,
+since it reverses the original reference on those two rows specifically.
 
 ## 7. Data model (initial outline)
 
@@ -231,12 +232,13 @@ data-model addition now vs. a retrofit later if ever reviewed.
 **Phase 0 — Foundations (1–2 weeks)**
 
 Manual (needs your account/billing access — not something I can do from here):
-- [ ] Create the new, isolated Supabase project; run `supabase/schema.sql`
-      in its SQL Editor once created
-- [ ] Create/confirm the GCP project for this app (alongside Flourish)
+- [ ] Create the Vercel project — import `proageing/proageing-app`, add the
+      env vars from `.env.example` (Supabase + shared-project values),
+      deploy. Replaces the old "create/confirm the GCP project" step now
+      that Hosting is Vercel (§6, changed 2026-07-29).
 - [ ] Create the Stripe Singapore account, add the products/prices from
       PLAN.md §5
-- [ ] Point `app.proageing.org` DNS at wherever the frontend ends up hosted
+- [ ] Point `app.proageing.org` DNS at the Vercel deployment once live
 
 Prepared and ready:
 - [x] `proageing_results` RLS policy pulled and documented — PLAN.md §Open
@@ -248,8 +250,13 @@ Prepared and ready:
       CelebrateYouHub, matching `proageing-site`'s pattern. Next.js 15 +
       TypeScript + Tailwind scaffold committed.
 - [x] Read-path/import mechanism — built client-side, no service-role key
-      needed; see §Open decisions item 5. Untested until this app's own
-      Supabase project exists.
+      needed; see §Open decisions item 5.
+- [x] The new, isolated Supabase project — created (`bzsvsowgronuelzpnlrt`),
+      `supabase/schema.sql` run against it. Verified indirectly (a real
+      `npm run build` against its live URL/anon key succeeds); this
+      environment's network policy blocks reaching `supabase.co` directly,
+      so full end-to-end verification (sign-in, saving a result) is still
+      pending a real deploy or a local run outside this environment.
 
 Everything else in this phase needs your account/billing access — see the
 manual list above. Nothing else is blocking the codebase from here.
