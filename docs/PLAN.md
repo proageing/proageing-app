@@ -262,8 +262,18 @@ Manual (needs your account/billing access — not something I can do from here):
       env vars from `.env.example` (Supabase + shared-project values),
       deploy. Replaces the old "create/confirm the GCP project" step now
       that Hosting is Vercel (§6, changed 2026-07-29).
-- [ ] Create the Stripe Singapore account, add the products/prices from
-      PLAN.md §5
+- [x] Stripe Singapore account created. 21-Day Challenge product/price
+      done, set locally as `STRIPE_PRICE_21DAY` in `.env.local` (not
+      committed — see `.env.example`) — checkout for that plan is
+      code-complete pending a real deploy. 90-Day Transformation price
+      still needed.
+- [ ] Add the Stripe secret key + webhook signing secret, and the
+      Supabase service_role key, to `.env.local`/Vercel once ready —
+      not done yet, and can't be verified from this environment either
+      way: outbound access to api.stripe.com is blocked here (same
+      network policy that blocks supabase.co), so an actual Checkout
+      Session can only be tested from a real deploy or a local run
+      outside this sandbox.
 - [ ] Point `app.proageing.org` DNS at the Vercel deployment once live
 
 Prepared and ready:
