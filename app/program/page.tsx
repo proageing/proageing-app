@@ -2,19 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import {
   computeCurrentDay,
   computeHabitStreak,
   getActiveEnrollment,
   getDayProgress,
-  phaseForDay,
   saveDayProgress,
   startEnrollment,
   type ProgramEnrollment,
 } from "@/lib/program";
+import { contentForDay } from "@/lib/program21";
 
 type LoadState = "loading" | "no-enrollment" | "ready";
+
+const PROGRAM_LENGTH_DAYS = 21;
 
 export default function ProgramPage() {
   const router = useRouter();
@@ -23,9 +26,9 @@ export default function ProgramPage() {
   const [enrollment, setEnrollment] = useState<ProgramEnrollment | null>(null);
   const [currentDay, setCurrentDay] = useState(1);
   const [streak, setStreak] = useState(0);
-  const [videoWatched, setVideoWatched] = useState(false);
-  const [habitCompleted, setHabitCompleted] = useState(false);
-  const [checkinNote, setCheckinNote] = useState("");
+  const [learned, setLearned] = useState(false);
+  const [actionDone, setActionDone] = useState(false);
+  const [reflection, setReflection] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [starting, setStarting] = useState(false);
@@ -58,9 +61,9 @@ export default function ProgramPage() {
       ]);
 
       if (progress) {
-        setVideoWatched(progress.video_watched);
-        setHabitCompleted(progress.habit_completed);
-        setCheckinNote(progress.checkin_note ?? "");
+        setLearned(progress.video_watched);
+        setActionDone(progress.habit_completed);
+        setReflection(progress.checkin_note ?? "");
       }
       setStreak(habitStreak);
       setLoadState("ready");
@@ -72,10 +75,10 @@ export default function ProgramPage() {
   async function handleStart() {
     if (!userId) return;
     setStarting(true);
-    const { enrollment: newEnrollment, error } = await startEnrollment(userId);
+    const { enrollment: newEnrollment, error } = await startEnrollment(userId, PROGRAM_LENGTH_DAYS);
     setStarting(false);
     if (error || !newEnrollment) {
-      setSaveStatus(`Couldn't start your programme: ${error}`);
+      setSaveStatus(`Couldn't start your challenge: ${error}`);
       return;
     }
     setEnrollment(newEnrollment);
@@ -88,9 +91,9 @@ export default function ProgramPage() {
     setSaving(true);
     setSaveStatus(null);
     const { error } = await saveDayProgress(enrollment.id, currentDay, {
-      videoWatched,
-      habitCompleted,
-      checkinNote,
+      videoWatched: learned,
+      habitCompleted: actionDone,
+      checkinNote: reflection,
     });
     setSaving(false);
     if (error) {
@@ -113,10 +116,10 @@ export default function ProgramPage() {
   if (loadState === "no-enrollment") {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
-        <h1 className="text-2xl font-semibold text-neutral-900">Start your 90-Day Transformation</h1>
+        <h1 className="text-2xl font-semibold text-neutral-900">The 21-Day ProAgeing Challenge</h1>
         <p className="mt-3 text-neutral-600">
-          A guided 90-day programme across three phases: Foundation, Strength & Metabolism, and
-          Future Health. Once you start, day 1 begins today.
+          Try out and start living the 7 ProAgeing Steps — one check and one small action a day.
+          Day 1 begins today.
         </p>
         <button
           onClick={handleStart}
@@ -130,15 +133,14 @@ export default function ProgramPage() {
     );
   }
 
-  const phase = phaseForDay(currentDay);
+  const content = contentForDay(currentDay);
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
-        Day {currentDay} of {enrollment?.program_length_days ?? 90}
+        Day {currentDay} of {PROGRAM_LENGTH_DAYS}
       </p>
-      <h1 className="mt-1 text-2xl font-semibold text-neutral-900">{phase.name}</h1>
-      <p className="mt-1 text-sm text-neutral-500">{phase.focus}</p>
+      <h1 className="mt-1 text-2xl font-semibold text-neutral-900">{content.pillar}</h1>
 
       {streak > 0 && (
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark">
@@ -146,46 +148,59 @@ export default function ProgramPage() {
         </p>
       )}
 
-      <div className="mt-6 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Placeholder — content not yet produced</p>
-        <p className="mt-2 text-sm text-neutral-600">
-          Day {currentDay}&apos;s video and habit prompt will go here once the {phase.name} content
-          is written and filmed (docs/PLAN.md §9, Phase 1). This screen tracks real progress
-          against real days starting today — only the content itself is a placeholder.
-        </p>
+      {content.isProfileReveal && (
+        <div className="mt-4 rounded-lg border border-primary bg-primary-light p-4">
+          <p className="text-sm font-semibold text-primary-dark">
+            All 7 ProAgeing Steps checked — see your full Healthy Longevity Profile on your{" "}
+            <Link href="/dashboard" className="underline">
+              dashboard
+            </Link>
+            .
+          </p>
+        </div>
+      )}
+
+      <div className="mt-6 rounded-lg border border-neutral-200 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Learn</p>
+        <p className="mt-2 text-sm text-neutral-700">{content.learn}</p>
+        <label className="mt-3 flex items-center gap-2 text-sm text-neutral-600">
+          <input type="checkbox" checked={learned} onChange={(e) => setLearned(e.target.checked)} className="h-4 w-4 accent-orange-500" />
+          Read today&apos;s insight
+        </label>
       </div>
 
-      <div className="mt-6 flex flex-col gap-4">
-        <label className="flex items-center gap-3 rounded-lg border border-neutral-200 p-4">
-          <input
-            type="checkbox"
-            checked={videoWatched}
-            onChange={(e) => setVideoWatched(e.target.checked)}
-            className="h-5 w-5 accent-orange-500"
-          />
-          <span className="font-medium text-neutral-800">Watched today&apos;s video</span>
+      <div className="mt-4 rounded-lg border border-neutral-200 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Act</p>
+        {content.assessments && content.assessments.length > 0 && (
+          <div className="mt-2 flex flex-col gap-2">
+            {content.assessments.map((a) => (
+              <Link
+                key={a.href}
+                href={a.href}
+                className="rounded border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark"
+              >
+                {a.label} →
+              </Link>
+            ))}
+          </div>
+        )}
+        <p className="mt-3 text-sm text-neutral-700">{content.action}</p>
+        <label className="mt-3 flex items-center gap-2 text-sm text-neutral-600">
+          <input type="checkbox" checked={actionDone} onChange={(e) => setActionDone(e.target.checked)} className="h-4 w-4 accent-orange-500" />
+          {content.isClose ? "Done — retaken & Keystone Habit declared" : "Done for today"}
         </label>
+      </div>
 
-        <label className="flex items-center gap-3 rounded-lg border border-neutral-200 p-4">
-          <input
-            type="checkbox"
-            checked={habitCompleted}
-            onChange={(e) => setHabitCompleted(e.target.checked)}
-            className="h-5 w-5 accent-orange-500"
-          />
-          <span className="font-medium text-neutral-800">Completed today&apos;s habit</span>
-        </label>
-
-        <div>
-          <label className="text-sm font-medium text-neutral-800">Check-in note (optional)</label>
-          <textarea
-            value={checkinNote}
-            onChange={(e) => setCheckinNote(e.target.value)}
-            rows={3}
-            className="mt-2 w-full rounded border border-neutral-300 px-3 py-2"
-            placeholder="How did today go?"
-          />
-        </div>
+      <div className="mt-4 rounded-lg border border-neutral-200 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Reflect</p>
+        <p className="mt-2 text-sm font-medium text-neutral-800">{content.reflect}</p>
+        <textarea
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+          rows={3}
+          className="mt-2 w-full rounded border border-neutral-300 px-3 py-2"
+          placeholder="Your answer…"
+        />
       </div>
 
       <button

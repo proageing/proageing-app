@@ -1,8 +1,9 @@
 import { supabase } from "@/lib/supabase";
 
-// Phase themes from docs/PLAN.md §2. Only the 90-day length is used
-// anywhere today (the 21-day tier is a deferred decision, PLAN.md §Open
-// decisions item 2), so these bands assume a 90-day enrollment.
+// Phase themes from docs/PLAN.md §2, for a 90-day enrollment. PAUSED —
+// the 21-day programme (lib/program21.ts) is the active track for now;
+// this is kept for when 90-day work resumes, not currently used by
+// app/program.
 export const PROGRAM_PHASES = [
   { startDay: 1, endDay: 30, name: "Foundation", focus: "Protein, walking, sleep" },
   { startDay: 31, endDay: 60, name: "Strength & Metabolism", focus: "Resistance training, waist reduction" },
@@ -56,10 +57,13 @@ export async function getActiveEnrollment(userId: string): Promise<ProgramEnroll
   return data;
 }
 
-export async function startEnrollment(userId: string): Promise<{ enrollment: ProgramEnrollment | null; error: string | null }> {
+export async function startEnrollment(
+  userId: string,
+  programLengthDays: number
+): Promise<{ enrollment: ProgramEnrollment | null; error: string | null }> {
   const { data, error } = await supabase
     .from("program_enrollments")
-    .insert({ user_id: userId, program_length_days: 90 })
+    .insert({ user_id: userId, program_length_days: programLengthDays })
     .select("id, user_id, program_length_days, started_at, status")
     .single();
 

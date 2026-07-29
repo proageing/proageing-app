@@ -130,7 +130,7 @@ export default function DashboardPage() {
         href="/program"
         className="mt-8 block rounded-lg bg-primary-light px-4 py-3 text-center font-semibold text-primary-dark"
       >
-        Go to your 90-Day Transformation
+        Go to your 21-Day ProAgeing Challenge
       </Link>
 
       <Link href="/import" className="mt-4 inline-block text-sm text-primary underline">
