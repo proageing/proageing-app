@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { PLANS, type PlanId } from "@/lib/plans";
 import { getActiveSubscription, type ActiveSubscription } from "@/lib/subscription";
-import { Logo } from "@/components/Logo";
+import { AppHeader } from "@/components/AppHeader";
+import { TabBar } from "@/components/TabBar";
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -62,8 +63,8 @@ export default function UpgradePage() {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-6 py-12">
-      <Logo size={40} />
+    <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
+      <AppHeader />
       <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
         Plans &amp; pricing
       </h1>
@@ -99,6 +100,8 @@ export default function UpgradePage() {
       </div>
 
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+
+      <TabBar />
     </main>
   );
 }

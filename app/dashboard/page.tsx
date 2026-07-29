@@ -6,7 +6,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
-import { Logo } from "@/components/Logo";
+import { AppHeader } from "@/components/AppHeader";
+import { TabBar } from "@/components/TabBar";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -22,6 +23,21 @@ function formatEntryData(type: AssessmentType, entryData: Record<string, unknown
   }
   return typeof entryData.score === "number" ? String(entryData.score) : "—";
 }
+
+const WELCOME_STEPS = [
+  {
+    title: "Take your free checks",
+    body: "9 quick, guided checks across the 7 ProAgeing Steps — no clinic, no needles.",
+  },
+  {
+    title: "See your Healthy Longevity Profile",
+    body: "Your results build into a profile below, always up to date as you retake checks.",
+  },
+  {
+    title: "Build the habit",
+    body: "Ready to act on what you find? The 21-Day ProAgeing Challenge turns it into a daily plan.",
+  },
+];
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -88,31 +104,60 @@ export default function DashboardPage() {
   }
 
   const completedCount = latestByType.size;
+  const isFirstVisit = completedCount === 0;
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <div className="flex items-center justify-between">
-        <Logo size={36} />
-        <button onClick={handleSignOut} className="text-sm text-ink-faint underline dark:text-ink-dark-faint">
-          Sign out
-        </button>
-      </div>
+    <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
+      <AppHeader onSignOut={handleSignOut} />
 
-      <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-        Your longevity dashboard
-      </h1>
+      {isFirstVisit ? (
+        <>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-primary-dark">Welcome to ProAge</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+            Let&apos;s find out how you&apos;re really ageing.
+          </h1>
+          <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
+            Healthy longevity isn&apos;t one number — it&apos;s 7 steps working together. Here&apos;s how this app
+            works.
+          </p>
 
-      <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-        {completedCount} of {ASSESSMENT_TYPES.length} checks completed
-      </p>
-      <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
-        <div
-          className="h-2 rounded-full bg-primary transition-all"
-          style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
-        />
-      </div>
+          <div className="mt-6 flex flex-col gap-4">
+            {WELCOME_STEPS.map((step, i) => (
+              <div
+                key={step.title}
+                className="flex gap-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5"
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="font-semibold text-ink dark:text-ink-dark">{step.title}</h3>
+                  <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <ul className="mt-8 divide-y divide-border dark:divide-border-dark">
+          <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
+            Your 9 checks
+          </p>
+        </>
+      ) : (
+        <>
+          <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Welcome back</h1>
+          <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+            {completedCount} of {ASSESSMENT_TYPES.length} checks completed
+          </p>
+          <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
+            <div
+              className="h-2 rounded-full bg-primary transition-all"
+              style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
+            />
+          </div>
+        </>
+      )}
+
+      <ul className="mt-4 divide-y divide-border dark:divide-border-dark">
         {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
           const row = latestByType.get(type);
           const style = PILLAR_STYLES[color];
@@ -147,9 +192,7 @@ export default function DashboardPage() {
         Import your ProAgeing Steps history from proageing.org
       </Link>
 
-      <Link href="/upgrade" className="mt-2 block text-sm text-primary-dark underline">
-        See paid programmes &amp; membership
-      </Link>
+      <TabBar />
     </main>
   );
 }

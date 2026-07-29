@@ -16,6 +16,8 @@ import {
 import { contentForDay } from "@/lib/program21";
 import { getActiveSubscription } from "@/lib/subscription";
 import { Logo } from "@/components/Logo";
+import { AppHeader } from "@/components/AppHeader";
+import { TabBar } from "@/components/TabBar";
 
 type LoadState = "loading" | "no-access" | "no-enrollment" | "ready";
 
@@ -127,7 +129,7 @@ export default function ProgramPage() {
 
   if (loadState === "no-access") {
     return (
-      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
+      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 pb-28 text-center">
         <div className="mx-auto">
           <Logo size={48} />
         </div>
@@ -145,13 +147,14 @@ export default function ProgramPage() {
         >
           See plans &amp; pricing
         </Link>
+        <TabBar />
       </main>
     );
   }
 
   if (loadState === "no-enrollment") {
     return (
-      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
+      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 pb-28 text-center">
         <div className="mx-auto">
           <Logo size={48} />
         </div>
@@ -169,6 +172,7 @@ export default function ProgramPage() {
           {starting ? "Starting…" : "Begin day 1"}
         </button>
         {saveStatus && <p className="mt-4 text-sm text-red-600">{saveStatus}</p>}
+        <TabBar />
       </main>
     );
   }
@@ -176,8 +180,10 @@ export default function ProgramPage() {
   const content = contentForDay(currentDay);
 
   return (
-    <main className="mx-auto max-w-xl px-6 py-12">
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
+    <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
+      <AppHeader />
+
+      <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-primary-dark">
         Day {currentDay} of {PROGRAM_LENGTH_DAYS}
       </p>
       <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
@@ -251,6 +257,8 @@ export default function ProgramPage() {
         {saving ? "Saving…" : "Save today's progress"}
       </button>
       {saveStatus && <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{saveStatus}</p>}
+
+      <TabBar />
     </main>
   );
 }
