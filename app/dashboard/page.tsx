@@ -146,6 +146,10 @@ export default function DashboardPage() {
       <Link href="/import" className="mt-4 inline-block text-sm text-primary-dark underline">
         Import your ProAgeing Steps history from proageing.org
       </Link>
+
+      <Link href="/upgrade" className="mt-2 block text-sm text-primary-dark underline">
+        See paid programmes &amp; membership
+      </Link>
     </main>
   );
 }

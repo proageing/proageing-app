@@ -292,7 +292,15 @@ manual list above. Nothing else is blocking the codebase from here.
 - [x] Habit streaks — consecutive completed-day count, shown on
       app/program. Push notifications (FCM) not started.
 - [ ] Video via Vimeo Business
-- [ ] Stripe subscription paywall
+- [x] Stripe subscription paywall — checkout + webhook scaffold built
+      (app/api/stripe/checkout, app/api/stripe/webhook, lib/stripe.ts,
+      lib/plans.ts, lib/supabaseAdmin.ts, app/upgrade). Gates nothing yet
+      by design — the 21-Day Challenge stays the free on-ramp per the
+      pivot above; `/upgrade` is reachable from the dashboard as the
+      funnel's next step once a user finishes it. Not live: needs the
+      Stripe Singapore account + real price IDs (Phase 0 manual step) and
+      the Supabase service_role key before `subscriptions` rows will
+      actually get written.
 - Explicitly OUT of scope for MVP: wearable integration, AI meal
   recognition, social feed, telemedicine, complex analytics, Sanity CMS,
   WhatsApp/Twilio, Redis
