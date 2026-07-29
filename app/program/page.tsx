@@ -23,6 +23,11 @@ type LoadState = "loading" | "no-access" | "no-enrollment" | "ready";
 
 const PROGRAM_LENGTH_DAYS = 21;
 
+// TEMPORARY: paywall disabled for preview at Isaiah's request (2026-07-29).
+// Flip back to true to restore the subscription gate — no other changes
+// needed.
+const PAYWALL_ENABLED = false;
+
 export default function ProgramPage() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
@@ -53,10 +58,12 @@ export default function ProgramPage() {
       // one-time purchases (docs/PLAN.md §5) — either grants access to the
       // programme content that exists today, which is the 21-day track
       // (lib/program21.ts). 90-day-specific content hasn't been built yet.
-      const subscription = await getActiveSubscription(user.id);
-      if (!subscription || (subscription.plan !== "21-day" && subscription.plan !== "90-day")) {
-        setLoadState("no-access");
-        return;
+      if (PAYWALL_ENABLED) {
+        const subscription = await getActiveSubscription(user.id);
+        if (!subscription || (subscription.plan !== "21-day" && subscription.plan !== "90-day")) {
+          setLoadState("no-access");
+          return;
+        }
       }
 
       const active = await getActiveEnrollment(user.id);
