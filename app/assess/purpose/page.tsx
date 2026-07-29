@@ -1,0 +1,185 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import {
+  AGREEMENT_OPTIONS,
+  IKIGAI_QUESTIONS,
+  SUBSCALE_META,
+  computeIkigaiScore,
+  emptyIkigaiAnswers,
+  interpretIkigaiScore,
+  isIkigaiComplete,
+  type IkigaiAnswers,
+} from "@/lib/assessments/purpose";
+
+type Screen = "welcome" | "questions" | "results";
+
+export default function PurposePage() {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [screen, setScreen] = useState<Screen>("welcome");
+  const [answers, setAnswers] = useState<IkigaiAnswers>(emptyIkigaiAnswers());
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        router.push("/signin");
+        return;
+      }
+      setUserId(user.id);
+    });
+  }, [router]);
+
+  function setAnswer(key: keyof IkigaiAnswers, value: number) {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
+  }
+
+  const score = computeIkigaiScore(answers);
+  const result = interpretIkigaiScore(score.total);
+
+  async function handleSave() {
+    if (!userId) return;
+    setSaving(true);
+    const { error } = await saveAssessmentResult(userId, "purpose", { score: score.total });
+    setSaving(false);
+    if (error) {
+      setSaveStatus(`Couldn't save: ${error}`);
+      return;
+    }
+    router.push("/dashboard");
+  }
+
+  return (
+    <main className="mx-auto max-w-xl px-6 py-12">
+      {screen === "welcome" && (
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Purpose Check · ~3 minutes</p>
+          <h1 className="mt-1 text-2xl font-semibold text-neutral-900">Sense of Purpose Check</h1>
+          <p className="mt-3 text-neutral-600">
+            This check is based on the Ikigai-9 (Imai, Osada & Nishi, 2012), a validated Japanese
+            scale measuring <em>ikigai</em> — roughly, &ldquo;a reason for being&rdquo; — across
+            three themes: how you feel about your life, your attitude towards the future, and the
+            sense that your existence matters.
+          </p>
+          <p className="mt-3 text-sm text-neutral-500">
+            The concept of ikigai has been linked in Japanese cohort research (e.g. the Ohsaki
+            study, Sone et al., 2008) to a lower risk of death over time — one of several strands
+            of evidence connecting a sense of purpose to healthy ageing.
+          </p>
+          <button
+            onClick={() => setScreen("questions")}
+            className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white"
+          >
+            Let&apos;s begin
+          </button>
+        </div>
+      )}
+
+      {screen === "questions" && (
+        <div>
+          <h2 className="text-xl font-semibold text-neutral-900">How much do you agree with each?</h2>
+          <p className="mt-1 text-sm text-neutral-500">Thinking about your life right now — there are no right or wrong answers.</p>
+
+          <div className="mt-6 flex flex-col gap-6">
+            {IKIGAI_QUESTIONS.map((q) => (
+              <div key={q.key}>
+                <p className="font-medium text-neutral-800">{q.text}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {AGREEMENT_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setAnswer(q.key, opt.value)}
+                      className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+                        answers[q.key] === opt.value
+                          ? "border-primary bg-primary-light text-primary-dark"
+                          : "border-neutral-300 text-neutral-600"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => isIkigaiComplete(answers) && setScreen("results")}
+            disabled={!isIkigaiComplete(answers)}
+            className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+          >
+            See my results
+          </button>
+        </div>
+      )}
+
+      {screen === "results" && (
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Your result</p>
+          <div className="mt-2 text-center">
+            <div className="text-5xl font-bold text-primary-dark">{score.total}</div>
+            <div className="text-sm font-medium text-neutral-500">out of 45 · higher means stronger ikigai</div>
+          </div>
+
+          <p className="mt-6 rounded-full bg-primary-light px-3 py-1 text-center text-sm font-semibold text-primary-dark">
+            {result.label}
+          </p>
+
+          <p className="mt-4 text-xs text-neutral-400">
+            Score {score.total} of 45. Illustrative bands only: 9–20 lower, 21–32 moderate, 33–45
+            strong — not official clinical cutoffs.
+          </p>
+
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-neutral-500">What&apos;s behind your score</p>
+          <div className="mt-2 flex flex-col gap-2">
+            {SUBSCALE_META.map((m) => (
+              <div key={m.key} className="flex items-center gap-3">
+                <span className="w-64 shrink-0 text-sm text-neutral-700">{m.label}</span>
+                <div className="h-2 flex-1 rounded-full bg-neutral-200">
+                  <div className="h-2 rounded-full bg-primary" style={{ width: `${(score.subs[m.key] / 15) * 100}%` }} />
+                </div>
+                <span className="w-10 text-right text-sm text-neutral-500">{score.subs[m.key]}/15</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 rounded-lg border border-neutral-200 p-4">
+            <h3 className="font-semibold text-neutral-900">💡 {result.title}</h3>
+            <p className="mt-2 text-sm text-neutral-600">{result.text}</p>
+          </div>
+
+          <div className="mt-4 rounded-lg border border-neutral-200 p-4">
+            <h3 className="font-semibold text-neutral-900">✅ Suggested next steps</h3>
+            <ul className="mt-2 list-disc pl-5 text-sm text-neutral-600">
+              {result.nextSteps.map((step) => (
+                <li key={step} className="mt-1">
+                  {step}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="mt-4 text-xs text-neutral-400">
+            This is a wellness reflection tool based on a published research questionnaire, not a
+            mental health diagnosis. If you&apos;re feeling persistently low, hopeless, or
+            unmotivated, please reach out to your doctor or a counsellor — support helps.
+          </p>
+
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+          >
+            {saving ? "Saving…" : "Save & return to dashboard"}
+          </button>
+          {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
+        </div>
+      )}
+    </main>
+  );
+}
