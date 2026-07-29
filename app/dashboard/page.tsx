@@ -126,7 +126,14 @@ export default function DashboardPage() {
         })}
       </ul>
 
-      <Link href="/import" className="mt-8 inline-block text-sm text-primary underline">
+      <Link
+        href="/program"
+        className="mt-8 block rounded-lg bg-primary-light px-4 py-3 text-center font-semibold text-primary-dark"
+      >
+        Go to your 90-Day Transformation
+      </Link>
+
+      <Link href="/import" className="mt-4 inline-block text-sm text-primary underline">
         Import your ProAgeing Steps history from proageing.org
       </Link>
     </main>
