@@ -124,8 +124,7 @@ export default function ProgramPage() {
           The 21-Day ProAgeing Challenge
         </h1>
         <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-          Try out and start living the 7 ProAgeing Steps — one check and one small action a day.
-          Day 1 begins today.
+          Try out and start living the 7 ProAgeing Steps. Day 1 begins today.
         </p>
         <button
           onClick={handleStart}
