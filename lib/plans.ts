@@ -2,7 +2,12 @@
 // come from env vars (set once the products/prices exist in the Stripe
 // Singapore account, Phase 0 manual step) rather than being hardcoded, since
 // Stripe price IDs are account-specific.
-export type PlanId = "90-day" | "90-day-coaching" | "membership";
+//
+// Both the 21-day and 90-day programmes are paid, one-time purchases.
+// Ongoing membership is free — every signed-in user gets it automatically
+// (it's just continued access + trend history across assessments they've
+// taken), so it isn't a Stripe product and doesn't appear here.
+export type PlanId = "21-day" | "90-day";
 
 export interface Plan {
   id: PlanId;
@@ -14,25 +19,18 @@ export interface Plan {
 
 export const PLANS: Plan[] = [
   {
+    id: "21-day",
+    title: "21-Day ProAgeing Challenge",
+    priceLabel: "S$39 one-time",
+    mode: "payment",
+    priceEnvVar: "STRIPE_PRICE_21DAY",
+  },
+  {
     id: "90-day",
     title: "90-Day Transformation",
     priceLabel: "S$129 one-time",
     mode: "payment",
     priceEnvVar: "STRIPE_PRICE_90DAY",
-  },
-  {
-    id: "90-day-coaching",
-    title: "90-Day + Coaching",
-    priceLabel: "S$249 one-time",
-    mode: "payment",
-    priceEnvVar: "STRIPE_PRICE_90DAY_COACHING",
-  },
-  {
-    id: "membership",
-    title: "Ongoing membership",
-    priceLabel: "S$12/month",
-    mode: "subscription",
-    priceEnvVar: "STRIPE_PRICE_MEMBERSHIP",
   },
 ];
 

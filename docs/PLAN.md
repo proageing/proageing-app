@@ -33,6 +33,10 @@ Tagline direction: **"Add life to your years."** Avoid "anti-ageing" framing.
   that can plausibly shift in 21 days and closes with a Keystone Habit
   declaration. Content grounded in the real Celebrate You! curriculum
   (`proageing/CelebrateYouCourse`), not invented. See `lib/program21.ts`.
+  **Pricing changed 2026-07-29** (§5): no longer the free on-ramp — it's
+  now a S$39 one-time purchase, gated behind the Stripe paywall
+  (`app/program`'s `no-access` state). The 9 free assessment checks stay
+  free; only the guided day-by-day programme itself is paid.
 - **90-Day Transformation** — the original flagship paid product design,
   in three phases (Days 1–30 Foundation; 31–60 Strength & Metabolism;
   61–90 Future Health). **Paused, not abandoned** — `lib/program.ts`
@@ -153,15 +157,28 @@ principle below and avoids the health-claims issue entirely.
 
 ## 5. Pricing
 
+**Revised 2026-07-29**, superseding the table below: the 21-Day Challenge
+(§2) is a paid one-time purchase, not free — reversing its earlier framing
+as the free on-ramp. Coaching add-on dropped for now. Ongoing membership
+is free, not S$12/month — it's continued access to your account plus a
+free trend history across every assessment you've taken over time, not a
+separate paid tier. "for now" per the decision that set this — expect
+these to keep moving as real conversion data comes in (§Funnel economics
+below is still unvalidated).
+
 ### Consumer
 | Plan | Price |
 |---|---|
-| Assessment | Free |
+| Assessment (9 checks) | Free |
+| Ongoing membership (account + trend history) | Free |
+| 21-Day ProAgeing Challenge | S$39 |
 | 90-Day Transformation | S$129 |
-| 90-Day + Coaching (2 group sessions/month) | S$249 |
-| Ongoing membership | S$12/month |
 
-(21-Day Essentials tier omitted per the deferred decision in §2.)
+90-Day Transformation is priced and purchasable (lib/plans.ts,
+app/upgrade) but has no built programme content yet — buying it today
+just unlocks the same 21-day content as the 21-Day Challenge, since
+that's all that exists (app/program). Build the actual 90-day content
+before promoting this tier, or mark it "coming soon" until then.
 
 ### Corporate (B2B2C)
 | Employees | Price per employee |
@@ -292,12 +309,15 @@ manual list above. Nothing else is blocking the codebase from here.
 - [x] Habit streaks — consecutive completed-day count, shown on
       app/program. Push notifications (FCM) not started.
 - [ ] Video via Vimeo Business
-- [x] Stripe subscription paywall — checkout + webhook scaffold built
-      (app/api/stripe/checkout, app/api/stripe/webhook, lib/stripe.ts,
-      lib/plans.ts, lib/supabaseAdmin.ts, app/upgrade). Gates nothing yet
-      by design — the 21-Day Challenge stays the free on-ramp per the
-      pivot above; `/upgrade` is reachable from the dashboard as the
-      funnel's next step once a user finishes it. Not live: needs the
+- [x] Stripe paywall — checkout + webhook (app/api/stripe/checkout,
+      app/api/stripe/webhook, lib/stripe.ts, lib/plans.ts,
+      lib/supabaseAdmin.ts, app/upgrade). **Updated 2026-07-29** to match
+      the revised pricing in §5: both the 21-Day Challenge (S$39) and
+      90-Day Transformation (S$129) are paid, one-time purchases and
+      `app/program` now gates on an active subscription for either
+      (`no-access` state) rather than letting anyone start free. Ongoing
+      membership (account + trend history) needs no Stripe product — it's
+      free by default for any signed-in user. Not live yet: needs the
       Stripe Singapore account + real price IDs (Phase 0 manual step) and
       the Supabase service_role key before `subscriptions` rows will
       actually get written.

@@ -90,7 +90,9 @@ create table public.subscriptions (
   user_id uuid not null references auth.users (id) on delete cascade,
   stripe_customer_id text,
   stripe_subscription_id text,
-  plan text not null,  -- '90-day' | '90-day-coaching' | 'membership'
+  plan text not null,  -- '21-day' | '90-day' — one-time purchases; ongoing
+  -- membership (trend history) is free for every signed-in user and isn't
+  -- a plan value here.
   status text not null default 'active',  -- mirrors Stripe subscription status values
   current_period_end timestamptz,
   created_at timestamptz not null default now()

@@ -14,9 +14,10 @@ import {
   type ProgramEnrollment,
 } from "@/lib/program";
 import { contentForDay } from "@/lib/program21";
+import { getActiveSubscription } from "@/lib/subscription";
 import { Logo } from "@/components/Logo";
 
-type LoadState = "loading" | "no-enrollment" | "ready";
+type LoadState = "loading" | "no-access" | "no-enrollment" | "ready";
 
 const PROGRAM_LENGTH_DAYS = 21;
 
@@ -45,6 +46,16 @@ export default function ProgramPage() {
         return;
       }
       setUserId(user.id);
+
+      // The 21-Day Challenge and 90-Day Transformation are both paid,
+      // one-time purchases (docs/PLAN.md §5) — either grants access to the
+      // programme content that exists today, which is the 21-day track
+      // (lib/program21.ts). 90-day-specific content hasn't been built yet.
+      const subscription = await getActiveSubscription(user.id);
+      if (!subscription || (subscription.plan !== "21-day" && subscription.plan !== "90-day")) {
+        setLoadState("no-access");
+        return;
+      }
 
       const active = await getActiveEnrollment(user.id);
       if (!active) {
@@ -110,6 +121,30 @@ export default function ProgramPage() {
     return (
       <main className="flex min-h-screen items-center justify-center">
         <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+      </main>
+    );
+  }
+
+  if (loadState === "no-access") {
+    return (
+      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
+        <div className="mx-auto">
+          <Logo size={48} />
+        </div>
+        <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+          The 21-Day ProAgeing Challenge
+        </h1>
+        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
+          Your 9 free assessment checks are always free. The guided 21-Day
+          Challenge — daily actions, streaks, and a Keystone Habit at the
+          end — is a paid programme.
+        </p>
+        <Link
+          href="/upgrade"
+          className="mt-6 rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark"
+        >
+          See plans &amp; pricing
+        </Link>
       </main>
     );
   }

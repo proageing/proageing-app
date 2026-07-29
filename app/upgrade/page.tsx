@@ -65,11 +65,12 @@ export default function UpgradePage() {
     <main className="mx-auto max-w-xl px-6 py-12">
       <Logo size={40} />
       <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-        Continue your ProAgeing journey
+        Plans &amp; pricing
       </h1>
       <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
-        Once you've completed your 21-Day ProAgeing Challenge, these are the
-        programmes to keep going.
+        Your 9 free assessment checks are always free, and your account
+        keeps a free history of every check you take over time. These are
+        the guided programmes that turn your results into a daily plan.
       </p>
 
       {active && (
