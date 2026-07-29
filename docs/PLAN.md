@@ -24,16 +24,25 @@ Tagline direction: **"Add life to your years."** Avoid "anti-ageing" framing.
 
 ## 2. Product structure
 
-- **90-Day Transformation** is the flagship paid product, in three phases:
-  - Days 1–30 — Foundation (protein, walking, sleep)
-  - Days 31–60 — Strength & Metabolism (resistance training, waist reduction)
-  - Days 61–90 — Future Health (stress, purpose, social connection, maintenance)
-- A shorter entry tier ("21-Day Essentials") was proposed in early planning,
-  but overlaps conceptually with *Celebrate You!*'s existing 8-week free
-  programme. **Decision deferred** — do not build a 21-day tier into this
-  app yet; design the data model so programme length is a variable
-  (`program_length_days` on the enrollment/programme record), not hardcoded,
-  so this can be resolved later without a schema rewrite.
+- **21-Day ProAgeing Challenge** — **resolved and built, 2026-07-29**,
+  superseding the "deferred" note below. Built as the active on-ramp:
+  Days 1–7 introduce all 7 ProAgeing Steps (one check + its first action
+  per day, no gap between assessment and action), Days 8–20 continue
+  nudges weighted toward Movement and Strength (the two habits meant to
+  be reinforced across the full 3 weeks), Day 21 retakes the assessments
+  that can plausibly shift in 21 days and closes with a Keystone Habit
+  declaration. Content grounded in the real Celebrate You! curriculum
+  (`proageing/CelebrateYouCourse`), not invented. See `lib/program21.ts`.
+- **90-Day Transformation** — the original flagship paid product design,
+  in three phases (Days 1–30 Foundation; 31–60 Strength & Metabolism;
+  61–90 Future Health). **Paused, not abandoned** — `lib/program.ts`
+  still has the phase logic; `app/program` currently runs the 21-day
+  content instead. Revisit once the 21-day challenge has real usage data.
+- ~~A shorter entry tier ("21-Day Essentials") was proposed in early
+  planning... Decision deferred~~ — **resolved above**: built, and it
+  turned out to be the higher-priority track, not the 90-day one.
+  `program_length_days` being a variable field (not hardcoded) is exactly
+  what made this pivot a same-day change rather than a schema rewrite.
 - Re-test on a recurring cadence (proposed: every 30 days) against the
   baseline assessment to show measurable movement.
 
