@@ -24,3 +24,24 @@ body {
   background-color: var(--paper);
   color: var(--ink);
 }
+
+@keyframes fade-in-quote {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-quote {
+  animation: fade-in-quote 0.5s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-quote {
+    animation: none;
+  }
+}

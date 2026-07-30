@@ -10,7 +10,16 @@ import { formatEntryData, greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { HomeCards } from "@/components/HomeCards";
+import { AffirmationCarousel } from "@/components/AffirmationCarousel";
 import type { AssessmentType } from "@/lib/importHistory";
+
+const AFFIRMATIONS = [
+  "Healthy longevity starts today!",
+  "ProAgeing, a step at a time.",
+  "Small steps, longer years.",
+  "Every check is a step forward.",
+  "Invest in your future self.",
+];
 
 interface ResultRow {
   assessment_type: AssessmentType;
@@ -108,9 +117,11 @@ export default function DashboardPage() {
       <AppHeader onSignOut={handleSignOut} />
 
       <p className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
-      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
-        {isFirstVisit ? "Here's how ProAge works." : "Here's your longevity activity."}
-      </p>
+      {isFirstVisit ? (
+        <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Here&apos;s how ProAge works.</p>
+      ) : (
+        <AffirmationCarousel quotes={AFFIRMATIONS} />
+      )}
 
       <HomeCards completedCount={completedCount} totalCount={ASSESSMENT_TYPES.length} />
 
