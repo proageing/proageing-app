@@ -17,7 +17,7 @@ const AFFIRMATIONS = [
   "Healthy longevity starts today!",
   "ProAgeing, a step at a time.",
   "Small steps, longer years.",
-  "Every check is a step forward.",
+  "Your decision today, shapes your tomorrow.",
   "Invest in your future self.",
 ];
 
