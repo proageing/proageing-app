@@ -34,6 +34,8 @@ export default function ProgramPage() {
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [enrollment, setEnrollment] = useState<ProgramEnrollment | null>(null);
   const [currentDay, setCurrentDay] = useState(1);
+  const [viewedDay, setViewedDay] = useState(1);
+  const [dayLoading, setDayLoading] = useState(false);
   const [streak, setStreak] = useState(0);
   const [learned, setLearned] = useState(false);
   const [actionDone, setActionDone] = useState(false);
@@ -76,6 +78,7 @@ export default function ProgramPage() {
       setEnrollment(active);
       const day = computeCurrentDay(active.started_at, active.program_length_days);
       setCurrentDay(day);
+      setViewedDay(day);
 
       const [progress, habitStreak] = await Promise.all([
         getDayProgress(active.id, day),
@@ -94,6 +97,19 @@ export default function ProgramPage() {
     load();
   }, [router]);
 
+  async function goToDay(day: number) {
+    if (!enrollment || day < 1 || day > currentDay) return;
+    setViewedDay(day);
+    setJustSaved(false);
+    setSaveStatus(null);
+    setDayLoading(true);
+    const progress = await getDayProgress(enrollment.id, day);
+    setLearned(progress?.video_watched ?? false);
+    setActionDone(progress?.habit_completed ?? false);
+    setReflection(progress?.checkin_note ?? "");
+    setDayLoading(false);
+  }
+
   async function handleStart() {
     if (!userId) return;
     setStarting(true);
@@ -105,6 +121,7 @@ export default function ProgramPage() {
     }
     setEnrollment(newEnrollment);
     setCurrentDay(1);
+    setViewedDay(1);
     setLoadState("ready");
   }
 
@@ -113,7 +130,7 @@ export default function ProgramPage() {
     setSaving(true);
     setSaveStatus(null);
     setJustSaved(false);
-    const { error } = await saveDayProgress(enrollment.id, currentDay, {
+    const { error } = await saveDayProgress(enrollment.id, viewedDay, {
       videoWatched: learned,
       habitCompleted: actionDone,
       checkinNote: reflection,
@@ -123,6 +140,8 @@ export default function ProgramPage() {
       setSaveStatus(`Couldn't save: ${error}`);
       return;
     }
+    // Streak is always anchored to today, even when saving a backfilled
+    // past day — completing a missed day can extend it.
     const newStreak = await computeHabitStreak(enrollment.id, currentDay);
     setStreak(newStreak);
     setJustSaved(true);
@@ -186,16 +205,49 @@ export default function ProgramPage() {
     );
   }
 
-  const content = contentForDay(currentDay);
+  const content = contentForDay(viewedDay);
+  const isToday = viewedDay === currentDay;
 
   return (
     <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
       <AppHeader />
 
-      <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-primary-dark">
-        Day {currentDay} of {PROGRAM_LENGTH_DAYS}
-      </p>
-      <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
+      <div className="mt-6 flex items-center justify-between">
+        <button
+          onClick={() => goToDay(viewedDay - 1)}
+          disabled={viewedDay <= 1 || dayLoading}
+          aria-label="Previous day"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-ink-soft transition hover:border-primary hover:text-primary-dark disabled:opacity-30 disabled:hover:border-border disabled:hover:text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
+            Day {viewedDay} of {PROGRAM_LENGTH_DAYS}
+          </p>
+          {viewedDay !== currentDay && (
+            <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-ink-faint underline dark:text-ink-dark-faint">
+              Back to today (Day {currentDay})
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={() => goToDay(viewedDay + 1)}
+          disabled={viewedDay >= currentDay || dayLoading}
+          aria-label="Next day"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-ink-soft transition hover:border-primary hover:text-primary-dark disabled:opacity-30 disabled:hover:border-border disabled:hover:text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+
+      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
 
       {streak > 0 && (
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
@@ -228,7 +280,7 @@ export default function ProgramPage() {
             }}
             className="h-4 w-4 accent-primary"
           />
-          Read today&apos;s insight
+          {isToday ? "Read today's insight" : "Read this day's insight"}
         </label>
       </div>
 
@@ -258,7 +310,7 @@ export default function ProgramPage() {
             }}
             className="h-4 w-4 accent-primary"
           />
-          {content.isClose ? "Done — retaken & Keystone Habit declared" : "Done for today"}
+          {content.isClose ? "Done — retaken & Keystone Habit declared" : isToday ? "Done for today" : "Done"}
         </label>
       </div>
 
@@ -279,7 +331,7 @@ export default function ProgramPage() {
 
       <button
         onClick={handleSave}
-        disabled={saving}
+        disabled={saving || dayLoading}
         className={`mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-semibold transition disabled:opacity-50 ${
           justSaved && !saving
             ? "bg-junebud text-ink"
@@ -291,7 +343,7 @@ export default function ProgramPage() {
             <path d="M5 13l4.5 4.5L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
-        {saving ? "Saving…" : justSaved ? "Saved" : "Save today's progress"}
+        {saving ? "Saving…" : justSaved ? "Saved" : isToday ? "Save today's progress" : `Save Day ${viewedDay}'s progress`}
       </button>
       {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
 
