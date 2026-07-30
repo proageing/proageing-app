@@ -40,6 +40,7 @@ export default function ProgramPage() {
   const [reflection, setReflection] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
@@ -111,6 +112,7 @@ export default function ProgramPage() {
     if (!enrollment) return;
     setSaving(true);
     setSaveStatus(null);
+    setJustSaved(false);
     const { error } = await saveDayProgress(enrollment.id, currentDay, {
       videoWatched: learned,
       habitCompleted: actionDone,
@@ -123,7 +125,7 @@ export default function ProgramPage() {
     }
     const newStreak = await computeHabitStreak(enrollment.id, currentDay);
     setStreak(newStreak);
-    setSaveStatus("Saved.");
+    setJustSaved(true);
   }
 
   if (loadState === "loading") {
@@ -217,7 +219,15 @@ export default function ProgramPage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Learn</p>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-          <input type="checkbox" checked={learned} onChange={(e) => setLearned(e.target.checked)} className="h-4 w-4 accent-primary" />
+          <input
+            type="checkbox"
+            checked={learned}
+            onChange={(e) => {
+              setLearned(e.target.checked);
+              setJustSaved(false);
+            }}
+            className="h-4 w-4 accent-primary"
+          />
           Read today&apos;s insight
         </label>
       </div>
@@ -239,7 +249,15 @@ export default function ProgramPage() {
         )}
         <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">{content.action}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-          <input type="checkbox" checked={actionDone} onChange={(e) => setActionDone(e.target.checked)} className="h-4 w-4 accent-primary" />
+          <input
+            type="checkbox"
+            checked={actionDone}
+            onChange={(e) => {
+              setActionDone(e.target.checked);
+              setJustSaved(false);
+            }}
+            className="h-4 w-4 accent-primary"
+          />
           {content.isClose ? "Done — retaken & Keystone Habit declared" : "Done for today"}
         </label>
       </div>
@@ -249,7 +267,10 @@ export default function ProgramPage() {
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         <textarea
           value={reflection}
-          onChange={(e) => setReflection(e.target.value)}
+          onChange={(e) => {
+            setReflection(e.target.value);
+            setJustSaved(false);
+          }}
           rows={3}
           className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
           placeholder="Your answer…"
@@ -259,11 +280,20 @@ export default function ProgramPage() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="mt-6 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
+        className={`mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-semibold transition disabled:opacity-50 ${
+          justSaved && !saving
+            ? "bg-junebud text-ink"
+            : "bg-primary text-white hover:bg-primary-dark"
+        }`}
       >
-        {saving ? "Saving…" : "Save today's progress"}
+        {justSaved && !saving && (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 13l4.5 4.5L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+        {saving ? "Saving…" : justSaved ? "Saved" : "Save today's progress"}
       </button>
-      {saveStatus && <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{saveStatus}</p>}
+      {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
 
       <TabBar />
     </main>
