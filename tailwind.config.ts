@@ -1,9 +1,14 @@
 import type { Config } from "tailwindcss";
 
-// Palette pulled directly from proageing.org's live assessment pages —
-// paper/ink neutrals and the per-pillar accent colors already proven in
-// production there, not invented for this app. See docs/PLAN.md §6 and
-// the design notes in globals.css.
+// Core neutrals + accent (ink/primary/border/junebud) now pinned to the
+// exact values in ProAge's official Brand Identity guide (Color System,
+// p.6): Onyx #444444, Orange Peel #FF9C00, Cultured #E3E3E3, June Bud
+// #A6D143. Per-pillar accents (purpose/healthrisk/movement/etc.) are a UX
+// extension beyond that 4-color system, carried over from proageing.org's
+// live assessment pages — they exist to visually distinguish the 9
+// assessment types, which the brand guide doesn't address. Typography is
+// deliberately NOT changed here per instruction — the guide specifies TAN
+// Tangkiwood/Quicksand/Montserrat, not applied.
 const config: Config = {
   darkMode: "media",
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
@@ -26,14 +31,19 @@ const config: Config = {
           "dark-faint": "#96918a",
         },
         border: {
-          DEFAULT: "#d9d6ce",
+          DEFAULT: "#e3e3e3", // Cultured, brand guide exact
           dark: "#3a3733",
         },
         primary: {
-          DEFAULT: "#ff9c00",
+          DEFAULT: "#ff9c00", // Orange Peel, brand guide exact
           dark: "#a84e00",
           light: "#ffefd6",
           "light-dark": "#3d2a0a",
+        },
+        junebud: {
+          DEFAULT: "#a6d143", // June Bud, brand guide exact
+          dark: "#a6d143",
+          tint: "#eff7dd",
         },
         // Per-pillar accents, matching proageing.org's assessment pages 1:1.
         // "dark" uses each page's own "-deep" shade where one exists;

@@ -5,6 +5,13 @@ export const metadata: Metadata = {
   title: "ProAgeing — Add life to your years",
   description: "The 21-Day ProAgeing Challenge — try the 7 ProAgeing Steps for healthy longevity.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/icon-192.png",
+  },
 };
 
 export const viewport: Viewport = {

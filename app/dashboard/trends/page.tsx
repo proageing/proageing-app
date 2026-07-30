@@ -99,7 +99,14 @@ export default function TrendsPage() {
             >
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-3">
-                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
+                  {history.length > 0 ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-junebud" aria-hidden="true">
+                      <circle cx="12" cy="12" r="12" fill="currentColor" />
+                      <path d="M7.5 12.5l2.8 2.8L16.5 9" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
+                  )}
                   <span className="font-semibold text-ink dark:text-ink-dark">{title}</span>
                 </span>
                 {href && (
