@@ -80,31 +80,31 @@ export function HomeCards({ completedCount, totalCount }: { completedCount: numb
 
       <Link
         href="/program"
-        className="flex flex-col justify-between rounded-2xl bg-movement p-4 text-white shadow-sm transition hover:brightness-105"
+        className="flex flex-col justify-between rounded-2xl bg-ink p-4 text-white shadow-sm transition hover:brightness-110"
         style={{ minHeight: "128px" }}
       >
         <ChallengeIcon />
         <div>
           <p className="font-serif text-base font-semibold leading-tight">21-Day Challenge</p>
-          <p className="mt-1 text-xs font-medium text-white/85">Daily plan &amp; streaks</p>
+          <p className="mt-1 text-xs font-medium opacity-85">Daily plan &amp; streaks</p>
         </div>
       </Link>
 
       <Link
         href="/dashboard/trends"
-        className="flex flex-col justify-between rounded-2xl bg-sleep p-4 text-white shadow-sm transition hover:brightness-105"
+        className="flex flex-col justify-between rounded-2xl bg-junebud p-4 text-ink shadow-sm transition hover:brightness-105"
         style={{ minHeight: "128px" }}
       >
         <TrendsIcon />
         <div>
           <p className="font-serif text-base font-semibold leading-tight">Your Trends</p>
-          <p className="mt-1 text-xs font-medium text-white/85">See how you're changing</p>
+          <p className="mt-1 text-xs font-medium opacity-80">See how you're changing</p>
         </div>
       </Link>
 
       <Link
         href="/upgrade"
-        className="flex flex-col justify-between rounded-2xl border border-border bg-border/30 p-4 text-ink-soft shadow-sm transition hover:bg-border/50 dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft dark:hover:bg-white/10"
+        className="flex flex-col justify-between rounded-2xl border border-border bg-border/40 p-4 text-ink-soft shadow-sm transition hover:bg-border/60 dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft dark:hover:bg-white/10"
         style={{ minHeight: "128px" }}
       >
         <LockIcon />
