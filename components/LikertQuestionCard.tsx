@@ -24,18 +24,20 @@ export function LikertQuestionCard({
   style: PillarStyle;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+    <div className="rounded-[14px] border-[1.5px] border-border bg-white p-4 dark:border-border-dark dark:bg-white/5">
       {section && (
-        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{section}</p>
+        <p className={`mb-1 text-[0.74rem] font-bold uppercase tracking-[0.13em] ${style.eyebrow}`}>{section}</p>
       )}
-      <p className="text-sm font-semibold text-ink dark:text-ink-dark">{question}</p>
-      <div className="mt-3 grid grid-cols-3 gap-1.5">
+      <p className="mb-2.5 text-base font-semibold leading-snug text-ink dark:text-ink-dark">{question}</p>
+      <div className="grid grid-cols-3 gap-1.5">
         {options.map((opt) => (
           <button
             key={opt.value}
             onClick={() => onChange(opt.value)}
-            className={`rounded-full border px-1 py-2.5 text-center text-xs font-semibold leading-tight transition ${
-              value === opt.value ? style.selected : `border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft`
+            className={`rounded-full border-[1.5px] px-1 py-2.5 text-center text-[0.72rem] font-bold leading-tight transition ${
+              value === opt.value
+                ? style.selected
+                : "border-border bg-paper text-ink-soft dark:border-border-dark dark:bg-paper-dark dark:text-ink-dark-soft"
             }`}
           >
             {opt.label}

@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   CANCER_TYPE_OPTIONS,
   FAMILY_HISTORY_CATEGORIES,
@@ -16,6 +19,8 @@ import {
 } from "@/lib/assessments/familyHistory";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.healthrisk;
 
 const FLAG_STYLES: Record<string, string> = {
   none: "bg-border/40 text-ink-soft dark:bg-border-dark dark:text-ink-dark-soft",
@@ -35,6 +40,7 @@ export default function FamilyHistoryPage() {
   const [answers, setAnswers] = useState<FamilyHistoryAnswers>(emptyFamilyHistoryAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -45,6 +51,18 @@ export default function FamilyHistoryPage() {
       setUserId(user.id);
     });
   }, [router]);
+
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Family history: know your risk. A few short questions to map your inherited risk.");
+    }
+    if (screen === "questions") {
+      speak(
+        "First, your sex — this helps us apply the right cardiovascular threshold. Then, for each category, tell us if a first-degree relative has been diagnosed, and at what age if you know it."
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
 
   function setSex(sex: Sex) {
     setAnswers((prev) => ({ ...prev, sex }));
@@ -85,9 +103,18 @@ export default function FamilyHistoryPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-healthrisk-dark">Family History · ~2 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Family History · ~2 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Family History: Know Your Risk</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             Knowing your family's medical history tells you which risks to watch most closely.
@@ -102,7 +129,7 @@ export default function FamilyHistoryPage() {
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-healthrisk px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -205,9 +232,17 @@ export default function FamilyHistoryPage() {
           })}
 
           <button
-            onClick={() => isFamilyHistoryComplete(answers) && setScreen("results")}
+            onClick={() => {
+              if (!isFamilyHistoryComplete(answers)) return;
+              speak(
+                summary.flaggedCount === 0
+                  ? "No family history flagged in any category."
+                  : `${summary.flaggedCount} of 4 categories show family history.`
+              );
+              setScreen("results");
+            }}
             disabled={!isFamilyHistoryComplete(answers)}
-            className="mt-8 rounded bg-healthrisk px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -263,7 +298,7 @@ export default function FamilyHistoryPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-healthrisk px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

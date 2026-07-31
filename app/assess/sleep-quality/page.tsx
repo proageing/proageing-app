@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   DAYTIME_TROUBLE_OPTIONS,
@@ -21,6 +23,8 @@ import {
 } from "@/lib/assessments/sleepQuality";
 
 type Screen = "welcome" | "times" | "disturbances" | "quality" | "medication" | "daytime" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "times", "disturbances", "quality", "medication", "daytime", "results"];
+const pillar = PILLAR_STYLES.sleep;
 
 function ChoiceButton({
   selected,
@@ -50,6 +54,7 @@ export default function SleepQualityPage() {
   const [answers, setAnswers] = useState<SleepAnswers>(emptySleepAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -61,12 +66,43 @@ export default function SleepQualityPage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Sleep quality check, based on the Pittsburgh Sleep Quality Index. We'll ask about your sleep over the past month.");
+    }
+    if (screen === "times") {
+      speak("Thinking back over the past month, tell us about your usual sleep schedule.");
+    }
+    if (screen === "disturbances") {
+      speak("How often has each of these kept you from sleeping well in the past month?");
+    }
+    if (screen === "quality") {
+      speak("Overall, how would you rate your sleep quality over the past month?");
+    }
+    if (screen === "medication") {
+      speak("How often have you taken medicine to help you sleep?");
+    }
+    if (screen === "daytime") {
+      speak("Two last questions about how your days have felt.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function set<K extends keyof SleepAnswers>(key: K, value: SleepAnswers[K]) {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }
 
   const result = computePSQI(answers);
   const interpretation = interpretPSQI(result.total);
+
+  function goToResults() {
+    speak(
+      `Your sleep quality score is ${result.total} out of 21. ${
+        result.total <= 5 ? "This is associated with good sleep quality." : "This is associated with poor sleep quality."
+      }`
+    );
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -82,9 +118,18 @@ export default function SleepQualityPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-sleep-dark">Sleep Check · ~5 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Sleep Check · ~5 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Sleep Quality Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This check is based on the Pittsburgh Sleep Quality Index (PSQI), one of the most
@@ -96,7 +141,7 @@ export default function SleepQualityPage() {
           </p>
           <button
             onClick={() => setScreen("times")}
-            className="mt-6 rounded bg-sleep px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -175,7 +220,7 @@ export default function SleepQualityPage() {
             </div>
           </div>
 
-          <button onClick={() => setScreen("disturbances")} className="mt-8 rounded bg-sleep px-4 py-2 font-medium text-white">
+          <button onClick={() => setScreen("disturbances")} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             Continue
           </button>
         </div>
@@ -186,7 +231,7 @@ export default function SleepQualityPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often has this kept you from sleeping well?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">For each one, choose how often it happened in the past month.</p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             {DISTURBANCE_ITEMS.map((item) => (
               <LikertQuestionCard
                 key={item.key}
@@ -207,7 +252,7 @@ export default function SleepQualityPage() {
           <button
             onClick={() => isDisturbancesComplete(answers) && setScreen("quality")}
             disabled={!isDisturbancesComplete(answers)}
-            className="mt-8 rounded bg-sleep px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             Continue
           </button>
@@ -228,7 +273,7 @@ export default function SleepQualityPage() {
           <button
             onClick={() => answers.q6 !== null && setScreen("medication")}
             disabled={answers.q6 === null}
-            className="mt-8 rounded bg-sleep px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             Continue
           </button>
@@ -249,7 +294,7 @@ export default function SleepQualityPage() {
           <button
             onClick={() => answers.q7 !== null && setScreen("daytime")}
             disabled={answers.q7 === null}
-            className="mt-8 rounded bg-sleep px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             Continue
           </button>
@@ -261,7 +306,7 @@ export default function SleepQualityPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Two last questions</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">How the past month felt during the day.</p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             <LikertQuestionCard
               question="How often have you had trouble staying awake while driving, eating meals, or being social?"
               options={DAYTIME_TROUBLE_OPTIONS}
@@ -279,9 +324,9 @@ export default function SleepQualityPage() {
           </div>
 
           <button
-            onClick={() => answers.q8 !== null && answers.q9 !== null && setScreen("results")}
+            onClick={() => answers.q8 !== null && answers.q9 !== null && goToResults()}
             disabled={answers.q8 === null || answers.q9 === null}
-            className="mt-8 rounded bg-sleep px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -290,7 +335,7 @@ export default function SleepQualityPage() {
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-sleep-dark">Your result</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your result</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-sleep-dark">{result.total}</div>
             <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">PSQI global score (0–21, lower is better)</div>
@@ -343,7 +388,7 @@ export default function SleepQualityPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-sleep px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

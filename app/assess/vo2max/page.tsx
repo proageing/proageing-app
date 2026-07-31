@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   classifyVO2,
   computeVO2Max,
@@ -14,6 +17,8 @@ import {
 } from "@/lib/assessments/vo2max";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.movement;
 
 export default function VO2MaxPage() {
   const router = useRouter();
@@ -22,6 +27,7 @@ export default function VO2MaxPage() {
   const [answers, setAnswers] = useState<VO2Answers>(emptyVO2Answers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -33,9 +39,25 @@ export default function VO2MaxPage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("VO2 max and resting heart rate check. We'll estimate your cardiorespiratory fitness.");
+    }
+    if (screen === "questions") {
+      speak("Tell us your age, sex, and resting heart rate.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   const score = computeVO2Max(answers);
   const category = answers.sex ? classifyVO2(score.vo2max, answers.sex, answers.age) : null;
   const result = category ? interpretVO2Category(category.status) : null;
+
+  function goToResults() {
+    if (!answers.sex) return;
+    speak(`Your estimated VO2 max is ${score.vo2max} milliliters per kilogram per minute.`);
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -51,9 +73,18 @@ export default function VO2MaxPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-movement-dark">Cardiorespiratory Fitness · ~3 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Cardiorespiratory Fitness · ~3 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">VO2 Max & Resting Heart Rate</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             VO2 max measures how efficiently your heart, lungs, and muscles use oxygen during
@@ -74,7 +105,7 @@ export default function VO2MaxPage() {
           </div>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-movement px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -150,9 +181,9 @@ export default function VO2MaxPage() {
           </div>
 
           <button
-            onClick={() => answers.sex && setScreen("results")}
+            onClick={goToResults}
             disabled={!answers.sex}
-            className="mt-8 rounded bg-movement px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -212,7 +243,7 @@ export default function VO2MaxPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-movement px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

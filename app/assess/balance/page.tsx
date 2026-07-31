@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   TIME_CAP,
   emptyBalanceAnswers,
@@ -16,6 +19,8 @@ import {
 } from "@/lib/assessments/balance";
 
 type Screen = "welcome" | "check" | "unsafe" | "setup" | "test" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "check", "setup", "test", "results"];
+const pillar = PILLAR_STYLES.strength;
 
 export default function BalancePage() {
   const router = useRouter();
@@ -28,6 +33,7 @@ export default function BalancePage() {
   const [saving, setSaving] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startedAtRef = useRef(0);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -45,17 +51,32 @@ export default function BalancePage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Balance check. We'll time how long you can stand on one leg.");
+    }
+    if (screen === "check") {
+      speak("Two quick safety questions, then your age and sex so we can compare fairly.");
+    }
+    if (screen === "setup") {
+      speak("Stand near your support, hands on your hips, eyes open, and tap Start when you lift your foot.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function finishTimer(finalElapsed: number) {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
     const rounded = Math.round(finalElapsed * 10) / 10;
     setAnswers((p) => ({ ...p, time: rounded }));
+    speak(`You balanced for ${rounded.toFixed(1)} seconds.`);
     setScreen("results");
   }
 
   function handleTimerButton() {
     if (!running) {
       setRunning(true);
+      speak("Timer started.");
       startedAtRef.current = performance.now() - elapsed * 1000;
       intervalRef.current = setInterval(() => {
         const now = (performance.now() - startedAtRef.current) / 1000;
@@ -102,9 +123,18 @@ export default function BalancePage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-strength-dark">Balance Check · ~2 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Balance Check · ~2 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Balance Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This check uses the One-Leg Standing Test (eyes open) — how long you can balance on
@@ -124,7 +154,7 @@ export default function BalancePage() {
               to a wall, counter, or sturdy furniture you can grab.
             </p>
           </div>
-          <button onClick={() => setScreen("check")} className="mt-6 rounded bg-strength px-4 py-2 font-medium text-white">
+          <button onClick={() => setScreen("check")} className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             Let&apos;s begin
           </button>
         </div>
@@ -222,7 +252,7 @@ export default function BalancePage() {
           <button
             onClick={handleCheckContinue}
             disabled={!isSafetyComplete(answers)}
-            className="mt-8 rounded bg-strength px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             Continue
           </button>
@@ -267,7 +297,7 @@ export default function BalancePage() {
             We&apos;ll time up to 60 seconds — that&apos;s the cap used in the research, so
             there&apos;s no need to go on longer.
           </div>
-          <button onClick={startTest} className="mt-8 rounded bg-strength px-4 py-2 font-medium text-white">
+          <button onClick={startTest} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             I&apos;m ready
           </button>
         </div>
@@ -275,7 +305,7 @@ export default function BalancePage() {
 
       {screen === "test" && (
         <div className="flex flex-col items-center text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-strength-dark">Balancing now</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Balancing now</p>
           <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">
             {running ? "Balancing… tap Stop when you touch down" : "Tap Start when your foot lifts off"}
           </h2>
@@ -288,8 +318,8 @@ export default function BalancePage() {
           </p>
           <button
             onClick={handleTimerButton}
-            className={`mt-8 w-full rounded px-4 py-2 font-medium ${
-              running ? "border border-border dark:border-border-dark text-ink-soft dark:text-ink-dark-soft" : "bg-strength text-white"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold ${
+              running ? "border-[1.5px] border-border dark:border-border-dark text-ink-soft dark:text-ink-dark-soft" : `text-white ${pillar.solidButton}`
             }`}
           >
             {running ? "Stop" : "Start"}
@@ -299,7 +329,7 @@ export default function BalancePage() {
 
       {screen === "results" && result && normRange && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-strength-dark">Your result</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your result</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-strength-dark">{answers.time.toFixed(1)}</div>
             <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">seconds balanced</div>
@@ -350,7 +380,7 @@ export default function BalancePage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-strength px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

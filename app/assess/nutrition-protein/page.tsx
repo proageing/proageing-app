@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   FREQUENCY_OPTIONS,
@@ -18,6 +20,8 @@ import {
 } from "@/lib/assessments/nutritionProtein";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.nutrition;
 
 export default function NutritionProteinPage() {
   const router = useRouter();
@@ -26,6 +30,7 @@ export default function NutritionProteinPage() {
   const [answers, setAnswers] = useState<NutritionAnswers>(emptyNutritionAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -37,12 +42,28 @@ export default function NutritionProteinPage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Nutrition and protein check. How often do you eat protein-rich foods in a typical week?");
+    }
+    if (screen === "questions") {
+      speak("Think about a normal week for you. There are no right or wrong answers.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function setAnswer(key: keyof NutritionAnswers, value: number) {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }
 
   const score = computeProteinScore(answers);
   const result = interpretProteinScore(score);
+
+  function goToResults() {
+    if (!isNutritionComplete(answers)) return;
+    speak(`Your protein source frequency score is ${score} out of 32.`);
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -58,9 +79,18 @@ export default function NutritionProteinPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-nutrition-dark">Nutrition & Protein · ~3 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Nutrition & Protein · ~3 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Nutrition & Protein Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             Older adults need more protein per kg of body weight than younger adults do, just to
@@ -74,7 +104,7 @@ export default function NutritionProteinPage() {
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-nutrition px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -86,7 +116,7 @@ export default function NutritionProteinPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often do you eat these?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Think about a normal week for you — no right or wrong answers.</p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             {PROTEIN_FOOD_QUESTIONS.map((q) => (
               <LikertQuestionCard
                 key={q.key}
@@ -108,9 +138,9 @@ export default function NutritionProteinPage() {
           </div>
 
           <button
-            onClick={() => isNutritionComplete(answers) && setScreen("results")}
+            onClick={goToResults}
             disabled={!isNutritionComplete(answers)}
-            className="mt-8 rounded bg-nutrition px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -153,7 +183,7 @@ export default function NutritionProteinPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-nutrition px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

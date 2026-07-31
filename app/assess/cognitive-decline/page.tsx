@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   COGNITIVE_QUESTIONS,
@@ -17,6 +19,8 @@ import {
 } from "@/lib/assessments/cognitiveDecline";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.cognitive;
 
 export default function CognitiveDeclinePage() {
   const router = useRouter();
@@ -25,6 +29,7 @@ export default function CognitiveDeclinePage() {
   const [answers, setAnswers] = useState<CognitiveAnswers>(emptyCognitiveAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -36,6 +41,16 @@ export default function CognitiveDeclinePage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Cognitive decline risk check, based on the SLAS Risk Index. A few short questions about you.");
+    }
+    if (screen === "questions") {
+      speak("Answer each question about yourself. There are no right or wrong answers.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function setAnswer(key: keyof CognitiveAnswers, value: number) {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }
@@ -43,6 +58,12 @@ export default function CognitiveDeclinePage() {
   const score = computeSLASScore(answers);
   const result = interpretSLASScore(score.total);
   const componentMeta = cognitiveComponentMeta(score.cardioCount);
+
+  function goToResults() {
+    if (!isCognitiveComplete(answers)) return;
+    speak(`Your cognitive risk score is ${score.total}.`);
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -60,9 +81,18 @@ export default function CognitiveDeclinePage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-cognitive-dark">Cognitive Health Check · ~3 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Cognitive Health Check · ~3 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Cognitive Decline Risk Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This check uses the SLAS Risk Index, developed and validated by the Singapore
@@ -77,7 +107,7 @@ export default function CognitiveDeclinePage() {
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-cognitive px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -92,7 +122,7 @@ export default function CognitiveDeclinePage() {
             right or wrong answers — just answer as accurately as you can.
           </p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             {COGNITIVE_QUESTIONS.map((q) => {
               const showSection = q.section !== lastSection;
               lastSection = q.section;
@@ -111,9 +141,9 @@ export default function CognitiveDeclinePage() {
           </div>
 
           <button
-            onClick={() => isCognitiveComplete(answers) && setScreen("results")}
+            onClick={goToResults}
             disabled={!isCognitiveComplete(answers)}
-            className="mt-8 rounded bg-cognitive px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -178,7 +208,7 @@ export default function CognitiveDeclinePage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-cognitive px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

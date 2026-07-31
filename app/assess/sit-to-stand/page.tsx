@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   emptySitToStandAnswers,
   getNormRange,
@@ -16,6 +19,8 @@ import {
 } from "@/lib/assessments/sitToStand";
 
 type Screen = "welcome" | "check" | "unsafe" | "setup" | "test" | "count" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "check", "setup", "test", "count", "results"];
+const pillar = PILLAR_STYLES.primary;
 
 export default function SitToStandPage() {
   const router = useRouter();
@@ -26,6 +31,7 @@ export default function SitToStandPage() {
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -38,12 +44,34 @@ export default function SitToStandPage() {
   }, [router]);
 
   useEffect(() => {
+    if (screen === "welcome") {
+      speak("Sit to stand check. This measures the strength in your legs and hips. Let's begin when you're ready.");
+    }
+    if (screen === "check") {
+      speak("Two quick safety questions before we start.");
+    }
+    if (screen === "setup") {
+      speak(
+        "Set up your chair against a wall or in a corner. Sit towards the front edge, feet flat, and cross your arms over your chest. Watch it loop once, then try a slow practice rep yourself."
+      );
+    }
+    if (screen === "unsafe") {
+      speak("Let's hold off on the test today. Please check with your doctor first, and come back whenever you're ready.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
+  useEffect(() => {
     if (screen !== "test") return;
     setTimeLeft(30);
+    speak("Go — as many full stands as you can.");
     intervalRef.current = setInterval(() => {
       setTimeLeft((prev) => {
+        if (prev === 16) speak("Halfway there. Keep going.");
+        if (prev === 6) speak("Five seconds left.");
         if (prev <= 1) {
           if (intervalRef.current) clearInterval(intervalRef.current);
+          speak("Time's up. How many full stands did you complete? Type your count, or use the plus and minus buttons.");
           setScreen("count");
           return 0;
         }
@@ -53,6 +81,7 @@ export default function SitToStandPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 
   function handleCheckContinue() {
@@ -65,6 +94,20 @@ export default function SitToStandPage() {
 
   const result = answers.sex && answers.age ? interpretSitToStand(answers.reps, answers.sex, answers.age) : null;
   const normRange = answers.sex && answers.age ? getNormRange(answers.sex, answers.age) : null;
+
+  function goToResults() {
+    if (normRange) {
+      const [lo, hi] = normRange;
+      const comparison =
+        answers.reps < lo
+          ? "This is below the typical range for your age group."
+          : answers.reps > hi
+            ? "This is above the typical range for your age group."
+            : "This is within the typical range for your age group.";
+      speak(`You completed ${answers.reps} stands. ${comparison}`);
+    }
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -80,9 +123,18 @@ export default function SitToStandPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Physical Function Check · ~4 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Physical Function Check · ~4 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Sit-to-Stand Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This test measures the strength in your legs and hips — the muscles you use every day
@@ -92,7 +144,7 @@ export default function SitToStandPage() {
             You&apos;ll stand up and sit down from a chair as many times as you can in 30 seconds.
             No equipment needed beyond a sturdy chair.
           </p>
-          <button onClick={() => setScreen("check")} className="mt-6 rounded bg-primary px-4 py-2 font-medium text-white">
+          <button onClick={() => setScreen("check")} className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             Let&apos;s begin
           </button>
         </div>
@@ -184,7 +236,7 @@ export default function SitToStandPage() {
           <button
             onClick={handleCheckContinue}
             disabled={!isSafetyComplete(answers)}
-            className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             Continue
           </button>
@@ -248,7 +300,7 @@ export default function SitToStandPage() {
             sit, that&apos;s one rep. Just count each one in your head — no need to touch your
             phone while you&apos;re moving. We&apos;ll ask for your total once the timer ends.
           </p>
-          <button onClick={() => setScreen("test")} className="mt-8 rounded bg-primary px-4 py-2 font-medium text-white">
+          <button onClick={() => setScreen("test")} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             I&apos;m ready
           </button>
         </div>
@@ -256,7 +308,7 @@ export default function SitToStandPage() {
 
       {screen === "test" && (
         <div className="flex flex-col items-center text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Time remaining</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Time remaining</p>
           <div className="mt-4 text-7xl font-bold tabular-nums text-primary-dark">{timeLeft}</div>
           <p className="mt-4 text-ink-soft dark:text-ink-dark-soft">
             {timeLeft > 15 ? "Go — as many full stands as you can." : timeLeft > 5 ? "Halfway there — keep going." : "Almost done."}
@@ -279,7 +331,7 @@ export default function SitToStandPage() {
 
       {screen === "count" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Time&apos;s up</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Time&apos;s up</p>
           <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">How many did you complete?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Count only full stands — all the way up, all the way back down.</p>
 
@@ -299,7 +351,7 @@ export default function SitToStandPage() {
             </button>
           </div>
 
-          <button onClick={() => setScreen("results")} className="mt-8 w-full rounded bg-primary px-4 py-2 font-medium text-white">
+          <button onClick={goToResults} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
             See my results
           </button>
         </div>
@@ -307,7 +359,7 @@ export default function SitToStandPage() {
 
       {screen === "results" && result && normRange && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">Your result</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your result</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-primary-dark">{answers.reps}</div>
             <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">full stands in 30 seconds</div>
@@ -335,7 +387,7 @@ export default function SitToStandPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-primary px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

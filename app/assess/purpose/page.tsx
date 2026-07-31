@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   AGREEMENT_OPTIONS,
@@ -18,6 +20,8 @@ import {
 } from "@/lib/assessments/purpose";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.purpose;
 
 export default function PurposePage() {
   const router = useRouter();
@@ -26,6 +30,7 @@ export default function PurposePage() {
   const [answers, setAnswers] = useState<IkigaiAnswers>(emptyIkigaiAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -37,12 +42,28 @@ export default function PurposePage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Sense of purpose check, based on the Ikigai-9. There are nine short statements to react to.");
+    }
+    if (screen === "questions") {
+      speak("For each statement, choose how much you agree, from strongly disagree to strongly agree.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function setAnswer(key: keyof IkigaiAnswers, value: number) {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }
 
   const score = computeIkigaiScore(answers);
   const result = interpretIkigaiScore(score.total);
+
+  function goToResults() {
+    if (!isIkigaiComplete(answers)) return;
+    speak(`Your ikigai score is ${score.total} out of 45.`);
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -58,9 +79,18 @@ export default function PurposePage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-purpose-dark">Purpose Check · ~3 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Purpose Check · ~3 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Sense of Purpose Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This check is based on the Ikigai-9 (Imai, Osada & Nishi, 2012), a validated Japanese
@@ -75,7 +105,7 @@ export default function PurposePage() {
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-purpose px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -84,10 +114,11 @@ export default function PurposePage() {
 
       {screen === "questions" && (
         <div>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your own honest reaction</p>
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How much do you agree with each?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Thinking about your life right now — there are no right or wrong answers.</p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             {IKIGAI_QUESTIONS.map((q) => (
               <LikertQuestionCard
                 key={q.key}
@@ -101,9 +132,9 @@ export default function PurposePage() {
           </div>
 
           <button
-            onClick={() => isIkigaiComplete(answers) && setScreen("results")}
+            onClick={goToResults}
             disabled={!isIkigaiComplete(answers)}
-            className="mt-8 rounded bg-purpose px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -165,7 +196,7 @@ export default function PurposePage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-purpose px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>

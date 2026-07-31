@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { AssessmentTopBar } from "@/components/AssessmentTopBar";
+import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   CONNECTION_QUESTIONS,
@@ -17,6 +19,8 @@ import {
 } from "@/lib/assessments/connection";
 
 type Screen = "welcome" | "questions" | "results";
+const SCREEN_ORDER: Screen[] = ["welcome", "questions", "results"];
+const pillar = PILLAR_STYLES.connection;
 
 export default function ConnectionPage() {
   const router = useRouter();
@@ -25,6 +29,7 @@ export default function ConnectionPage() {
   const [answers, setAnswers] = useState<ConnectionAnswers>(emptyConnectionAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const { audioOn, toggleAudio, speak } = useAssessmentAudio();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -36,6 +41,16 @@ export default function ConnectionPage() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (screen === "welcome") {
+      speak("Connection check. A few questions about your family, friends, and how you've been feeling.");
+    }
+    if (screen === "questions") {
+      speak("Answer each question as accurately as you can. There are no right or wrong answers.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen]);
+
   function setAnswer(key: keyof ConnectionAnswers, value: number) {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   }
@@ -44,6 +59,12 @@ export default function ConnectionPage() {
   const result = interpretLonelinessScore(score.loneliness);
   const famFlag = networkFlag(score.family);
   const friFlag = networkFlag(score.friends);
+
+  function goToResults() {
+    if (!isConnectionComplete(answers)) return;
+    speak(`Your loneliness score is ${score.loneliness} out of 9.`);
+    setScreen("results");
+  }
 
   async function handleSave() {
     if (!userId) return;
@@ -61,9 +82,18 @@ export default function ConnectionPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
+      <AssessmentTopBar
+        order={SCREEN_ORDER}
+        current={screen}
+        pillar={pillar}
+        audioOn={audioOn}
+        onToggleAudio={toggleAudio}
+        onExit={() => router.push("/dashboard")}
+      />
+
       {screen === "welcome" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-connection-dark">Connection Check · ~3 minutes</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Connection Check · ~3 minutes</p>
           <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Connection Check</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
             This check combines two validated instruments: the Lubben Social Network Scale
@@ -77,7 +107,7 @@ export default function ConnectionPage() {
           </p>
           <button
             onClick={() => setScreen("questions")}
-            className="mt-6 rounded bg-connection px-4 py-2 font-medium text-white"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
             Let&apos;s begin
           </button>
@@ -89,7 +119,7 @@ export default function ConnectionPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Your family, friends, and feelings</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">There are no right or wrong answers — just answer as accurately as you can.</p>
 
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-2.5">
             {CONNECTION_QUESTIONS.map((q) => {
               const showSection = q.section !== lastSection;
               lastSection = q.section;
@@ -108,9 +138,9 @@ export default function ConnectionPage() {
           </div>
 
           <button
-            onClick={() => isConnectionComplete(answers) && setScreen("results")}
+            onClick={goToResults}
             disabled={!isConnectionComplete(answers)}
-            className="mt-8 rounded bg-connection px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             See my results
           </button>
@@ -176,7 +206,7 @@ export default function ConnectionPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-6 w-full rounded bg-connection px-4 py-2 font-medium text-white disabled:opacity-50"
+            className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
             {saving ? "Saving…" : "Save & return to dashboard"}
           </button>
