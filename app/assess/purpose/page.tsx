@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   AGREEMENT_OPTIONS,
   IKIGAI_QUESTIONS,
@@ -85,26 +87,16 @@ export default function PurposePage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How much do you agree with each?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Thinking about your life right now — there are no right or wrong answers.</p>
 
-          <div className="mt-6 flex flex-col gap-6">
+          <div className="mt-6 flex flex-col gap-3">
             {IKIGAI_QUESTIONS.map((q) => (
-              <div key={q.key}>
-                <p className="font-medium text-ink dark:text-ink-dark">{q.text}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {AGREEMENT_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setAnswer(q.key, opt.value)}
-                      className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                        answers[q.key] === opt.value
-                          ? "border-purpose bg-purpose-tint text-purpose-dark"
-                          : "border-border text-ink-soft"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <LikertQuestionCard
+                key={q.key}
+                question={q.text}
+                options={AGREEMENT_OPTIONS}
+                value={answers[q.key]}
+                onChange={(v) => setAnswer(q.key, v)}
+                style={PILLAR_STYLES.purpose}
+              />
             ))}
           </div>
 

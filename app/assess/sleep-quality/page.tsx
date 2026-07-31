@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   DAYTIME_TROUBLE_OPTIONS,
   DISTURBANCE_ITEMS,
@@ -38,32 +40,6 @@ function ChoiceButton({
     >
       {label}
     </button>
-  );
-}
-
-function PillRow({
-  options,
-  value,
-  onChange,
-}: {
-  options: { value: number; label: string }[];
-  value: number | null;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <div className="mt-2 flex flex-wrap gap-2">
-      {options.map((opt) => (
-        <button
-          key={opt.value}
-          onClick={() => onChange(opt.value)}
-          className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-            value === opt.value ? "border-sleep bg-sleep-tint text-sleep-dark" : "border-border text-ink-soft"
-          }`}
-        >
-          {opt.label}
-        </button>
-      ))}
-    </div>
   );
 }
 
@@ -210,21 +186,21 @@ export default function SleepQualityPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often has this kept you from sleeping well?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">For each one, choose how often it happened in the past month.</p>
 
-          <div className="mt-6 flex flex-col gap-5">
+          <div className="mt-6 flex flex-col gap-3">
             {DISTURBANCE_ITEMS.map((item) => (
-              <div key={item.key}>
-                <p className="text-sm font-medium text-ink dark:text-ink-dark">{item.text}</p>
-                <PillRow
-                  options={[
-                    { value: 0, label: "Never" },
-                    { value: 1, label: "<1x/wk" },
-                    { value: 2, label: "1–2x/wk" },
-                    { value: 3, label: "3+/wk" },
-                  ]}
-                  value={answers[item.key]}
-                  onChange={(v) => set(item.key, v)}
-                />
-              </div>
+              <LikertQuestionCard
+                key={item.key}
+                question={item.text}
+                options={[
+                  { value: 0, label: "Never" },
+                  { value: 1, label: "<1x/wk" },
+                  { value: 2, label: "1–2x/wk" },
+                  { value: 3, label: "3+/wk" },
+                ]}
+                value={answers[item.key]}
+                onChange={(v) => set(item.key, v)}
+                style={PILLAR_STYLES.sleep}
+              />
             ))}
           </div>
 
@@ -285,20 +261,21 @@ export default function SleepQualityPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Two last questions</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">How the past month felt during the day.</p>
 
-          <div className="mt-6 flex flex-col gap-6">
-            <div>
-              <p className="text-sm font-medium text-ink dark:text-ink-dark">
-                How often have you had trouble staying awake while driving, eating meals, or being
-                social?
-              </p>
-              <PillRow options={DAYTIME_TROUBLE_OPTIONS} value={answers.q8} onChange={(v) => set("q8", v)} />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-ink dark:text-ink-dark">
-                How much of a problem has it been to keep up enough enthusiasm to get things done?
-              </p>
-              <PillRow options={ENTHUSIASM_OPTIONS} value={answers.q9} onChange={(v) => set("q9", v)} />
-            </div>
+          <div className="mt-6 flex flex-col gap-3">
+            <LikertQuestionCard
+              question="How often have you had trouble staying awake while driving, eating meals, or being social?"
+              options={DAYTIME_TROUBLE_OPTIONS}
+              value={answers.q8}
+              onChange={(v) => set("q8", v)}
+              style={PILLAR_STYLES.sleep}
+            />
+            <LikertQuestionCard
+              question="How much of a problem has it been to keep up enough enthusiasm to get things done?"
+              options={ENTHUSIASM_OPTIONS}
+              value={answers.q9}
+              onChange={(v) => set("q9", v)}
+              style={PILLAR_STYLES.sleep}
+            />
           </div>
 
           <button

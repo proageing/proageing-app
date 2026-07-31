@@ -210,6 +210,16 @@ export default function SitToStandPage() {
       {screen === "setup" && (
         <div>
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Set up your chair like this</h2>
+
+          <div className="mt-4 overflow-hidden rounded-2xl bg-primary-light dark:bg-primary-light-dark">
+            <video autoPlay loop muted playsInline className="block h-auto w-full">
+              <source src="/sit-to-stand-demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p className="mt-2 text-center text-xs font-semibold text-primary-dark">
+            Watch it loop once, then try a slow practice rep yourself.
+          </p>
+
           <ol className="mt-6 flex flex-col gap-4">
             <li className="flex gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-tint font-semibold text-primary-dark">1</span>

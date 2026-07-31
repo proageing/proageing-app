@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   FREQUENCY_OPTIONS,
   PORTION_OPTIONS,
@@ -84,48 +86,25 @@ export default function NutritionProteinPage() {
           <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often do you eat these?</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Think about a normal week for you — no right or wrong answers.</p>
 
-          <div className="mt-6 flex flex-col gap-6">
+          <div className="mt-6 flex flex-col gap-3">
             {PROTEIN_FOOD_QUESTIONS.map((q) => (
-              <div key={q.key}>
-                <p className="font-medium text-ink dark:text-ink-dark">{q.label}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {FREQUENCY_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setAnswer(q.key, opt.value)}
-                      className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                        answers[q.key] === opt.value
-                          ? "border-nutrition bg-nutrition-tint text-nutrition-dark"
-                          : "border-border text-ink-soft"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <LikertQuestionCard
+                key={q.key}
+                question={q.label}
+                options={FREQUENCY_OPTIONS}
+                value={answers[q.key]}
+                onChange={(v) => setAnswer(q.key, v)}
+                style={PILLAR_STYLES.nutrition}
+              />
             ))}
 
-            <div>
-              <p className="font-medium text-ink dark:text-ink-dark">
-                At your main meal, how much meat, fish, tofu, or eggs do you usually have?
-              </p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {PORTION_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setAnswer("portion", opt.value)}
-                    className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                      answers.portion === opt.value
-                        ? "border-nutrition bg-nutrition-tint text-nutrition-dark"
-                        : "border-border text-ink-soft"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <LikertQuestionCard
+              question="At your main meal, how much meat, fish, tofu, or eggs do you usually have?"
+              options={PORTION_OPTIONS}
+              value={answers.portion}
+              onChange={(v) => setAnswer("portion", v)}
+              style={PILLAR_STYLES.nutrition}
+            />
           </div>
 
           <button

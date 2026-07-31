@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
+import { LikertQuestionCard } from "@/components/LikertQuestionCard";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   COGNITIVE_QUESTIONS,
   cognitiveComponentMeta,
@@ -90,32 +92,20 @@ export default function CognitiveDeclinePage() {
             right or wrong answers — just answer as accurately as you can.
           </p>
 
-          <div className="mt-6 flex flex-col gap-6">
+          <div className="mt-6 flex flex-col gap-3">
             {COGNITIVE_QUESTIONS.map((q) => {
               const showSection = q.section !== lastSection;
               lastSection = q.section;
               return (
-                <div key={q.key}>
-                  {showSection && (
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{q.section}</p>
-                  )}
-                  <p className="font-medium text-ink dark:text-ink-dark">{q.question}</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {q.opts.map((opt) => (
-                      <button
-                        key={opt.value}
-                        onClick={() => setAnswer(q.key, opt.value)}
-                        className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                          answers[q.key] === opt.value
-                            ? "border-cognitive bg-cognitive-tint text-cognitive-dark"
-                            : "border-border text-ink-soft"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <LikertQuestionCard
+                  key={q.key}
+                  section={showSection ? q.section : undefined}
+                  question={q.question}
+                  options={q.opts}
+                  value={answers[q.key]}
+                  onChange={(v) => setAnswer(q.key, v)}
+                  style={PILLAR_STYLES.cognitive}
+                />
               );
             })}
           </div>
