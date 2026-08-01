@@ -10,6 +10,7 @@ import { readingsTierFor } from "@/lib/assessments/readingsTier";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { ReadingsStatusIcon } from "@/components/ReadingsStatusIcon";
+import { WatermarkSwirl } from "@/components/BrandSwirl";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -85,10 +86,13 @@ export default function ReadingsPage() {
   const completedCount = latestByType.size;
 
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
-      <AppHeader onSignOut={handleSignOut} />
+    <main className="relative mx-auto max-w-2xl overflow-x-hidden px-6 pb-28 pt-8">
+      <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
-      <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
+      <div className="relative">
+        <AppHeader onSignOut={handleSignOut} />
+
+        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Every check you&apos;ve taken, and your latest result for each.</p>
 
       <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Your 9 checks</p>
@@ -142,9 +146,10 @@ export default function ReadingsPage() {
         })}
       </div>
 
-      <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
-        Import your ProAgeing Steps history from proageing.org
-      </Link>
+        <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
+          Import your ProAgeing Steps history from proageing.org
+        </Link>
+      </div>
 
       <TabBar />
     </main>

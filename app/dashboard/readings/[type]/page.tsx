@@ -12,6 +12,7 @@ import { ASSESSMENT_INTROS } from "@/lib/assessments/intro";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { TrendChart } from "@/components/TrendChart";
+import { WatermarkSwirl } from "@/components/BrandSwirl";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -109,15 +110,18 @@ export default function AssessmentTrendPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
-      <AppHeader />
+    <main className="relative mx-auto max-w-2xl overflow-x-hidden px-6 pb-28 pt-8">
+      <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
-      <Link
-        href="/dashboard/readings"
-        className="mt-3 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
-      >
-        ← Back to readings
-      </Link>
+      <div className="relative">
+        <AppHeader />
+
+        <Link
+          href="/dashboard/readings"
+          className="mt-3 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
+        >
+          ← Back to readings
+        </Link>
 
       <p className={`mt-4 text-[0.74rem] font-bold uppercase tracking-[0.13em] ${style.eyebrow}`}>Your progress</p>
       <h1 className="font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{meta.title} Trend</h1>
@@ -229,12 +233,13 @@ export default function AssessmentTrendPage() {
         </>
       )}
 
-      <Link
-        href={`/assess/${typeParam}?from=readings`}
-        className={`mt-8 block w-full rounded-2xl py-4 text-center text-base font-bold text-white ${style.solidButton}`}
-      >
-        {rows.length === 0 ? "Take this check" : "Retake this check"}
-      </Link>
+        <Link
+          href={`/assess/${typeParam}?from=readings`}
+          className={`mt-8 block w-full rounded-2xl py-4 text-center text-base font-bold text-white ${style.solidButton}`}
+        >
+          {rows.length === 0 ? "Take this check" : "Retake this check"}
+        </Link>
+      </div>
 
       <TabBar />
     </main>

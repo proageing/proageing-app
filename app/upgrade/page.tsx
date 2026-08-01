@@ -7,6 +7,7 @@ import { PLANS, type PlanId } from "@/lib/plans";
 import { getActiveSubscription, type ActiveSubscription } from "@/lib/subscription";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { WatermarkSwirl } from "@/components/BrandSwirl";
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -63,16 +64,19 @@ export default function UpgradePage() {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
-      <AppHeader />
-      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-        Plans &amp; pricing
-      </h1>
-      <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
-        Your 9 free assessment checks are always free, and your account
-        keeps a free history of every check you take over time. These are
-        the guided programmes that turn your results into a daily plan.
-      </p>
+    <main className="relative mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-8">
+      <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
+
+      <div className="relative">
+        <AppHeader />
+        <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+          Plans &amp; pricing
+        </h1>
+        <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
+          Your 9 free assessment checks are always free, and your account
+          keeps a free history of every check you take over time. These are
+          the guided programmes that turn your results into a daily plan.
+        </p>
 
       {active && (
         <p className="mt-6 rounded-xl border border-primary bg-primary-light px-4 py-3 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
@@ -99,7 +103,8 @@ export default function UpgradePage() {
         ))}
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      </div>
 
       <TabBar />
     </main>

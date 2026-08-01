@@ -26,6 +26,7 @@ import {
 } from "@/lib/testimonials";
 import { Logo } from "@/components/Logo";
 import { TabBar } from "@/components/TabBar";
+import { HeroSwirl } from "@/components/BrandSwirl";
 
 type LoadState = "loading" | "no-access" | "no-enrollment" | "ready";
 
@@ -268,43 +269,47 @@ function ProgramPageInner() {
   const pillar = PILLAR_STYLES[content.pillarColor];
 
   return (
-    <main className="mx-auto max-w-xl px-6 pb-28 pt-4">
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => goToDay(viewedDay - 1)}
-          disabled={viewedDay <= 1 || dayLoading}
-          aria-label="Previous day"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-ink-soft transition hover:border-primary hover:text-primary-dark disabled:opacity-30 disabled:hover:border-border disabled:hover:text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
+    <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-4">
+      <div className={`relative -mx-6 -mt-4 overflow-hidden px-6 pt-6 pb-6 ${pillar.dot}`}>
+        <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-white opacity-30" />
 
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
-            Day {viewedDay} of {PROGRAM_LENGTH_DAYS}
-          </p>
-          {viewedDay !== currentDay && (
-            <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-ink-faint underline dark:text-ink-dark-faint">
-              Back to today (Day {currentDay})
-            </button>
-          )}
+        <div className="relative flex items-center justify-between">
+          <button
+            onClick={() => goToDay(viewedDay - 1)}
+            disabled={viewedDay <= 1 || dayLoading}
+            aria-label="Previous day"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white transition hover:border-white disabled:opacity-30 disabled:hover:border-white/40"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-wide text-white/90">
+              Day {viewedDay} of {PROGRAM_LENGTH_DAYS}
+            </p>
+            {viewedDay !== currentDay && (
+              <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-white/75 underline">
+                Back to today (Day {currentDay})
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={() => goToDay(viewedDay + 1)}
+            disabled={viewedDay >= currentDay || dayLoading}
+            aria-label="Next day"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white transition hover:border-white disabled:opacity-30 disabled:hover:border-white/40"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
         </div>
 
-        <button
-          onClick={() => goToDay(viewedDay + 1)}
-          disabled={viewedDay >= currentDay || dayLoading}
-          aria-label="Next day"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-ink-soft transition hover:border-primary hover:text-primary-dark disabled:opacity-30 disabled:hover:border-border disabled:hover:text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+        <h1 className="relative mt-3 text-balance font-serif text-2xl font-semibold text-white">{content.pillar}</h1>
       </div>
-
-      <h1 className={`mt-3 font-serif text-2xl font-semibold ${pillar.eyebrow}`}>{content.pillar}</h1>
 
       {streak > 0 && (
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">

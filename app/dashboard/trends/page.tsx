@@ -9,6 +9,7 @@ import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { formatEntryData } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { WatermarkSwirl } from "@/components/BrandSwirl";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -80,13 +81,16 @@ export default function TrendsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
-      <AppHeader />
+    <main className="relative mx-auto max-w-2xl overflow-x-hidden px-6 pb-28 pt-8">
+      <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
-      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Trends</h1>
-      <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-        Every check you've ever taken, so you can see how you're changing over time — not just your latest result.
-      </p>
+      <div className="relative">
+        <AppHeader />
+
+        <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Trends</h1>
+        <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+          Every check you've ever taken, so you can see how you're changing over time — not just your latest result.
+        </p>
 
       <div className="mt-6 flex flex-col gap-4">
         {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
@@ -139,6 +143,8 @@ export default function TrendsPage() {
             </div>
           );
         })}
+      </div>
+
       </div>
 
       <TabBar />

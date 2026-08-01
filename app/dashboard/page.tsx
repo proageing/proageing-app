@@ -10,6 +10,7 @@ import { TabBar } from "@/components/TabBar";
 import { HomeCards } from "@/components/HomeCards";
 import { AffirmationCarousel } from "@/components/AffirmationCarousel";
 import { ArticlesSection } from "@/components/ArticlesSection";
+import { WatermarkSwirl } from "@/components/BrandSwirl";
 import type { AssessmentType } from "@/lib/importHistory";
 
 const AFFIRMATIONS = [
@@ -112,10 +113,13 @@ export default function DashboardPage() {
   const isFirstVisit = completedCount === 0;
 
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
-      <AppHeader onSignOut={handleSignOut} />
+    <main className="relative mx-auto max-w-2xl overflow-x-hidden px-6 pb-28 pt-8">
+      <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
-      <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
+      <div className="relative">
+        <AppHeader onSignOut={handleSignOut} />
+
+        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
       {isFirstVisit ? (
         <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Here&apos;s how ProAge works.</p>
       ) : (
@@ -145,7 +149,8 @@ export default function DashboardPage() {
         </>
       )}
 
-      <ArticlesSection />
+        <ArticlesSection />
+      </div>
 
       <TabBar />
     </main>
