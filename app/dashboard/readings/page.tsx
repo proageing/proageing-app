@@ -123,7 +123,7 @@ export default function ReadingsPage() {
                 <span className="font-medium text-ink dark:text-ink-dark">{title}</span>
               </span>
               {href ? (
-                <Link href={href} className={`text-sm font-semibold underline ${style.eyebrow}`}>
+                <Link href={`${href}?from=readings`} className={`text-sm font-semibold underline ${style.eyebrow}`}>
                   {row ? `${formatEntryData(type, row.entry_data)} · Retake` : "Start"}
                 </Link>
               ) : (

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { AssessmentTopBar } from "@/components/AssessmentTopBar";
 import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { returnLabelFrom, returnPathFrom } from "@/lib/assessments/returnTo";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   emptySitToStandAnswers,
@@ -23,7 +24,18 @@ const SCREEN_ORDER: Screen[] = ["welcome", "check", "setup", "test", "count", "r
 const pillar = PILLAR_STYLES.primary;
 
 export default function SitToStandPage() {
+  return (
+    <Suspense fallback={null}>
+      <SitToStandPageInner />
+    </Suspense>
+  );
+}
+
+function SitToStandPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = returnPathFrom(searchParams.get("from"));
+  const returnLabel = returnLabelFrom(searchParams.get("from"));
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<SitToStandAnswers>(emptySitToStandAnswers());
@@ -118,7 +130,7 @@ export default function SitToStandPage() {
       setSaveStatus(`Couldn't save: ${error}`);
       return;
     }
-    router.push("/dashboard");
+    router.push(returnTo);
   }
 
   return (
@@ -129,7 +141,7 @@ export default function SitToStandPage() {
         pillar={pillar}
         audioOn={audioOn}
         onToggleAudio={toggleAudio}
-        onExit={() => router.push("/dashboard")}
+        onExit={() => router.push(returnTo)}
       />
 
       {screen === "welcome" && (
@@ -389,7 +401,7 @@ export default function SitToStandPage() {
             disabled={saving}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            {saving ? "Saving…" : "Save & return to dashboard"}
+            {saving ? "Saving…" : `Save & return to ${returnLabel}`}
           </button>
           {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
         </div>

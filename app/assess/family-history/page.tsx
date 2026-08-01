@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { AssessmentTopBar } from "@/components/AssessmentTopBar";
 import { useAssessmentAudio } from "@/lib/assessments/speech";
+import { returnLabelFrom, returnPathFrom } from "@/lib/assessments/returnTo";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   CANCER_TYPE_OPTIONS,
@@ -34,7 +35,18 @@ const FLAG_LABELS: Record<string, string> = {
 };
 
 export default function FamilyHistoryPage() {
+  return (
+    <Suspense fallback={null}>
+      <FamilyHistoryPageInner />
+    </Suspense>
+  );
+}
+
+function FamilyHistoryPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = returnPathFrom(searchParams.get("from"));
+  const returnLabel = returnLabelFrom(searchParams.get("from"));
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<FamilyHistoryAnswers>(emptyFamilyHistoryAnswers());
@@ -98,7 +110,7 @@ export default function FamilyHistoryPage() {
       setSaveStatus(`Couldn't save: ${error}`);
       return;
     }
-    router.push("/dashboard");
+    router.push(returnTo);
   }
 
   return (
@@ -109,7 +121,7 @@ export default function FamilyHistoryPage() {
         pillar={pillar}
         audioOn={audioOn}
         onToggleAudio={toggleAudio}
-        onExit={() => router.push("/dashboard")}
+        onExit={() => router.push(returnTo)}
       />
 
       {screen === "welcome" && (
@@ -300,7 +312,7 @@ export default function FamilyHistoryPage() {
             disabled={saving}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            {saving ? "Saving…" : "Save & return to dashboard"}
+            {saving ? "Saving…" : `Save & return to ${returnLabel}`}
           </button>
           {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
         </div>

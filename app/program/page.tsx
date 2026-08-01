@@ -291,7 +291,7 @@ export default function ProgramPage() {
             {content.assessments.map((a) => (
               <Link
                 key={a.href}
-                href={a.href}
+                href={`${a.href}?from=program`}
                 className="rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark transition hover:bg-primary-light dark:hover:bg-primary-light-dark"
               >
                 {a.label} →
