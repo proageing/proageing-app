@@ -8,6 +8,7 @@ import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { PILLAR_HEX } from "@/lib/pillarHex";
 import { TREND_METRICS } from "@/lib/assessments/trendConfig";
+import { ASSESSMENT_INTROS } from "@/lib/assessments/intro";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { TrendChart } from "@/components/TrendChart";
@@ -97,6 +98,7 @@ export default function AssessmentTrendPage() {
   }
 
   const style = PILLAR_STYLES[meta.color];
+  const intro = ASSESSMENT_INTROS[typeParam];
 
   if (loading) {
     return (
@@ -119,6 +121,16 @@ export default function AssessmentTrendPage() {
 
       <p className={`mt-4 text-[0.74rem] font-bold uppercase tracking-[0.13em] ${style.eyebrow}`}>Your progress</p>
       <h1 className="font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{meta.title} Trend</h1>
+
+      {intro && (
+        <div className="mt-3 flex flex-col gap-2">
+          {intro.paragraphs.map((p) => (
+            <p key={p} className="text-sm text-ink-soft dark:text-ink-dark-soft">
+              {p}
+            </p>
+          ))}
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <div className="mt-6 rounded-xl border border-border bg-white p-4 text-sm text-ink-soft shadow-sm dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft">
