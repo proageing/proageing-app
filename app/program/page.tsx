@@ -15,6 +15,13 @@ import {
 } from "@/lib/program";
 import { contentForDay } from "@/lib/program21";
 import { getActiveSubscription } from "@/lib/subscription";
+import {
+  emptyTestimonial,
+  getTestimonial,
+  saveTestimonial,
+  IMPROVED_MOST_OPTIONS,
+  type TestimonialFields,
+} from "@/lib/testimonials";
 import { Logo } from "@/components/Logo";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
@@ -40,6 +47,7 @@ export default function ProgramPage() {
   const [learned, setLearned] = useState(false);
   const [actionDone, setActionDone] = useState(false);
   const [reflection, setReflection] = useState("");
+  const [testimonial, setTestimonial] = useState<TestimonialFields>(emptyTestimonial());
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [justSaved, setJustSaved] = useState(false);
@@ -90,6 +98,9 @@ export default function ProgramPage() {
         setActionDone(progress.habit_completed);
         setReflection(progress.checkin_note ?? "");
       }
+      if (contentForDay(day).isClose) {
+        setTestimonial((await getTestimonial(active.id, day)) ?? emptyTestimonial());
+      }
       setStreak(habitStreak);
       setLoadState("ready");
     }
@@ -107,6 +118,11 @@ export default function ProgramPage() {
     setLearned(progress?.video_watched ?? false);
     setActionDone(progress?.habit_completed ?? false);
     setReflection(progress?.checkin_note ?? "");
+    if (contentForDay(day).isClose) {
+      setTestimonial((await getTestimonial(enrollment.id, day)) ?? emptyTestimonial());
+    } else {
+      setTestimonial(emptyTestimonial());
+    }
     setDayLoading(false);
   }
 
@@ -126,7 +142,7 @@ export default function ProgramPage() {
   }
 
   async function handleSave() {
-    if (!enrollment) return;
+    if (!enrollment || !userId) return;
     setSaving(true);
     setSaveStatus(null);
     setJustSaved(false);
@@ -135,11 +151,20 @@ export default function ProgramPage() {
       habitCompleted: actionDone,
       checkinNote: reflection,
     });
-    setSaving(false);
     if (error) {
+      setSaving(false);
       setSaveStatus(`Couldn't save: ${error}`);
       return;
     }
+    if (contentForDay(viewedDay).isClose) {
+      const { error: testimonialError } = await saveTestimonial(userId, enrollment.id, viewedDay, testimonial);
+      if (testimonialError) {
+        setSaving(false);
+        setSaveStatus(`Couldn't save: ${testimonialError}`);
+        return;
+      }
+    }
+    setSaving(false);
     // Streak is always anchored to today, even when saving a backfilled
     // past day — completing a missed day can extend it.
     const newStreak = await computeHabitStreak(enrollment.id, currentDay);
@@ -317,6 +342,11 @@ export default function ProgramPage() {
       <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Reflect</p>
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
+        {content.reflectExamples && (
+          <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">
+            e.g. {content.reflectExamples.map((ex) => `"${ex}"`).join(" · ")}
+          </p>
+        )}
         <textarea
           value={reflection}
           onChange={(e) => {
@@ -328,6 +358,123 @@ export default function ProgramPage() {
           placeholder="Your answer…"
         />
       </div>
+
+      {content.isClose && (
+        <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Share your story</p>
+          <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">What has improved the most?</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {IMPROVED_MOST_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => {
+                  setTestimonial((t) => ({ ...t, improvedMost: opt.value }));
+                  setJustSaved(false);
+                }}
+                className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+                  testimonial.improvedMost === opt.value
+                    ? "border-primary bg-primary-light text-primary-dark dark:bg-primary-light-dark"
+                    : "border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {testimonial.improvedMost === "other" && (
+            <input
+              type="text"
+              value={testimonial.improvedMostOther}
+              onChange={(e) => {
+                setTestimonial((t) => ({ ...t, improvedMostOther: e.target.value }));
+                setJustSaved(false);
+              }}
+              placeholder="What improved?"
+              className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
+            />
+          )}
+
+          <p className="mt-4 text-sm font-medium text-ink dark:text-ink-dark">
+            Would you be willing to share this anonymously to encourage other adults?
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              onClick={() => {
+                setTestimonial((t) => ({ ...t, consentToShare: true }));
+                setJustSaved(false);
+              }}
+              className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
+                testimonial.consentToShare === true
+                  ? "border-primary bg-primary-light text-primary-dark dark:bg-primary-light-dark"
+                  : "border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
+              }`}
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => {
+                setTestimonial((t) => ({ ...t, consentToShare: false }));
+                setJustSaved(false);
+              }}
+              className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
+                testimonial.consentToShare === false
+                  ? "border-primary bg-primary-light text-primary-dark dark:bg-primary-light-dark"
+                  : "border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
+              }`}
+            >
+              No
+            </button>
+          </div>
+
+          {testimonial.consentToShare && (
+            <div className="mt-4 flex flex-col gap-4 border-t border-border pt-4 dark:border-border-dark">
+              <div>
+                <p className="text-sm font-medium text-ink dark:text-ink-dark">
+                  Before this programme, what was your biggest concern about ageing?
+                </p>
+                <textarea
+                  value={testimonial.beforeConcern}
+                  onChange={(e) => {
+                    setTestimonial((t) => ({ ...t, beforeConcern: e.target.value }));
+                    setJustSaved(false);
+                  }}
+                  rows={2}
+                  className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
+                  placeholder="Your answer…"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-ink dark:text-ink-dark">What is one change you&apos;ve noticed?</p>
+                <textarea
+                  value={testimonial.changeNoticed}
+                  onChange={(e) => {
+                    setTestimonial((t) => ({ ...t, changeNoticed: e.target.value }));
+                    setJustSaved(false);
+                  }}
+                  rows={2}
+                  className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
+                  placeholder="Your answer…"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-ink dark:text-ink-dark">
+                  What would you say to someone your age who is hesitant to start?
+                </p>
+                <textarea
+                  value={testimonial.recommendation}
+                  onChange={(e) => {
+                    setTestimonial((t) => ({ ...t, recommendation: e.target.value }));
+                    setJustSaved(false);
+                  }}
+                  rows={2}
+                  className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
+                  placeholder="Your answer…"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <button
         onClick={handleSave}

@@ -20,6 +20,7 @@ export interface Program21Day {
   assessments?: AssessmentLink[];
   action: string;
   reflect: string;
+  reflectExamples?: string[];
   isProfileReveal?: boolean;
   isClose?: boolean;
 }
@@ -85,7 +86,8 @@ export const PROGRAM21_DAYS: Program21Day[] = [
     learn: "Social isolation is as harmful to longevity as smoking 15 cigarettes a day (Holt-Lunstad, 3.4 million people) — more harmful than obesity or inactivity.",
     assessments: [{ label: "Take your Connection check", href: "/assess/connection" }],
     action: "Reach out to one person today — a call, not just a text.",
-    reflect: "Your Healthy Longevity Profile is complete — all 7 ProAgeing Steps checked. Which one do you want to focus on most this week?",
+    reflect: "What is one small win from this week?",
+    reflectExamples: ["I walked 4 days.", "I slept earlier.", "I did my first chair squats."],
     isProfileReveal: true,
   },
   {

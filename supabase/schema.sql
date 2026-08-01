@@ -82,6 +82,29 @@ create table public.day_progress (
   unique (enrollment_id, day_number)
 );
 
+-- Day 21's "share your story" prompt (PLAN.md testimony collection).
+-- Distinct from day_progress.checkin_note: that's a private daily journal
+-- entry, this is a structured, multi-field response the user has
+-- explicitly been asked whether they're willing to have referenced
+-- (anonymised) in marketing. consent_to_share is the source of truth for
+-- that — a row existing here is not itself permission to use it; only
+-- consent_to_share = true rows should ever be reviewed for that, and even
+-- then a human curates/anonymises before anything is published elsewhere.
+create table public.testimonials (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  enrollment_id uuid not null references public.program_enrollments (id) on delete cascade,
+  day_number int not null,  -- 21 today; kept general in case an earlier checkpoint is added later
+  improved_most text,  -- 'energy' | 'strength' | 'sleep' | 'confidence' | 'motivation' | 'other'
+  improved_most_other text,
+  consent_to_share boolean,
+  before_concern text,
+  change_noticed text,
+  recommendation text,
+  created_at timestamptz not null default now(),
+  unique (enrollment_id, day_number)
+);
+
 -- Written by the backend's Stripe webhook handler (service_role, bypasses
 -- RLS) — the policies below only need to stop a signed-in user from
 -- writing their own row directly through the client.
@@ -108,6 +131,7 @@ alter table public.consent_records enable row level security;
 alter table public.assessment_results enable row level security;
 alter table public.program_enrollments enable row level security;
 alter table public.day_progress enable row level security;
+alter table public.testimonials enable row level security;
 alter table public.subscriptions enable row level security;
 
 create or replace function public.is_admin()
@@ -202,6 +226,17 @@ create policy "day_progress: update own" on public.day_progress
   ) with check (
     enrollment_id in (select id from public.program_enrollments where user_id = auth.uid())
   );
+
+-- testimonials: own or admin, same shape as day_progress but with a
+-- direct user_id column (simpler than joining through enrollment, and
+-- this is the table an admin will actually query to find shareable
+-- stories, so a direct owner column is worth the small duplication).
+create policy "testimonials: select own or admin" on public.testimonials
+  for select using (user_id = auth.uid() or public.is_admin());
+create policy "testimonials: insert own" on public.testimonials
+  for insert with check (user_id = auth.uid());
+create policy "testimonials: update own" on public.testimonials
+  for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 -- subscriptions: users can only ever read their own; all writes are
 -- admin/service_role (the Stripe webhook handler uses service_role, which
