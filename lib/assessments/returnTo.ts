@@ -4,8 +4,8 @@
 // than always dropping them on the main dashboard.
 export type ReturnSource = "program" | "readings";
 
-export function returnPathFrom(from: string | null): string {
-  if (from === "program") return "/program";
+export function returnPathFrom(from: string | null, day?: string | null): string {
+  if (from === "program") return day ? `/program?day=${day}` : "/program";
   if (from === "readings") return "/dashboard/readings";
   return "/dashboard";
 }

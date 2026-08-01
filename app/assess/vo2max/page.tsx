@@ -32,7 +32,7 @@ export default function VO2MaxPage() {
 function VO2MaxPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const returnTo = returnPathFrom(searchParams.get("from"));
+  const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
   const returnLabel = returnLabelFrom(searchParams.get("from"));
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");

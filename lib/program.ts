@@ -108,6 +108,18 @@ export async function saveDayProgress(
   return { error: error?.message ?? null };
 }
 
+// True only when every listed assessment type has at least one saved
+// result for this user — used to default the Act card's "Done" checkbox
+// when someone returns from taking the check(s) linked to a given day.
+export async function hasCompletedAssessments(userId: string, types: string[]): Promise<boolean> {
+  if (types.length === 0) return false;
+  const { data, error } = await supabase.from("assessment_results").select("assessment_type").eq("user_id", userId).in("assessment_type", types);
+
+  if (error || !data) return false;
+  const completedTypes = new Set(data.map((row) => row.assessment_type));
+  return types.every((t) => completedTypes.has(t));
+}
+
 // Consecutive days of habit_completed=true, walking backward from
 // (currentDay - 1) plus today if already completed. A simple, honest
 // streak definition — no partial-day or grace-period rules yet.

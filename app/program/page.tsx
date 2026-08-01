@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import {
@@ -9,6 +9,7 @@ import {
   computeHabitStreak,
   getActiveEnrollment,
   getDayProgress,
+  hasCompletedAssessments,
   saveDayProgress,
   startEnrollment,
   type ProgramEnrollment,
@@ -35,8 +36,27 @@ const PROGRAM_LENGTH_DAYS = 21;
 // needed.
 const PAYWALL_ENABLED = false;
 
+// The linked assessment(s) for a day, so the Act card's Done checkbox can
+// default to checked when someone returns having taken them. Excludes the
+// closing day, which asks for a retake of 5 checks plus a Keystone Habit
+// declaration — one check being done there doesn't mean the day is done.
+function assessmentTypesForDay(day: number): string[] {
+  const content = contentForDay(day);
+  if (content.isClose || !content.assessments) return [];
+  return content.assessments.map((a) => a.href.split("/").pop()!);
+}
+
 export default function ProgramPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProgramPageInner />
+    </Suspense>
+  );
+}
+
+function ProgramPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [userId, setUserId] = useState<string | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [enrollment, setEnrollment] = useState<ProgramEnrollment | null>(null);
@@ -84,18 +104,26 @@ export default function ProgramPage() {
       }
 
       setEnrollment(active);
-      const day = computeCurrentDay(active.started_at, active.program_length_days);
-      setCurrentDay(day);
+      const today = computeCurrentDay(active.started_at, active.program_length_days);
+      setCurrentDay(today);
+      // Returning from a check taken via a day's Act card (?day=) should
+      // land back on that day, not reset to whatever day it is today.
+      const requestedDay = Number(searchParams.get("day"));
+      const day = requestedDay >= 1 && requestedDay <= today ? requestedDay : today;
       setViewedDay(day);
 
       const [progress, habitStreak] = await Promise.all([
         getDayProgress(active.id, day),
-        computeHabitStreak(active.id, day),
+        computeHabitStreak(active.id, today),
       ]);
 
+      if (progress?.habit_completed) {
+        setActionDone(true);
+      } else {
+        setActionDone(await hasCompletedAssessments(user.id, assessmentTypesForDay(day)));
+      }
       if (progress) {
         setLearned(progress.video_watched);
-        setActionDone(progress.habit_completed);
         setReflection(progress.checkin_note ?? "");
       }
       if (contentForDay(day).isClose) {
@@ -106,17 +134,22 @@ export default function ProgramPage() {
     }
 
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   async function goToDay(day: number) {
-    if (!enrollment || day < 1 || day > currentDay) return;
+    if (!enrollment || !userId || day < 1 || day > currentDay) return;
     setViewedDay(day);
     setJustSaved(false);
     setSaveStatus(null);
     setDayLoading(true);
     const progress = await getDayProgress(enrollment.id, day);
     setLearned(progress?.video_watched ?? false);
-    setActionDone(progress?.habit_completed ?? false);
+    if (progress?.habit_completed) {
+      setActionDone(true);
+    } else {
+      setActionDone(await hasCompletedAssessments(userId, assessmentTypesForDay(day)));
+    }
     setReflection(progress?.checkin_note ?? "");
     if (contentForDay(day).isClose) {
       setTestimonial((await getTestimonial(enrollment.id, day)) ?? emptyTestimonial());
@@ -316,7 +349,7 @@ export default function ProgramPage() {
             {content.assessments.map((a) => (
               <Link
                 key={a.href}
-                href={`${a.href}?from=program`}
+                href={`${a.href}?from=program&day=${viewedDay}`}
                 className="rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark transition hover:bg-primary-light dark:hover:bg-primary-light-dark"
               >
                 {a.label} →
