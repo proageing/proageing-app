@@ -127,10 +127,14 @@ function BalancePageInner() {
     // age and sex are stored alongside the score because this check's
     // norms depend on both. Without them a past result can never be
     // re-interpreted — only compared as a bare number.
+    // status is stored, not just recomputed later, so the record keeps
+    // the interpretation the participant was actually shown. If a norm
+    // table is ever revised, past results don't silently change meaning.
     const { error } = await saveAssessmentResult(userId, "balance", {
       score: answers.time,
       age: answers.age,
       sex: answers.sex,
+      status: result?.status ?? null,
     });
     setSaving(false);
     if (error) {

@@ -131,6 +131,7 @@ function SitToStandPageInner() {
       score: answers.reps,
       age: answers.age,
       sex: answers.sex,
+      status: result?.status ?? null,
     });
     setSaving(false);
     if (error) {

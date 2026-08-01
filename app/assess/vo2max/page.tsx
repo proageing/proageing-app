@@ -81,6 +81,7 @@ function VO2MaxPageInner() {
       rhr: answers.rhr,
       age: answers.age,
       sex: answers.sex,
+      status: category?.status ?? null,
     });
     setSaving(false);
     if (error) {
