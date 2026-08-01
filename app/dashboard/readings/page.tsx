@@ -113,7 +113,7 @@ export default function ReadingsPage() {
             <Link
               key={type}
               href={`/dashboard/readings/${type}`}
-              className={`flex flex-col justify-between rounded-2xl p-4 shadow-sm transition hover:brightness-105 ${style.pill}`}
+              className="flex flex-col justify-between rounded-2xl border border-border bg-white p-4 shadow-sm transition hover:border-primary dark:border-border-dark dark:bg-white/5"
               style={{ minHeight: "104px" }}
             >
               <div className="flex items-center gap-2">
@@ -125,9 +125,11 @@ export default function ReadingsPage() {
                 ) : (
                   <span className={`h-2 w-2 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
                 )}
-                <span className="text-xs font-bold uppercase tracking-wide">{title}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{title}</span>
               </div>
-              <div className="mt-2 text-lg font-bold">{row ? formatEntryData(type, row.entry_data) : "Not started"}</div>
+              <div className={`mt-2 text-lg font-bold ${row ? style.eyebrow : "text-ink-faint dark:text-ink-dark-faint"}`}>
+                {row ? formatEntryData(type, row.entry_data) : "Not started"}
+              </div>
             </Link>
           );
         })}
