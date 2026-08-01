@@ -124,7 +124,14 @@ function BalancePageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "balance", { score: answers.time });
+    // age and sex are stored alongside the score because this check's
+    // norms depend on both. Without them a past result can never be
+    // re-interpreted — only compared as a bare number.
+    const { error } = await saveAssessmentResult(userId, "balance", {
+      score: answers.time,
+      age: answers.age,
+      sex: answers.sex,
+    });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);

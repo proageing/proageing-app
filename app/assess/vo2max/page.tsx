@@ -74,7 +74,14 @@ function VO2MaxPageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "vo2max", { score: score.vo2max, rhr: answers.rhr });
+    // Cooper/ACSM fitness categories are age- and sex-banded, so both
+    // are stored with the estimate rather than only the derived number.
+    const { error } = await saveAssessmentResult(userId, "vo2max", {
+      score: score.vo2max,
+      rhr: answers.rhr,
+      age: answers.age,
+      sex: answers.sex,
+    });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);

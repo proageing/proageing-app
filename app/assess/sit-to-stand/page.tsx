@@ -124,7 +124,14 @@ function SitToStandPageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "sit-to-stand", { score: answers.reps });
+    // Age band and sex go with the score — the Rikli & Jones norms this
+    // check is scored against differ by both, so a bare rep count can't
+    // be interpreted later.
+    const { error } = await saveAssessmentResult(userId, "sit-to-stand", {
+      score: answers.reps,
+      age: answers.age,
+      sex: answers.sex,
+    });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);

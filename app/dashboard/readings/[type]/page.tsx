@@ -196,8 +196,10 @@ export default function AssessmentTrendPage() {
               .reverse()
               .map((row) => {
                 const primaryValue = row.entry_data[metrics[0]?.key];
-                const statusLabel =
-                  metrics[0]?.statusLabel && typeof primaryValue === "number" ? metrics[0].statusLabel(primaryValue) : null;
+                // Passed the whole row: some checks are scored against
+                // age- and sex-banded norms, and rows saved before those
+                // were persisted return null rather than a guessed band.
+                const statusLabel = metrics[0]?.statusLabel ? metrics[0].statusLabel(row.entry_data) : null;
                 return (
                   <div
                     key={row.created_at}
