@@ -65,7 +65,7 @@ export function HomeCards({ completedCount, totalCount }: { completedCount: numb
   return (
     <div className="mt-6 grid grid-cols-2 gap-3">
       <Link
-        href="#checks-list"
+        href="/dashboard/readings"
         className="flex flex-col justify-between rounded-2xl bg-primary p-4 text-white shadow-sm transition hover:brightness-105"
         style={{ minHeight: "128px" }}
       >

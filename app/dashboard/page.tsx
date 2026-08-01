@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
-import { PILLAR_STYLES } from "@/lib/pillarStyles";
-import { formatEntryData, greetingNameFromEmail } from "@/lib/formatResult";
+import { greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { HomeCards } from "@/components/HomeCards";
 import { AffirmationCarousel } from "@/components/AffirmationCarousel";
+import { ArticlesSection } from "@/components/ArticlesSection";
 import type { AssessmentType } from "@/lib/importHistory";
 
 const AFFIRMATIONS = [
@@ -146,55 +145,7 @@ export default function DashboardPage() {
         </>
       )}
 
-      <p
-        id="checks-list"
-        className="mt-8 scroll-mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint"
-      >
-        Your 9 checks
-      </p>
-      {!isFirstVisit && (
-        <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
-          <div
-            className="h-2 rounded-full bg-primary transition-all"
-            style={{ width: `${(completedCount / ASSESSMENT_TYPES.length) * 100}%` }}
-          />
-        </div>
-      )}
-
-      <ul className="mt-4 divide-y divide-border dark:divide-border-dark">
-        {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
-          const row = latestByType.get(type);
-          const style = PILLAR_STYLES[color];
-          return (
-            <li key={type} className="flex items-center justify-between py-4">
-              <span className="flex items-center gap-3">
-                {row ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-junebud" aria-hidden="true">
-                    <circle cx="12" cy="12" r="12" fill="currentColor" />
-                    <path d="M7.5 12.5l2.8 2.8L16.5 9" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                ) : (
-                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
-                )}
-                <span className="font-medium text-ink dark:text-ink-dark">{title}</span>
-              </span>
-              {href ? (
-                <Link href={href} className={`text-sm font-semibold underline ${style.eyebrow}`}>
-                  {row ? `${formatEntryData(type, row.entry_data)} · Retake` : "Start"}
-                </Link>
-              ) : (
-                <span className="text-sm text-ink-soft dark:text-ink-dark-soft">
-                  {row ? formatEntryData(type, row.entry_data) : "Not started"}
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-
-      <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
-        Import your ProAgeing Steps history from proageing.org
-      </Link>
+      <ArticlesSection />
 
       <TabBar />
     </main>
