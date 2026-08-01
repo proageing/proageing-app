@@ -1,3 +1,4 @@
+import { Logo } from "@/components/Logo";
 import type { PillarStyle } from "@/lib/pillarStyles";
 
 // Matches proageing.org's assessment top bar exactly: Exit link, a row of
@@ -48,9 +49,8 @@ export function AssessmentTopBar({
           {audioOn ? "🔊 Audio" : "🔇 Audio"}
         </button>
       </div>
-      <div className="text-center font-serif text-[0.92rem] font-semibold italic -tracking-[0.01em]">
-        <span className="text-ink dark:text-ink-dark">pro</span>
-        <span className="text-primary-dark">age</span>
+      <div className="flex justify-center">
+        <Logo size={32} />
       </div>
     </div>
   );
