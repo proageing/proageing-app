@@ -111,10 +111,10 @@ export default function ReadingsPage() {
             <Link
               key={type}
               href={`/dashboard/readings/${type}`}
-              className={`flex flex-col justify-between rounded-2xl border p-4 shadow-sm transition hover:brightness-[0.98] ${
+              className={`flex flex-col justify-between rounded-2xl border p-4 shadow-sm transition ${
                 row
-                  ? "border-junebud/40 bg-junebud-tint dark:border-junebud/30 dark:bg-junebud/10"
-                  : "border-primary/25 bg-primary-light dark:border-primary/20 dark:bg-primary-light-dark"
+                  ? "border-border bg-white hover:border-primary dark:border-border-dark dark:bg-white/5"
+                  : "border-primary/25 bg-primary-light hover:border-primary dark:border-primary/20 dark:bg-primary-light-dark"
               }`}
               style={{ minHeight: "104px" }}
             >
