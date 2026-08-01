@@ -270,7 +270,7 @@ function ProgramPageInner() {
     <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
       <AppHeader />
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-3 flex items-center justify-between">
         <button
           onClick={() => goToDay(viewedDay - 1)}
           disabled={viewedDay <= 1 || dayLoading}

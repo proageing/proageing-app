@@ -88,7 +88,7 @@ export default function AssessmentTrendPage() {
     return (
       <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
         <AppHeader />
-        <p className="mt-6 text-ink-soft dark:text-ink-dark-soft">Unknown assessment.</p>
+        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">Unknown assessment.</p>
         <Link href="/dashboard/readings" className="mt-2 inline-block text-sm text-primary-dark underline">
           ← Back to readings
         </Link>
@@ -114,7 +114,7 @@ export default function AssessmentTrendPage() {
 
       <Link
         href="/dashboard/readings"
-        className="mt-6 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
+        className="mt-3 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
       >
         ← Back to readings
       </Link>

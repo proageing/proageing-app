@@ -115,7 +115,7 @@ export default function DashboardPage() {
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
       <AppHeader onSignOut={handleSignOut} />
 
-      <p className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
+      <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
       {isFirstVisit ? (
         <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Here&apos;s how ProAge works.</p>
       ) : (

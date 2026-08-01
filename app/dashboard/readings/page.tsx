@@ -88,7 +88,7 @@ export default function ReadingsPage() {
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
       <AppHeader onSignOut={handleSignOut} />
 
-      <p className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
+      <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Every check you&apos;ve taken, and your latest result for each.</p>
 
       <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Your 9 checks</p>

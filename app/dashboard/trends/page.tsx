@@ -83,7 +83,7 @@ export default function TrendsPage() {
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
       <AppHeader />
 
-      <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Trends</h1>
+      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Trends</h1>
       <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
         Every check you've ever taken, so you can see how you're changing over time — not just your latest result.
       </p>
