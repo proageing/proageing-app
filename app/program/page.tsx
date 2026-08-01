@@ -15,6 +15,7 @@ import {
   type ProgramEnrollment,
 } from "@/lib/program";
 import { contentForDay } from "@/lib/program21";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { getActiveSubscription } from "@/lib/subscription";
 import {
   emptyTestimonial,
@@ -24,7 +25,6 @@ import {
   type TestimonialFields,
 } from "@/lib/testimonials";
 import { Logo } from "@/components/Logo";
-import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 
 type LoadState = "loading" | "no-access" | "no-enrollment" | "ready";
@@ -265,12 +265,11 @@ function ProgramPageInner() {
 
   const content = contentForDay(viewedDay);
   const isToday = viewedDay === currentDay;
+  const pillar = PILLAR_STYLES[content.pillarColor];
 
   return (
-    <main className="mx-auto max-w-xl px-6 pb-28 pt-8">
-      <AppHeader />
-
-      <div className="mt-3 flex items-center justify-between">
+    <main className="mx-auto max-w-xl px-6 pb-28 pt-4">
+      <div className="flex items-center justify-between">
         <button
           onClick={() => goToDay(viewedDay - 1)}
           disabled={viewedDay <= 1 || dayLoading}
@@ -305,7 +304,7 @@ function ProgramPageInner() {
         </button>
       </div>
 
-      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
+      <h1 className={`mt-3 font-serif text-2xl font-semibold ${pillar.eyebrow}`}>{content.pillar}</h1>
 
       {streak > 0 && (
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
@@ -325,8 +324,8 @@ function ProgramPageInner() {
         </div>
       )}
 
-      <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Learn</p>
+      <div className={`mt-6 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
+        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Learn</p>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
           <input
@@ -342,15 +341,15 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Act</p>
+      <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
+        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Act</p>
         {content.assessments && content.assessments.length > 0 && (
           <div className="mt-2 flex flex-col gap-2">
             {content.assessments.map((a) => (
               <Link
                 key={a.href}
                 href={`${a.href}?from=program&day=${viewedDay}`}
-                className="rounded-lg border border-primary px-3 py-2 text-center text-sm font-semibold text-primary-dark transition hover:bg-primary-light dark:hover:bg-primary-light-dark"
+                className="rounded-lg border border-primary bg-white px-3 py-2 text-center text-sm font-semibold text-primary-dark transition hover:bg-primary-light dark:bg-transparent dark:hover:bg-primary-light-dark"
               >
                 {a.label} →
               </Link>
@@ -372,8 +371,8 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Reflect</p>
+      <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
+        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Reflect</p>
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         {content.reflectExamples && (
           <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">
@@ -387,14 +386,14 @@ function ProgramPageInner() {
             setJustSaved(false);
           }}
           rows={3}
-          className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
+          className="mt-2 w-full rounded-lg border border-border bg-white px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
           placeholder="Your answer…"
         />
       </div>
 
       {content.isClose && (
-        <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Share your story</p>
+        <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
+          <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Share your story</p>
           <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">What has improved the most?</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {IMPROVED_MOST_OPTIONS.map((opt) => (

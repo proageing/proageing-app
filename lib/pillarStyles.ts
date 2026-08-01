@@ -11,6 +11,7 @@ export interface PillarStyle {
   eyebrow: string; // small caps label above a heading
   pill: string; // result/status pill background+text
   dot: string; // small color swatch (dashboard rows)
+  card: string; // tinted card background+border, body text stays neutral
 }
 
 export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
@@ -22,6 +23,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-primary-dark",
     pill: "bg-primary-light text-primary-dark",
     dot: "bg-primary",
+    card: "border-primary/25 bg-primary-light dark:bg-primary-light-dark",
   },
   purpose: {
     selected: "border-purpose bg-purpose-tint text-purpose-dark",
@@ -31,6 +33,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-purpose-dark",
     pill: "bg-purpose-tint text-purpose-dark",
     dot: "bg-purpose",
+    card: "border-purpose/25 bg-purpose-tint",
   },
   healthrisk: {
     selected: "border-healthrisk bg-healthrisk-tint text-healthrisk-dark",
@@ -40,6 +43,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-healthrisk-dark",
     pill: "bg-healthrisk-tint text-healthrisk-dark",
     dot: "bg-healthrisk",
+    card: "border-healthrisk/25 bg-healthrisk-tint",
   },
   cognitive: {
     selected: "border-cognitive bg-cognitive-tint text-cognitive-dark",
@@ -49,6 +53,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-cognitive-dark",
     pill: "bg-cognitive-tint text-cognitive-dark",
     dot: "bg-cognitive",
+    card: "border-cognitive/25 bg-cognitive-tint",
   },
   movement: {
     selected: "border-movement bg-movement-tint text-movement-dark",
@@ -58,6 +63,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-movement-dark",
     pill: "bg-movement-tint text-movement-dark",
     dot: "bg-movement",
+    card: "border-movement/25 bg-movement-tint",
   },
   strength: {
     selected: "border-strength bg-strength-tint text-strength-dark",
@@ -67,6 +73,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-strength-dark",
     pill: "bg-strength-tint text-strength-dark",
     dot: "bg-strength",
+    card: "border-strength/25 bg-strength-tint",
   },
   nutrition: {
     selected: "border-nutrition bg-nutrition-tint text-nutrition-dark",
@@ -76,6 +83,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-nutrition-dark",
     pill: "bg-nutrition-tint text-nutrition-dark",
     dot: "bg-nutrition",
+    card: "border-nutrition/25 bg-nutrition-tint",
   },
   sleep: {
     selected: "border-sleep bg-sleep-tint text-sleep-dark",
@@ -85,6 +93,7 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-sleep-dark",
     pill: "bg-sleep-tint text-sleep-dark",
     dot: "bg-sleep",
+    card: "border-sleep/25 bg-sleep-tint",
   },
   connection: {
     selected: "border-connection bg-connection-tint text-connection-dark",
@@ -94,5 +103,6 @@ export const PILLAR_STYLES: Record<PillarColor, PillarStyle> = {
     eyebrow: "text-connection-dark",
     pill: "bg-connection-tint text-connection-dark",
     dot: "bg-connection",
+    card: "border-connection/25 bg-connection-tint",
   },
 };
