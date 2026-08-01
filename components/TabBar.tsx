@@ -9,18 +9,15 @@ import { usePathname } from "next/navigation";
 // currentColor fills at two opacities rather than strokes, so they stay
 // single-color-safe (recolors cleanly with active/inactive tab state).
 
-function ChecksIcon() {
+function HomeIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="3" width="16" height="18" rx="4" fill="currentColor" fillOpacity="0.18" />
       <path
-        d="M8 12.5l2.6 2.6L16.5 9"
-        stroke="currentColor"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
+        d="M12 2.8 2.8 10.2V18.6c0 1.55 1.25 2.8 2.8 2.8h12.8c1.55 0 2.8-1.25 2.8-2.8V10.2z"
+        fill="currentColor"
+        fillOpacity="0.18"
       />
+      <rect x="9.4" y="13.8" width="5.2" height="7.6" rx="1.6" fill="currentColor" />
     </svg>
   );
 }
@@ -45,7 +42,7 @@ function PlansIcon() {
 }
 
 const TABS = [
-  { href: "/dashboard", label: "Checks", Icon: ChecksIcon },
+  { href: "/dashboard", label: "Home", Icon: HomeIcon },
   { href: "/program", label: "Programme", Icon: ProgrammeIcon },
   { href: "/upgrade", label: "Plans", Icon: PlansIcon },
 ];
