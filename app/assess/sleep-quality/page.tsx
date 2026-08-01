@@ -119,7 +119,7 @@ function SleepQualityPageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "sleep-quality", { score: result.total });
+    const { error } = await saveAssessmentResult(userId, "sleep-quality", { score: result.total, status: interpretation.status });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);

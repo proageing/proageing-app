@@ -6,8 +6,10 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { formatEntryData } from "@/lib/formatResult";
+import { readingsTierFor } from "@/lib/assessments/readingsTier";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { ReadingsStatusIcon } from "@/components/ReadingsStatusIcon";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -104,9 +106,22 @@ export default function ReadingsPage() {
         />
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-faint dark:text-ink-dark-faint">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-junebud" aria-hidden="true" /> Typical
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-amber-500" aria-hidden="true" /> Worth a look
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" aria-hidden="true" /> Discuss with your doctor
+        </span>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-3">
         {ASSESSMENT_TYPES.map(({ type, title }) => {
           const row = latestByType.get(type);
+          const tier = row ? readingsTierFor(type, row.entry_data) : null;
           return (
             <Link
               key={type}
@@ -120,10 +135,7 @@ export default function ReadingsPage() {
             >
               <div className="flex items-center gap-2">
                 {row ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 text-junebud" aria-hidden="true">
-                    <circle cx="12" cy="12" r="12" fill="currentColor" />
-                    <path d="M7.5 12.5l2.8 2.8L16.5 9" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <ReadingsStatusIcon tier={tier} />
                 ) : (
                   <span className="h-2 w-2 shrink-0 rounded-full bg-primary" aria-hidden="true" />
                 )}

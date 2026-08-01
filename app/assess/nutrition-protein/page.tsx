@@ -80,7 +80,7 @@ function NutritionProteinPageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "nutrition-protein", { score });
+    const { error } = await saveAssessmentResult(userId, "nutrition-protein", { score, status: result.status });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);

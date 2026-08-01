@@ -80,7 +80,7 @@ function PurposePageInner() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "purpose", { score: score.total });
+    const { error } = await saveAssessmentResult(userId, "purpose", { score: score.total, status: result.status });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);
