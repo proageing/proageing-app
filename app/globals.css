@@ -45,3 +45,15 @@ body {
     animation: none;
   }
 }
+
+/* Assessment count fields ship their own +/- buttons, so the browser's
+   native spinner arrows are redundant and crowd the digits. */
+input[type="number"].no-spinner::-webkit-inner-spin-button,
+input[type="number"].no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].no-spinner {
+  -moz-appearance: textfield;
+}

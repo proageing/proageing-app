@@ -147,7 +147,19 @@ function VO2MaxPageInner() {
               >
                 −
               </button>
-              <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.age}</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={18}
+                max={100}
+                value={answers.age}
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  setAnswers((p) => ({ ...p, age: Number.isNaN(n) ? 18 : Math.min(100, Math.max(18, n)) }));
+                }}
+                className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+              />
               <button
                 onClick={() => setAnswers((p) => ({ ...p, age: Math.max(18, Math.min(100, p.age + 1)) }))}
                 className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
@@ -189,7 +201,19 @@ function VO2MaxPageInner() {
               >
                 −
               </button>
-              <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.rhr}</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={35}
+                max={120}
+                value={answers.rhr}
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  setAnswers((p) => ({ ...p, rhr: Number.isNaN(n) ? 35 : Math.min(120, Math.max(35, n)) }));
+                }}
+                className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+              />
               <button
                 onClick={() => setAnswers((p) => ({ ...p, rhr: Math.max(35, Math.min(120, p.rhr + 1)) }))}
                 className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"

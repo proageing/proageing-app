@@ -248,7 +248,19 @@ function BalancePageInner() {
               >
                 −
               </button>
-              <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.age}</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={18}
+                max={100}
+                value={answers.age}
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  setAnswers((p) => ({ ...p, age: Number.isNaN(n) ? 18 : Math.min(100, Math.max(18, n)) }));
+                }}
+                className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+              />
               <button
                 onClick={() => setAnswers((p) => ({ ...p, age: Math.max(18, Math.min(100, p.age + 1)) }))}
                 className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"

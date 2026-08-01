@@ -358,14 +358,26 @@ function SitToStandPageInner() {
           <div className="mt-8 flex items-center justify-center gap-4">
             <button
               onClick={() => setAnswers((p) => ({ ...p, reps: Math.max(0, p.reps - 1) }))}
-              className="h-12 w-12 rounded-full border border-border dark:border-border-dark text-xl"
+              className="h-12 w-12 shrink-0 rounded-full border border-border dark:border-border-dark text-xl"
             >
               −
             </button>
-            <span className="w-16 text-center text-4xl font-bold tabular-nums">{answers.reps}</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={60}
+              value={answers.reps}
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => {
+                const n = parseInt(e.target.value, 10);
+                setAnswers((p) => ({ ...p, reps: Number.isNaN(n) ? 0 : Math.min(60, Math.max(0, n)) }));
+              }}
+              className="no-spinner w-20 rounded-lg border border-border bg-transparent text-center text-4xl font-bold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+            />
             <button
               onClick={() => setAnswers((p) => ({ ...p, reps: Math.min(60, p.reps + 1) }))}
-              className="h-12 w-12 rounded-full border border-border dark:border-border-dark text-xl"
+              className="h-12 w-12 shrink-0 rounded-full border border-border dark:border-border-dark text-xl"
             >
               +
             </button>

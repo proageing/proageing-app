@@ -197,7 +197,20 @@ function SleepQualityPageInner() {
                 >
                   −
                 </button>
-                <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.latency}</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={240}
+                  step={5}
+                  value={answers.latency}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => {
+                    const n = parseInt(e.target.value, 10);
+                    set("latency", Number.isNaN(n) ? 0 : Math.min(240, Math.max(0, n)));
+                  }}
+                  className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+                />
                 <button
                   onClick={() => set("latency", Math.max(0, Math.min(240, answers.latency + 5)))}
                   className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
@@ -220,7 +233,20 @@ function SleepQualityPageInner() {
                 >
                   −
                 </button>
-                <span className="w-12 text-center text-xl font-semibold tabular-nums">{answers.sleepHours}</span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  max={14}
+                  step={0.5}
+                  value={answers.sleepHours}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => {
+                    const n = parseFloat(e.target.value);
+                    set("sleepHours", Number.isNaN(n) ? 0 : Math.min(14, Math.max(0, n)));
+                  }}
+                  className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+                />
                 <button
                   onClick={() => set("sleepHours", Math.max(0, Math.min(14, Math.round((answers.sleepHours + 0.5) * 2) / 2)))}
                   className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
