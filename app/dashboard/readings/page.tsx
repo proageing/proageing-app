@@ -105,36 +105,33 @@ export default function ReadingsPage() {
         />
       </div>
 
-      <ul className="mt-4 divide-y divide-border dark:divide-border-dark">
-        {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        {ASSESSMENT_TYPES.map(({ type, title, color }) => {
           const row = latestByType.get(type);
           const style = PILLAR_STYLES[color];
           return (
-            <li key={type} className="flex items-center justify-between py-4">
-              <span className="flex items-center gap-3">
+            <Link
+              key={type}
+              href={`/dashboard/readings/${type}`}
+              className={`flex flex-col justify-between rounded-2xl p-4 shadow-sm transition hover:brightness-105 ${style.pill}`}
+              style={{ minHeight: "104px" }}
+            >
+              <div className="flex items-center gap-2">
                 {row ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-junebud" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 text-junebud" aria-hidden="true">
                     <circle cx="12" cy="12" r="12" fill="currentColor" />
-                    <path d="M7.5 12.5l2.8 2.8L16.5 9" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M7.5 12.5l2.8 2.8L16.5 9" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
-                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
                 )}
-                <span className="font-medium text-ink dark:text-ink-dark">{title}</span>
-              </span>
-              {href ? (
-                <Link href={`${href}?from=readings`} className={`text-sm font-semibold underline ${style.eyebrow}`}>
-                  {row ? `${formatEntryData(type, row.entry_data)} · Retake` : "Start"}
-                </Link>
-              ) : (
-                <span className="text-sm text-ink-soft dark:text-ink-dark-soft">
-                  {row ? formatEntryData(type, row.entry_data) : "Not started"}
-                </span>
-              )}
-            </li>
+                <span className="text-xs font-bold uppercase tracking-wide">{title}</span>
+              </div>
+              <div className="mt-2 text-lg font-bold">{row ? formatEntryData(type, row.entry_data) : "Not started"}</div>
+            </Link>
           );
         })}
-      </ul>
+      </div>
 
       <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
         Import your ProAgeing Steps history from proageing.org
