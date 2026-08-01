@@ -62,7 +62,7 @@ export default function VO2MaxPage() {
   async function handleSave() {
     if (!userId) return;
     setSaving(true);
-    const { error } = await saveAssessmentResult(userId, "vo2max", { score: score.vo2max });
+    const { error } = await saveAssessmentResult(userId, "vo2max", { score: score.vo2max, rhr: answers.rhr });
     setSaving(false);
     if (error) {
       setSaveStatus(`Couldn't save: ${error}`);
