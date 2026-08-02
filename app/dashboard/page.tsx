@@ -9,7 +9,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { HomeCards } from "@/components/HomeCards";
 import { AffirmationCarousel } from "@/components/AffirmationCarousel";
-import { ArticlesSection } from "@/components/ArticlesSection";
+import { SevenStepsSection } from "@/components/SevenStepsSection";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
 import type { AssessmentType } from "@/lib/importHistory";
 
@@ -149,7 +149,7 @@ export default function DashboardPage() {
         </>
       )}
 
-        <ArticlesSection />
+        <SevenStepsSection />
       </div>
 
       <TabBar />
