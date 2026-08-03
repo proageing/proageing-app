@@ -140,6 +140,26 @@ export default function AccountPage() {
       </div>
 
       <div className="mt-4 rounded-xl border border-border bg-white shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
+          Your data
+        </p>
+        <Link
+          href="/import"
+          className="flex items-center justify-between px-4 py-3.5 text-sm font-semibold text-ink transition hover:text-primary-dark dark:text-ink-dark"
+        >
+          <span>
+            Find history from another email
+            <span className="mt-0.5 block text-xs font-normal text-ink-faint dark:text-ink-dark-faint">
+              Results saved on proageing.org under a different address
+            </span>
+          </span>
+          <span className="shrink-0 text-ink-faint dark:text-ink-dark-faint" aria-hidden="true">
+            →
+          </span>
+        </Link>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-border bg-white shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Account</p>
         <a
           href="https://proageing.org/privacy.html"

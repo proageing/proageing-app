@@ -143,7 +143,7 @@ export default function ReadingsPage() {
       </div>
 
         <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
-          Import your ProAgeing Steps history from proageing.org
+          Missing history from proageing.org?
         </Link>
       </div>
 

@@ -25,12 +25,15 @@ export default function ImportHistoryPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
       <h1 className="font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-        Import your ProAgeing Steps history
+        Find history from another email
       </h1>
       <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-        Pull your existing assessment results from proageing.org into your ProAgeing account.
-        We only ever read your own data, using a sign-in link sent to your email — nothing is
-        shared with anyone else.
+        Anything you saved on proageing.org comes across automatically when you sign in, as
+        long as you used the same email address. If you used a different one, enter it here and
+        we&apos;ll send that address a link to confirm it&apos;s yours.
+      </p>
+      <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+        We only ever read your own data — nothing is shared with anyone else.
       </p>
 
       {!sent ? (

@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { completeSessionFromUrlHash } from "@/lib/authCallback";
 import { recordPendingConsent } from "@/lib/consent";
 import { takeNextPath } from "@/lib/nextPath";
+import { runLegacyImport } from "@/lib/runLegacyImport";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -29,6 +30,11 @@ export default function AuthCallbackPage() {
       if (user) {
         await recordPendingConsent(user.id);
       }
+
+      // Bring across anything this person saved on proageing.org before
+      // the app existed. Idempotent, and it swallows its own failures —
+      // sign-in must not hinge on the legacy project being reachable.
+      await runLegacyImport();
 
       router.replace(takeNextPath());
     }
