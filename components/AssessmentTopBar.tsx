@@ -1,5 +1,9 @@
+"use client";
+
 import { Logo } from "@/components/Logo";
 import type { PillarStyle } from "@/lib/pillarStyles";
+
+import { useT } from "@/lib/i18n/context";
 
 // Matches proageing.org's assessment top bar exactly: Exit link, a row of
 // progress dots for the page's screen order, an Audio toggle in the pillar
@@ -19,6 +23,7 @@ export function AssessmentTopBar({
   onToggleAudio: () => void;
   onExit: () => void;
 }) {
+  const t = useT();
   const idx = order.indexOf(current);
 
   return (
@@ -28,7 +33,7 @@ export function AssessmentTopBar({
           onClick={onExit}
           className="text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
         >
-          ← Exit
+          {t.assess.common.exit}
         </button>
         {idx >= 0 && (
           <div className="flex gap-[7px]">
@@ -46,7 +51,7 @@ export function AssessmentTopBar({
           onClick={onToggleAudio}
           className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold text-white ${pillar.solidButton}`}
         >
-          {audioOn ? "🔊 Audio" : "🔇 Audio"}
+          {audioOn ? `🔊 ${t.assess.common.audio}` : `🔇 ${t.assess.common.audio}`}
         </button>
       </div>
       <div className="flex justify-center">

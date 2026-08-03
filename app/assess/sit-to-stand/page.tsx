@@ -9,6 +9,7 @@ import { AssessmentTopBar } from "@/components/AssessmentTopBar";
 import { useAssessmentAudio } from "@/lib/assessments/speech";
 import { returnLabelFrom, returnPathFrom } from "@/lib/assessments/returnTo";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
+import { useT } from "@/lib/i18n/context";
 import {
   emptySitToStandAnswers,
   getNormRange,
@@ -38,6 +39,8 @@ function SitToStandPageInner() {
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
   const returnLabel = returnLabelFrom(searchParams.get("from"));
   const [userId, setUserId] = useState<string | null>(null);
+  const t = useT();
+  const c = t.assess.sitToStand;
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<SitToStandAnswers>(emptySitToStandAnswers());
   const [timeLeft, setTimeLeft] = useState(30);
@@ -155,29 +158,27 @@ function SitToStandPageInner() {
 
       {screen === "welcome" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Physical Function Check · ~4 minutes</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Sit-to-Stand Check</h1>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.eyebrow}</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{c.title}</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            This test measures the strength in your legs and hips — the muscles you use every day
-            to get up from a chair, climb stairs, or catch your balance.
+            {c.intro1}
           </p>
           <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
-            You&apos;ll stand up and sit down from a chair as many times as you can in 30 seconds.
-            No equipment needed beyond a sturdy chair.
+            {c.intro2}
           </p>
           <button onClick={() => setScreen("check")} className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
-            Let&apos;s begin
+            {c.begin}
           </button>
         </div>
       )}
 
       {screen === "check" && (
         <div>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Two quick safety questions</h2>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.safetyHeading}</h2>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
             <p className="font-medium text-ink dark:text-ink-dark">
-              Do you have a sturdy chair with no wheels, that won&apos;t slide when you sit or stand?
+              {c.chairQuestion}
             </p>
             <div className="mt-3 flex gap-2">
               <button
@@ -186,7 +187,7 @@ function SitToStandPageInner() {
                   answers.chairReady === true ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
                 }`}
               >
-                Yes, ready
+                {c.chairYes}
               </button>
               <button
                 onClick={() => setAnswers((p) => ({ ...p, chairReady: false }))}
@@ -194,15 +195,14 @@ function SitToStandPageInner() {
                   answers.chairReady === false ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
                 }`}
               >
-                Not yet
+                {c.chairNo}
               </button>
             </div>
           </div>
 
           <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
             <p className="font-medium text-ink dark:text-ink-dark">
-              Right now, are you free of pain, dizziness, or a recent injury that would make
-              standing up repeatedly unsafe?
+              {c.safeQuestion}
             </p>
             <div className="mt-3 flex gap-2">
               <button
@@ -211,7 +211,7 @@ function SitToStandPageInner() {
                   answers.safe === true ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
                 }`}
               >
-                Yes, I&apos;m fine
+                {c.safeYes}
               </button>
               <button
                 onClick={() => setAnswers((p) => ({ ...p, safe: false }))}
@@ -219,13 +219,13 @@ function SitToStandPageInner() {
                   answers.safe === false ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
                 }`}
               >
-                Not today
+                {c.safeNo}
               </button>
             </div>
           </div>
 
           <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
-            Just so we can compare your result fairly
+            {c.compareNote}
           </p>
           <div className="mt-2 flex gap-2">
             {([60, 70, 80] as AgeBand[]).map((band) => (
@@ -249,7 +249,7 @@ function SitToStandPageInner() {
                   answers.sex === s ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
                 }`}
               >
-                {s === "f" ? "Female" : "Male"}
+                {s === "f" ? c.female : c.male}
               </button>
             ))}
           </div>
@@ -259,30 +259,27 @@ function SitToStandPageInner() {
             disabled={!isSafetyComplete(answers)}
             className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            Continue
+            {t.assess.common.continue}
           </button>
         </div>
       )}
 
       {screen === "unsafe" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-red-600">Let&apos;s hold off</p>
-          <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">We&apos;ll skip the test for today</h2>
+          <p className="text-xs font-semibold uppercase tracking-wide text-red-600">{c.holdOff}</p>
+          <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.skipToday}</h2>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            Standing up repeatedly isn&apos;t a good idea while you&apos;re dealing with pain,
-            dizziness, or a recent injury, or without a chair that won&apos;t slide. Please check
-            with your doctor first, or get set up safely — we&apos;ll be right here whenever
-            you&apos;re ready to try.
+            {c.skipBody}
           </p>
           <button onClick={() => setScreen("welcome")} className="mt-6 rounded border border-border dark:border-border-dark px-4 py-2 font-medium text-ink-soft dark:text-ink-dark-soft">
-            Not now
+            {t.assess.common.notNow}
           </button>
         </div>
       )}
 
       {screen === "setup" && (
         <div>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Set up your chair like this</h2>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.setupHeading}</h2>
 
           <div className="mt-4 overflow-hidden rounded-2xl bg-primary-light dark:bg-primary-light-dark">
             <video autoPlay loop muted playsInline className="block h-auto w-full">
@@ -290,53 +287,50 @@ function SitToStandPageInner() {
             </video>
           </div>
           <p className="mt-2 text-center text-xs font-semibold text-primary-dark">
-            Watch it loop once, then try a slow practice rep yourself.
+            {c.watchLoop}
           </p>
 
           <ol className="mt-6 flex flex-col gap-4">
             <li className="flex gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-tint font-semibold text-primary-dark">1</span>
               <span>
-                <strong className="text-ink dark:text-ink-dark">Back against a wall.</strong>{" "}
-                <span className="text-ink-soft dark:text-ink-dark-soft">Or push it into a corner so it can&apos;t slide.</span>
+                <strong className="text-ink dark:text-ink-dark">{c.setup1Strong}</strong>{" "}
+                <span className="text-ink-soft dark:text-ink-dark-soft">{c.setup1}</span>
               </span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-tint font-semibold text-primary-dark">2</span>
               <span>
-                <strong className="text-ink dark:text-ink-dark">Sit towards the front edge.</strong>{" "}
-                <span className="text-ink-soft dark:text-ink-dark-soft">Feet flat on the floor, about shoulder-width apart.</span>
+                <strong className="text-ink dark:text-ink-dark">{c.setup2Strong}</strong>{" "}
+                <span className="text-ink-soft dark:text-ink-dark-soft">{c.setup2}</span>
               </span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-tint font-semibold text-primary-dark">3</span>
               <span>
-                <strong className="text-ink dark:text-ink-dark">Cross your arms over your chest.</strong>{" "}
-                <span className="text-ink-soft dark:text-ink-dark-soft">No pushing off with your hands or the chair arms.</span>
+                <strong className="text-ink dark:text-ink-dark">{c.setup3Strong}</strong>{" "}
+                <span className="text-ink-soft dark:text-ink-dark-soft">{c.setup3}</span>
               </span>
             </li>
           </ol>
           <p className="mt-6 text-sm text-ink-soft dark:text-ink-dark-soft">
-            In the real check, do as many full stands as you can in 30 seconds. Full stand, full
-            sit, that&apos;s one rep. Just count each one in your head — no need to touch your
-            phone while you&apos;re moving. We&apos;ll ask for your total once the timer ends.
+            {c.setupBody}
           </p>
           <button onClick={() => setScreen("test")} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
-            I&apos;m ready
+            {c.ready}
           </button>
         </div>
       )}
 
       {screen === "test" && (
         <div className="flex flex-col items-center text-center">
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Time remaining</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.timeRemaining}</p>
           <div className="mt-4 text-7xl font-bold tabular-nums text-primary-dark">{timeLeft}</div>
           <p className="mt-4 text-ink-soft dark:text-ink-dark-soft">
-            {timeLeft > 15 ? "Go — as many full stands as you can." : timeLeft > 5 ? "Halfway there — keep going." : "Almost done."}
+            {timeLeft > 15 ? c.go : timeLeft > 5 ? c.halfway : c.almostDone}
           </p>
           <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-            🧠 Count each full stand in your head. No need to touch your phone — we&apos;ll ask for
-            your total when time&apos;s up.
+            {c.countInHead}
           </p>
           <button
             onClick={() => {
@@ -345,16 +339,16 @@ function SitToStandPageInner() {
             }}
             className="mt-8 rounded border border-red-300 px-4 py-2 font-medium text-red-600"
           >
-            Stop — I need to rest
+            {c.stopRest}
           </button>
         </div>
       )}
 
       {screen === "count" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Time&apos;s up</p>
-          <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">How many did you complete?</h2>
-          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Count only full stands — all the way up, all the way back down.</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.timesUp}</p>
+          <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.howMany}</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{c.countOnlyFull}</p>
 
           <div className="mt-8 flex items-center justify-center gap-4">
             <button
@@ -385,36 +379,34 @@ function SitToStandPageInner() {
           </div>
 
           <button onClick={goToResults} className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}>
-            See my results
+            {c.seeResults}
           </button>
         </div>
       )}
 
       {screen === "results" && result && normRange && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your result</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{t.assess.common.yourResult}</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-primary-dark">{answers.reps}</div>
-            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">full stands in 30 seconds</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">{c.standsIn30}</div>
           </div>
 
           <p className="mt-6 rounded-full bg-primary-tint px-3 py-1 text-center text-sm font-semibold text-primary-dark">
-            {result.label}
+            {c.result[result.status].label}
           </p>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            Typical range for your group: {normRange[0]}–{normRange[1]} stands (illustrative
-            reference, Rikli & Jones Senior Fitness Test).
+            {c.typicalRange(normRange[0], normRange[1])}
           </p>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {c.result[result.status].title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{c.result[result.status].text}</p>
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            This is an educational screening check, not a diagnosis. If you felt very unsteady
-            during this test, please mention it to your doctor.
+            {c.disclaimer}
           </p>
 
           <button
@@ -422,7 +414,7 @@ function SitToStandPageInner() {
             disabled={saving}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            {saving ? "Saving…" : `Save & return to ${returnLabel}`}
+            {saving ? t.assess.common.saving : t.assess.common.saveAndReturn(returnLabel)}
           </button>
           {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
         </div>

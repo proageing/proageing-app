@@ -235,6 +235,84 @@ export const zh: Dictionary = {
     nextStep: (n: number) => `步骤 ${n} →`,
   },
 
+  // Wording for the checks follows proageing.org/zh/*.html, which is the
+  // published Chinese for these instruments. The result copy in particular
+  // is health guidance and is taken from the site rather than re-worded.
+  assess: {
+    common: {
+      exit: "← 退出",
+      audio: "语音",
+      continue: "继续",
+      saving: "保存中…",
+      saveAndReturn: (target: string) => `保存并返回${target}`,
+      notNow: "暂不进行",
+      yourResult: "你的结果",
+    },
+    sitToStand: {
+      eyebrow: "身体功能检测 · 约 4 分钟",
+      title: "坐立测试",
+      intro1: "本测试评估你腿部与髋部的力量——这些肌肉是你每天从椅子上站起、爬楼梯或保持平衡时所使用的。",
+      intro2: "你将在 30 秒内尽可能多次地从椅子上站起再坐下。除了一把稳固的椅子外，无需其他器材。",
+      begin: "开始吧",
+      safetyHeading: "两个简短的安全问题",
+      chairQuestion: "你是否有一把没有轮子、坐下或站起时不会滑动的稳固椅子？",
+      chairYes: "是的，已准备好",
+      chairNo: "还没有",
+      safeQuestion: "你目前是否没有疼痛、头晕，或近期没有会让反复起立变得不安全的伤病？",
+      safeYes: "是的，我没问题",
+      safeNo: "今天不行",
+      compareNote: "这样我们才能公平地比较你的结果",
+      female: "女性",
+      male: "男性",
+      holdOff: "先暂缓一下",
+      skipToday: "我们今天先跳过这项测试",
+      skipBody:
+        "在有疼痛、头晕或近期受伤的情况下，反复站立并不是个好主意；没有一把不会滑动的椅子时也是。请先咨询医生，或把场地安置妥当——准备好后我们随时都在这里。",
+      setupHeading: "请这样摆放你的椅子",
+      watchLoop: "先看一次循环演示，再自己慢慢练习一次。",
+      setup1Strong: "椅背靠墙。",
+      setup1: "或将椅子推入墙角，使其无法滑动。",
+      setup2Strong: "坐在椅子前缘。",
+      setup2: "双脚平放在地面上，与肩同宽。",
+      setup3Strong: "双臂交叉抱于胸前。",
+      setup3: "不要用手或扶手借力。",
+      setupBody:
+        "在正式测试中，请在 30 秒内尽可能多次完整站立。完全站起、完全坐下，算作一次。只需在心里默数，不必在移动时触碰手机。计时结束后，我们会请你输入总次数。",
+      ready: "我准备好了",
+      timeRemaining: "剩余时间",
+      go: "开始——尽力完成更多次完整站立。",
+      halfway: "过半了——继续保持。",
+      almostDone: "快结束了。",
+      countInHead: "🧠 请在心里默数每一次完整站立。不必触碰手机——计时结束后我们会请你输入总次数。",
+      stopRest: "停止 — 我需要休息",
+      timesUp: "时间到",
+      howMany: "你完成了多少次？",
+      countOnlyFull: "只计算完整的站立——完全站起，再完全坐下。",
+      seeResults: "查看我的结果",
+      standsIn30: "30 秒内完整站立次数",
+      typicalRange: (lo: number, hi: number) =>
+        `你所在组别的典型范围：${lo}–${hi} 次（示例参考，Rikli & Jones Senior Fitness Test）。`,
+      disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
+      result: {
+        below: {
+          label: "低于同年龄组的典型范围",
+          title: "这是一个信号，而非诊断",
+          text: "下肢力量是变老过程中最容易靠训练补回来的能力之一——研究显示，简单的运动坚持 8 到 12 周，就能看到明显改善。下次看医生时可以提一提，尤其如果最近平衡或爬楼梯的感觉有变化。",
+        },
+        within: {
+          label: "处于同年龄组的典型范围内",
+          title: "保持稳定",
+          text: "你的下肢力量就在同年龄该有的水平上。这种能力不用就会悄悄退掉——规律地动，才守得住。",
+        },
+        above: {
+          label: "高于同年龄组的典型范围",
+          title: "比大多数同龄人更强健",
+          text: "这和能不能自理、跌不跌倒关系很大。你现在做的运动是有效的，继续保持。",
+        },
+      },
+    },
+  },
+
   consent: {
     heading: "数据使用同意与个人资料保护法（PDPA）",
     clauses: [

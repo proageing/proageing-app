@@ -229,6 +229,86 @@ export const en = {
     nextStep: (n: number) => `Step ${n} →`,
   },
 
+  assess: {
+    common: {
+      exit: "← Exit",
+      audio: "Audio",
+      continue: "Continue",
+      saving: "Saving…",
+      saveAndReturn: (target: string) => `Save & return to ${target}`,
+      notNow: "Not now",
+      yourResult: "Your result",
+    },
+    sitToStand: {
+      eyebrow: "Physical Function Check · ~4 minutes",
+      title: "Sit-to-Stand Check",
+      intro1:
+        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance.",
+      intro2:
+        "You'll stand up and sit down from a chair as many times as you can in 30 seconds. No equipment needed beyond a sturdy chair.",
+      begin: "Let's begin",
+      safetyHeading: "Two quick safety questions",
+      chairQuestion: "Do you have a sturdy chair with no wheels, that won't slide when you sit or stand?",
+      chairYes: "Yes, ready",
+      chairNo: "Not yet",
+      safeQuestion:
+        "Right now, are you free of pain, dizziness, or a recent injury that would make standing up repeatedly unsafe?",
+      safeYes: "Yes, I'm fine",
+      safeNo: "Not today",
+      compareNote: "Just so we can compare your result fairly",
+      female: "Female",
+      male: "Male",
+      holdOff: "Let's hold off",
+      skipToday: "We'll skip the test for today",
+      skipBody:
+        "Standing up repeatedly isn't a good idea while you're dealing with pain, dizziness, or a recent injury, or without a chair that won't slide. Please check with your doctor first, or get set up safely — we'll be right here whenever you're ready to try.",
+      setupHeading: "Set up your chair like this",
+      watchLoop: "Watch it loop once, then try a slow practice rep yourself.",
+      setup1Strong: "Back against a wall.",
+      setup1: "Or push it into a corner so it can't slide.",
+      setup2Strong: "Sit towards the front edge.",
+      setup2: "Feet flat on the floor, about shoulder-width apart.",
+      setup3Strong: "Cross your arms over your chest.",
+      setup3: "No pushing off with your hands or the chair arms.",
+      setupBody:
+        "In the real check, do as many full stands as you can in 30 seconds. Full stand, full sit, that's one rep. Just count each one in your head — no need to touch your phone while you're moving. We'll ask for your total once the timer ends.",
+      ready: "I'm ready",
+      timeRemaining: "Time remaining",
+      go: "Go — as many full stands as you can.",
+      halfway: "Halfway there — keep going.",
+      almostDone: "Almost done.",
+      countInHead:
+        "🧠 Count each full stand in your head. No need to touch your phone — we'll ask for your total when time's up.",
+      stopRest: "Stop — I need to rest",
+      timesUp: "Time's up",
+      howMany: "How many did you complete?",
+      countOnlyFull: "Count only full stands — all the way up, all the way back down.",
+      seeResults: "See my results",
+      standsIn30: "full stands in 30 seconds",
+      typicalRange: (lo: number, hi: number) =>
+        `Typical range for your group: ${lo}–${hi} stands (illustrative reference, Rikli & Jones Senior Fitness Test).`,
+      disclaimer:
+        "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
+      result: {
+        below: {
+          label: "Below typical range for your age group",
+          title: "This is a signal, not a diagnosis",
+          text: "Lower-body strength is one of the most trainable aspects of ageing — research shows meaningful improvement is possible within 8–12 weeks of consistent, simple exercise. Worth mentioning at your next doctor visit, especially alongside any recent changes in balance or stair-climbing.",
+        },
+        within: {
+          label: "Within typical range for your age group",
+          title: "Holding steady",
+          text: "Your lower-body strength is where we'd expect for your age. This is exactly the kind of measure that quietly declines if it isn't used — regular movement helps you stay right here.",
+        },
+        above: {
+          label: "Above typical range for your age group",
+          title: "Stronger than most peers your age",
+          text: "This is strongly associated with staying independent and lowering fall risk as you age. Whatever you're doing for activity, it's working — keep it up.",
+        },
+      },
+    },
+  },
+
   consent: {
     heading: "Consent of data usage & PDPA",
     clauses: [
