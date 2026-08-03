@@ -10,8 +10,12 @@ export function returnPathFrom(from: string | null, day?: string | null): string
   return "/dashboard";
 }
 
-export function returnLabelFrom(from: string | null): string {
-  if (from === "program") return "the 21-Day Challenge";
-  if (from === "readings") return "your readings";
+// Returns a dictionary key rather than a label, so the wording lives with
+// the rest of the copy and gets translated with it.
+export type ReturnLabelKey = "program" | "readings" | "dashboard";
+
+export function returnLabelKeyFrom(from: string | null): ReturnLabelKey {
+  if (from === "program") return "program";
+  if (from === "readings") return "readings";
   return "dashboard";
 }

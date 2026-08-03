@@ -8,7 +8,8 @@ import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
 import { AssessmentTopBar } from "@/components/AssessmentTopBar";
 import { useAssessmentAudio } from "@/lib/assessments/speech";
-import { returnLabelFrom, returnPathFrom } from "@/lib/assessments/returnTo";
+import { returnLabelKeyFrom, returnPathFrom } from "@/lib/assessments/returnTo";
+import { useT } from "@/lib/i18n/context";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import {
   FREQUENCY_OPTIONS,
@@ -37,7 +38,8 @@ function NutritionProteinPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
-  const returnLabel = returnLabelFrom(searchParams.get("from"));
+  const returnLabelKey = returnLabelKeyFrom(searchParams.get("from"));
+  const t = useT();
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<NutritionAnswers>(emptyNutritionAnswers());
@@ -198,7 +200,7 @@ function NutritionProteinPageInner() {
             disabled={saving}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            {saving ? "Saving…" : `Save & return to ${returnLabel}`}
+            {saving ? t.assess.common.saving : t.assess.common.saveAndReturn(t.assess.common.returnTo[returnLabelKey])}
           </button>
           {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
         </div>

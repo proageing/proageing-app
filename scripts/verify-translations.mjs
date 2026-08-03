@@ -85,7 +85,10 @@ function significantTokensIn(s) {
 
   // Citation parentheticals: any capitalised surname inside brackets that
   // also carry a year. This is where the evidence claims live.
-  for (const paren of s.match(/\([^)]*\b(?:19|20)\d{2}[^)]*\)/g) ?? []) {
+  //
+  // Both bracket styles, because Chinese uses full-width （） — matching
+  // only ASCII made every correctly-translated citation look dropped.
+  for (const paren of s.match(/[(（][^)）]*\b(?:19|20)\d{2}[^)）]*[)）]/g) ?? []) {
     for (const w of paren.match(/\b[A-Z][a-zA-Z-]{2,}\b/g) ?? []) {
       if (!["Senior", "Fitness", "Test"].includes(w)) out.add(w);
     }

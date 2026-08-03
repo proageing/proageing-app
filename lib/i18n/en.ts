@@ -238,6 +238,11 @@ export const en = {
       saveAndReturn: (target: string) => `Save & return to ${target}`,
       notNow: "Not now",
       yourResult: "Your result",
+      returnTo: {
+        program: "the 21-Day Challenge",
+        readings: "your readings",
+        dashboard: "dashboard",
+      },
     },
     balance: {
       eyebrow: "Balance Check · ~2 minutes",
@@ -320,6 +325,77 @@ export const en = {
           nextSteps: [
             "Keep doing whatever activity is supporting this.",
             "Retest every few months to keep tracking your trend.",
+          ],
+        },
+      },
+    },
+    vo2max: {
+      eyebrow: "Cardiorespiratory Fitness · ~3 minutes",
+      title: "VO2 Max & Resting Heart Rate",
+      intro1:
+        "VO2 max measures how efficiently your heart, lungs, and muscles use oxygen during exercise. It's one of the strongest predictors of healthy longevity found in ageing research — in one study of over 122,000 adults, the fittest group had an 80% lower risk of death than the least fit (Mandsager et al., JAMA Network Open, 2018).",
+      intro2:
+        "We'll estimate yours from your resting heart rate using the Heart Rate Ratio Method (Uth et al., 2004) — no treadmill needed.",
+      beforeBegin: "📏 Before you begin",
+      beforeBeginBody:
+        "For the most accurate result, measure your resting heart rate first thing in the morning, before getting out of bed. Count your pulse for a full 60 seconds.",
+      begin: "Let's begin",
+      tellUs: "Tell us about yourself",
+      tellUsBlurb: "Just three numbers — no equipment needed beyond a watch or phone timer.",
+      aboutYou: "About you",
+      yourAge: "Your age",
+      yearsUnit: "years",
+      yourSex: "Your sex",
+      male: "Male",
+      female: "Female",
+      restingHr: "Your resting heart rate",
+      pulseCount: "Pulse count (60 seconds, at rest)",
+      pulseBlurb: "Count your pulse for a full minute while sitting calmly, ideally first thing in the morning.",
+      bpm: "beats per minute",
+      seeResults: "See my results",
+      estimatedVo2: "estimated VO2 max (mL/kg/min)",
+      maxHr: "Max HR (bpm)",
+      restingHrShort: "Resting HR (bpm)",
+      estimateFor: (age: number, sex: string) => `Estimate for age ${age}, ${sex}. Categories from Cooper Institute / ACSM norms.`,
+      sexMale: "male",
+      sexFemale: "female",
+      nextStepsHeading: "✅ Suggested next steps",
+      disclaimer:
+        "This is a formula-based estimate, not a lab measurement — individual accuracy varies, and it tends to underestimate VO2 max in fitter people. It's a screening tool, not a diagnosis. Always check with your doctor before starting a new exercise programme.",
+      category: {
+        poor: "Poor for your age & sex",
+        fair: "Fair for your age & sex",
+        average: "Average for your age & sex",
+        good: "Good for your age & sex",
+        excellent: "Excellent for your age & sex",
+        superior: "Superior for your age & sex",
+      },
+      result: {
+        low: {
+          title: "There is real room to improve",
+          text: "Cardiorespiratory fitness responds well to regular moderate exercise at any age — even modest gains are linked to meaningfully lower long-term mortality risk in research. Zone 2 training (see the Training Zone Finder) is a good place to start.",
+          nextSteps: [
+            "Aim for 20–30 minutes of moderate activity most days — walking counts.",
+            "Try a Training Zone Finder to find your ideal effort level.",
+            "Recheck in a few months as your resting heart rate improves.",
+          ],
+        },
+        average: {
+          title: "A solid, typical fitness level",
+          text: "You're in the typical range for your age and sex. Research shows that moving from average to good fitness is linked to a meaningful further drop in long-term health risk — worth the effort.",
+          nextSteps: [
+            "Add one more session of moderate cardio activity per week.",
+            "Track your resting heart rate over time — a falling trend is a good sign of improving fitness.",
+            "Recheck every few months.",
+          ],
+        },
+        high: {
+          title: "A strong protective factor",
+          text: "Your estimated fitness is above typical for your age and sex — one of the most consistent markers linked to healthy, independent ageing in the research. Whatever you're doing, it's working.",
+          nextSteps: [
+            "Keep up your current activity routine.",
+            "Recheck every few months to keep tracking your trend.",
+            "Consider mixing in some higher-intensity intervals if your doctor is comfortable with that.",
           ],
         },
       },

@@ -7,8 +7,9 @@ import { signInHrefFor } from "@/lib/nextPath";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { AssessmentTopBar } from "@/components/AssessmentTopBar";
 import { useAssessmentAudio } from "@/lib/assessments/speech";
-import { returnLabelFrom, returnPathFrom } from "@/lib/assessments/returnTo";
+import { returnLabelKeyFrom, returnPathFrom } from "@/lib/assessments/returnTo";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
+import { useT } from "@/lib/i18n/context";
 import {
   classifyVO2,
   computeVO2Max,
@@ -34,8 +35,10 @@ function VO2MaxPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
-  const returnLabel = returnLabelFrom(searchParams.get("from"));
+  const returnLabelKey = returnLabelKeyFrom(searchParams.get("from"));
   const [userId, setUserId] = useState<string | null>(null);
+  const t = useT();
+  const c = t.assess.vo2max;
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<VO2Answers>(emptyVO2Answers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
@@ -65,6 +68,15 @@ function VO2MaxPageInner() {
   const score = computeVO2Max(answers);
   const category = answers.sex ? classifyVO2(score.vo2max, answers.sex, answers.age) : null;
   const result = category ? interpretVO2Category(category.status) : null;
+  // The six norm bands collapse to three copy bands, matching
+  // interpretVO2Category's own poor/fair, average, rest split.
+  const rc = category
+    ? category.status === "poor" || category.status === "fair"
+      ? c.result.low
+      : category.status === "average"
+        ? c.result.average
+        : c.result.high
+    : null;
 
   function goToResults() {
     if (!answers.sex) return;
@@ -105,42 +117,37 @@ function VO2MaxPageInner() {
 
       {screen === "welcome" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Cardiorespiratory Fitness · ~3 minutes</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">VO2 Max & Resting Heart Rate</h1>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.eyebrow}</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{c.title}</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            VO2 max measures how efficiently your heart, lungs, and muscles use oxygen during
-            exercise. It&apos;s one of the strongest predictors of healthy longevity found in
-            ageing research — in one study of over 122,000 adults, the fittest group had an 80%
-            lower risk of death than the least fit (Mandsager et al., JAMA Network Open, 2018).
+            {c.intro1}
           </p>
           <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
-            We&apos;ll estimate yours from your resting heart rate using the Heart Rate Ratio
-            Method (Uth et al., 2004) — no treadmill needed.
+            {c.intro2}
           </p>
           <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50 p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">📏 Before you begin</h3>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">{c.beforeBegin}</h3>
             <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
-              For the most accurate result, measure your resting heart rate first thing in the
-              morning, before getting out of bed. Count your pulse for a full 60 seconds.
+              {c.beforeBeginBody}
             </p>
           </div>
           <button
             onClick={() => setScreen("questions")}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
-            Let&apos;s begin
+            {c.begin}
           </button>
         </div>
       )}
 
       {screen === "questions" && (
         <div>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Tell us about yourself</h2>
-          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Just three numbers — no equipment needed beyond a watch or phone timer.</p>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.tellUs}</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{c.tellUsBlurb}</p>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">About you</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{c.aboutYou}</p>
           <div className="mt-2 rounded-lg border border-border dark:border-border-dark p-4">
-            <p className="font-medium text-ink dark:text-ink-dark">Your age</p>
+            <p className="font-medium text-ink dark:text-ink-dark">{c.yourAge}</p>
             <div className="mt-2 flex items-center gap-4">
               <button
                 onClick={() => setAnswers((p) => ({ ...p, age: Math.max(18, Math.min(100, p.age - 1)) }))}
@@ -167,12 +174,12 @@ function VO2MaxPageInner() {
               >
                 +
               </button>
-              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">years</span>
+              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">{c.yearsUnit}</span>
             </div>
           </div>
 
           <div className="mt-3 rounded-lg border border-border dark:border-border-dark p-4">
-            <p className="font-medium text-ink dark:text-ink-dark">Your sex</p>
+            <p className="font-medium text-ink dark:text-ink-dark">{c.yourSex}</p>
             <div className="mt-2 flex gap-2">
               {(["m", "f"] as Sex[]).map((s) => (
                 <button
@@ -182,18 +189,17 @@ function VO2MaxPageInner() {
                     answers.sex === s ? "border-movement bg-movement-tint text-movement-dark" : "border-border text-ink-soft"
                   }`}
                 >
-                  {s === "m" ? "Male" : "Female"}
+                  {s === "m" ? c.male : c.female}
                 </button>
               ))}
             </div>
           </div>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Your resting heart rate</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{c.restingHr}</p>
           <div className="mt-2 rounded-lg border border-border dark:border-border-dark p-4">
-            <p className="font-medium text-ink dark:text-ink-dark">Pulse count (60 seconds, at rest)</p>
+            <p className="font-medium text-ink dark:text-ink-dark">{c.pulseCount}</p>
             <p className="mt-1 text-xs text-ink-soft dark:text-ink-dark-soft">
-              Count your pulse for a full minute while sitting calmly, ideally first thing in the
-              morning.
+              {c.pulseBlurb}
             </p>
             <div className="mt-2 flex items-center gap-4">
               <button
@@ -221,7 +227,7 @@ function VO2MaxPageInner() {
               >
                 +
               </button>
-              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">beats per minute</span>
+              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">{c.bpm}</span>
             </div>
           </div>
 
@@ -230,48 +236,47 @@ function VO2MaxPageInner() {
             disabled={!answers.sex}
             className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            See my results
+            {c.seeResults}
           </button>
         </div>
       )}
 
-      {screen === "results" && category && result && (
+      {screen === "results" && category && result && rc && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-movement-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-movement-dark">{t.assess.common.yourResult}</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-movement-dark">{score.vo2max}</div>
-            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">estimated VO2 max (mL/kg/min)</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">{c.estimatedVo2}</div>
           </div>
 
           <p className="mt-6 rounded-full bg-movement-tint px-3 py-1 text-center text-sm font-semibold text-movement-dark">
-            {category.label}
+            {c.category[category.status]}
           </p>
 
           <div className="mt-4 flex justify-center gap-6">
             <div className="text-center">
               <div className="text-2xl font-bold text-ink dark:text-ink-dark">{score.hrMax}</div>
-              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">Max HR (bpm)</div>
+              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">{c.maxHr}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-ink dark:text-ink-dark">{answers.rhr}</div>
-              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">Resting HR (bpm)</div>
+              <div className="text-xs text-ink-soft dark:text-ink-dark-soft">{c.restingHrShort}</div>
             </div>
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint text-center">
-            Estimate for age {answers.age}, {answers.sex === "m" ? "male" : "female"}. Categories
-            from Cooper Institute / ACSM norms.
+            {c.estimateFor(answers.age, answers.sex === "m" ? c.sexMale : c.sexFemale)}
           </p>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {rc.title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{rc.text}</p>
           </div>
 
           <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">{c.nextStepsHeading}</h3>
             <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
-              {result.nextSteps.map((step) => (
+              {rc.nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
                 </li>
@@ -280,9 +285,7 @@ function VO2MaxPageInner() {
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            This is a formula-based estimate, not a lab measurement — individual accuracy varies,
-            and it tends to underestimate VO2 max in fitter people. It&apos;s a screening tool, not
-            a diagnosis. Always check with your doctor before starting a new exercise programme.
+            {c.disclaimer}
           </p>
 
           <button
@@ -290,7 +293,7 @@ function VO2MaxPageInner() {
             disabled={saving}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            {saving ? "Saving…" : `Save & return to ${returnLabel}`}
+            {saving ? t.assess.common.saving : t.assess.common.saveAndReturn(t.assess.common.returnTo[returnLabelKey])}
           </button>
           {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
         </div>
