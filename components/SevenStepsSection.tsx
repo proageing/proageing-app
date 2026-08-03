@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useT } from "@/lib/i18n/context";
 import Link from "next/link";
 import { SEVEN_STEPS } from "@/lib/sevenSteps";
 
@@ -6,10 +9,12 @@ import { SEVEN_STEPS } from "@/lib/sevenSteps";
 // eyebrow, serif title, one-line meta — but tapping opens the step
 // in-app instead of linking out.
 export function SevenStepsSection() {
+  const t = useT();
+
   return (
     <div className="mt-8">
-      <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">The 7 ProAgeing Steps</p>
-      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Seven simple steps toward a longer, fuller life.</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.dashboard.sevenSteps.eyebrow}</p>
+      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.dashboard.sevenSteps.blurb}</p>
 
       <div className="mt-4 flex flex-col gap-3">
         {SEVEN_STEPS.map((step) => (
@@ -23,7 +28,7 @@ export function SevenStepsSection() {
             </div>
             <div className="p-4">
               <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">
-                Step {step.step} · {step.tagline}
+                {t.dashboard.sevenSteps.stepLabel(step.step, step.tagline)}
               </p>
               <h3 className="mt-1 font-serif text-base font-semibold leading-snug text-ink dark:text-ink-dark">{step.title}</h3>
               <p className="mt-1 line-clamp-2 text-xs text-ink-soft dark:text-ink-dark-soft">{step.why}</p>

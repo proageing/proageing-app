@@ -29,6 +29,8 @@ import {
 import { Logo } from "@/components/Logo";
 import { TabBar } from "@/components/TabBar";
 import { HeroSwirl } from "@/components/BrandSwirl";
+import { useLocale } from "@/lib/i18n/context";
+import type { Dictionary } from "@/lib/i18n/en";
 
 type LoadState = "loading" | "no-access" | "no-enrollment" | "completed" | "ready";
 
@@ -52,7 +54,7 @@ function assessmentTypesForDay(day: number): string[] {
 // Deliberately understated. A check that didn't move, or moved the wrong
 // way, still gets a neutral label rather than being hidden or dressed up —
 // the point of the retake is an honest read, not a guaranteed win.
-function MovementPill({ direction }: { direction: MovementDirection }) {
+function MovementPill({ direction, t }: { direction: MovementDirection; t: Dictionary }) {
   if (direction === "unrated") return null;
 
   const style: Record<Exclude<MovementDirection, "unrated">, { label: string; className: string }> = {
@@ -62,15 +64,15 @@ function MovementPill({ direction }: { direction: MovementDirection }) {
     // raw score moved would need a per-check direction map — more reps is
     // better, a lower PSQI is better — and one entry backwards would tell
     // someone they improved when they declined.
-    better: { label: "Better range", className: "bg-junebud/25 text-cognitive" },
-    held: { label: "Same range", className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint" },
-    lower: { label: "Lower range", className: "bg-primary-light text-primary-dark dark:bg-primary-light-dark" },
+    better: { label: t.programme.complete.betterRange, className: "bg-junebud/25 text-cognitive" },
+    held: { label: t.programme.complete.sameRange, className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint" },
+    lower: { label: t.programme.complete.lowerRange, className: "bg-primary-light text-primary-dark dark:bg-primary-light-dark" },
     "first-time": {
-      label: "First time",
+      label: t.programme.complete.firstTime,
       className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint",
     },
     "not-retaken": {
-      label: "Not retaken",
+      label: t.programme.complete.notRetaken,
       className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint",
     },
   };
@@ -108,6 +110,7 @@ function ProgramPageInner() {
   const [justSaved, setJustSaved] = useState(false);
   const [starting, setStarting] = useState(false);
   const [summary, setSummary] = useState<CompletionSummary | null>(null);
+  const { locale, t } = useLocale();
 
   useEffect(() => {
     async function load() {
@@ -211,7 +214,7 @@ function ProgramPageInner() {
     const { enrollment: newEnrollment, error } = await startEnrollment(userId, PROGRAM_LENGTH_DAYS);
     setStarting(false);
     if (error || !newEnrollment) {
-      setSaveStatus(`Couldn't start your challenge: ${error}`);
+      setSaveStatus(t.programme.notStarted.couldntStart(String(error)));
       return;
     }
     setEnrollment(newEnrollment);
@@ -232,14 +235,14 @@ function ProgramPageInner() {
     });
     if (error) {
       setSaving(false);
-      setSaveStatus(`Couldn't save: ${error}`);
+      setSaveStatus(t.common.couldntSave(error));
       return;
     }
     if (contentForDay(viewedDay).isClose) {
       const { error: testimonialError } = await saveTestimonial(userId, enrollment.id, viewedDay, testimonial);
       if (testimonialError) {
         setSaving(false);
-        setSaveStatus(`Couldn't save: ${testimonialError}`);
+        setSaveStatus(t.common.couldntSave(testimonialError));
         return;
       }
     }
@@ -282,7 +285,7 @@ function ProgramPageInner() {
   if (loadState === "loading") {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -294,18 +297,16 @@ function ProgramPageInner() {
           <Logo size={48} />
         </div>
         <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-          The 21-Day ProAgeing Challenge
+          {t.programme.noAccess.title}
         </h1>
         <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-          Your 9 free assessment checks are always free. The guided 21-Day
-          Challenge — daily actions, streaks, and a Keystone Habit at the
-          end — is a paid programme.
+          {t.programme.noAccess.blurb}
         </p>
         <Link
           href="/upgrade"
           className="mt-6 rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark"
         >
-          See plans &amp; pricing
+          {t.programme.noAccess.seePlans}
         </Link>
         <TabBar />
       </main>
@@ -318,24 +319,20 @@ function ProgramPageInner() {
         <div className="relative -mx-6 -mt-4 overflow-hidden border-b border-primary/25 bg-primary-light px-6 pb-6 pt-6 dark:bg-primary-light-dark">
           <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
           <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">21-Day Challenge</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">{t.programme.notStarted.eyebrow}</p>
             <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink">
-              Start living the 7 ProAgeing Steps
+              {t.programme.notStarted.title}
             </h1>
             <p className="mt-2 text-sm text-ink-soft">
-              One small action a day, for twenty-one days. Day 1 begins today.
+              {t.programme.notStarted.blurb}
             </p>
           </div>
         </div>
 
         <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">What you&apos;ll do</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.notStarted.whatYoullDo}</p>
           <ul className="mt-3 flex flex-col gap-3">
-            {[
-              { label: "Learn", body: "one idea a day, in a minute of reading." },
-              { label: "Act", body: "a single action you can finish the same day." },
-              { label: "Reflect", body: "a line to yourself, kept private." },
-            ].map((item) => (
+            {t.programme.notStarted.items.map((item) => (
               <li key={item.label} className="flex items-start gap-3 text-sm text-ink-soft dark:text-ink-dark-soft">
                 <span className="mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-primary-light text-primary-dark dark:bg-primary-light-dark">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -351,10 +348,9 @@ function ProgramPageInner() {
         </div>
 
         <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">On day 21</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.notStarted.onDay21}</p>
           <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-            You&apos;ll retake five of your checks and see exactly what moved — then name the one habit
-            you&apos;re keeping.
+            {t.programme.notStarted.onDay21Body}
           </p>
         </div>
 
@@ -363,7 +359,7 @@ function ProgramPageInner() {
           disabled={starting}
           className="mt-6 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
         >
-          {starting ? "Starting…" : "Begin day 1"}
+          {starting ? t.programme.notStarted.starting : t.programme.notStarted.begin}
         </button>
         {saveStatus && <p className="mt-3 text-center text-sm text-red-600">{saveStatus}</p>}
 
@@ -379,14 +375,17 @@ function ProgramPageInner() {
           <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
           <div className="relative">
             <p className="text-xs font-semibold uppercase tracking-wide text-cognitive">
-              Challenge complete · {PROGRAM_LENGTH_DAYS} of {PROGRAM_LENGTH_DAYS}
+              {t.programme.complete.eyebrow(PROGRAM_LENGTH_DAYS)}
             </p>
-            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink">You&apos;re a ProAger</h1>
+            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink">{t.programme.complete.title}</h1>
             {summary.finishedOn && (
               <p className="mt-2 text-sm text-ink-soft">
-                Finished{" "}
-                {new Date(summary.finishedOn).toLocaleDateString("en-SG", { day: "numeric", month: "long" })}. Here&apos;s
-                what changed.
+                {t.programme.complete.finishedOn(
+                  new Date(summary.finishedOn).toLocaleDateString(locale === "zh" ? "zh-Hans-SG" : "en-SG", {
+                    day: "numeric",
+                    month: "long",
+                  })
+                )}
               </p>
             )}
           </div>
@@ -394,19 +393,19 @@ function ProgramPageInner() {
 
         {summary.keystoneHabit && (
           <div className="mt-6 rounded-xl border-[1.5px] border-junebud bg-junebud/10 p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-cognitive">Your keystone habit</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-cognitive">{t.programme.complete.keystone}</p>
             <p className="mt-2 font-serif text-lg leading-snug text-ink dark:text-ink-dark">
               &ldquo;{summary.keystoneHabit}&rdquo;
             </p>
-            <p className="mt-2 text-xs text-cognitive">Declared on day {PROGRAM_LENGTH_DAYS} · yours to keep</p>
+            <p className="mt-2 text-xs text-cognitive">{t.programme.complete.keystoneFooter(PROGRAM_LENGTH_DAYS)}</p>
           </div>
         )}
 
         <div className="mt-4 grid grid-cols-3 gap-3">
           {[
-            { n: summary.daysCompleted, l: "Days done" },
-            { n: summary.bestStreak, l: "Best streak" },
-            { n: summary.retakenCount, l: "Retaken" },
+            { n: summary.daysCompleted, l: t.programme.complete.daysDone },
+            { n: summary.bestStreak, l: t.programme.complete.bestStreak },
+            { n: summary.retakenCount, l: t.programme.complete.retaken },
           ].map((stat) => (
             <div
               key={stat.l}
@@ -422,8 +421,8 @@ function ProgramPageInner() {
 
         {summary.movements.length > 0 && (
           <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-            <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">What moved</p>
-            <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">When you started → now</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.complete.whatMoved}</p>
+            <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">{t.programme.complete.whatMovedRange}</p>
             <div className="mt-2 flex flex-col">
               {summary.movements.map((m) => (
                 <div
@@ -435,7 +434,7 @@ function ProgramPageInner() {
                     {m.firstLabel && <>{m.firstLabel} → </>}
                     <span className="font-bold text-ink dark:text-ink-dark">{m.latestLabel}</span>
                   </span>
-                  <MovementPill direction={m.direction} />
+                  <MovementPill direction={m.direction} t={t} />
                 </div>
               ))}
             </div>
@@ -443,20 +442,20 @@ function ProgramPageInner() {
         )}
 
         <p className="mt-4 rounded-xl border border-dashed border-border px-3 py-2.5 text-xs text-ink-soft dark:border-border-dark dark:text-ink-dark-soft">
-          Every retake is saved to your profile — your readings are already up to date.
+          {t.programme.complete.readingsSaved}
         </p>
 
         <Link
           href="/dashboard/readings"
           className="mt-6 block w-full rounded-xl bg-primary px-4 py-3 text-center font-semibold text-white transition hover:bg-primary-dark"
         >
-          See my Longevity Readings
+          {t.programme.complete.seeReadings}
         </Link>
         <button
           onClick={revisitDays}
           className="mt-2 w-full rounded-xl border border-border px-4 py-3 font-semibold text-ink transition hover:border-primary dark:border-border-dark dark:text-ink-dark"
         >
-          Revisit any day
+          {t.programme.complete.revisitDays}
         </button>
 
         <TabBar />
@@ -476,7 +475,7 @@ function ProgramPageInner() {
           <button
             onClick={() => goToDay(viewedDay - 1)}
             disabled={viewedDay <= 1 || dayLoading}
-            aria-label="Previous day"
+            aria-label={t.programme.day.previousDay}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -486,11 +485,11 @@ function ProgramPageInner() {
 
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
-              Day {viewedDay} of {PROGRAM_LENGTH_DAYS}
+              {t.programme.day.dayOf(viewedDay, PROGRAM_LENGTH_DAYS)}
             </p>
             {viewedDay !== currentDay && (
               <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-ink-faint underline">
-                Back to today (Day {currentDay})
+                {t.programme.day.backToToday(currentDay)}
               </button>
             )}
           </div>
@@ -498,7 +497,7 @@ function ProgramPageInner() {
           <button
             onClick={() => goToDay(viewedDay + 1)}
             disabled={viewedDay >= currentDay || dayLoading}
-            aria-label="Next day"
+            aria-label={t.programme.day.nextDay}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -515,13 +514,13 @@ function ProgramPageInner() {
           onClick={backToSummary}
           className="mt-3 text-sm font-semibold text-primary-dark underline"
         >
-          ← Back to my summary
+          {t.programme.day.backToSummary}
         </button>
       )}
 
       {streak > 0 && (
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
-          🔥 {streak} day{streak === 1 ? "" : "s"} streak
+          {t.programme.day.streak(streak)}
         </p>
       )}
 
@@ -538,7 +537,7 @@ function ProgramPageInner() {
       )}
 
       <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Learn</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.learn}</p>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
           <input
@@ -550,12 +549,12 @@ function ProgramPageInner() {
             }}
             className="h-4 w-4 accent-primary"
           />
-          {isToday ? "Read today's insight" : "Read this day's insight"}
+          {isToday ? t.programme.day.readToday : t.programme.day.readThisDay}
         </label>
       </div>
 
       <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Act</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.act}</p>
         {content.assessments && content.assessments.length > 0 && (
           <div className="mt-2 flex flex-col gap-2">
             {content.assessments.map((a) => (
@@ -580,16 +579,16 @@ function ProgramPageInner() {
             }}
             className="h-4 w-4 accent-primary"
           />
-          {content.isClose ? "Done — retaken & Keystone Habit declared" : isToday ? "Done for today" : "Done"}
+          {content.isClose ? t.programme.day.doneClose : isToday ? t.programme.day.doneToday : t.programme.day.done}
         </label>
       </div>
 
       <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Reflect</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.reflect}</p>
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         {content.reflectExamples && (
           <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">
-            e.g. {content.reflectExamples.map((ex) => `"${ex}"`).join(" · ")}
+            {t.programme.day.examples(content.reflectExamples.map((ex) => `"${ex}"`).join(" · "))}
           </p>
         )}
         <textarea
@@ -600,14 +599,14 @@ function ProgramPageInner() {
           }}
           rows={3}
           className="mt-2 w-full rounded-lg border border-border bg-white px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
-          placeholder="Your answer…"
+          placeholder={t.programme.day.answerPlaceholder}
         />
       </div>
 
       {content.isClose && (
         <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Share your story</p>
-          <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">What has improved the most?</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.testimonial.heading}</p>
+          <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{t.programme.testimonial.improvedMost}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {IMPROVED_MOST_OPTIONS.map((opt) => (
               <button
@@ -634,13 +633,13 @@ function ProgramPageInner() {
                 setTestimonial((t) => ({ ...t, improvedMostOther: e.target.value }));
                 setJustSaved(false);
               }}
-              placeholder="What improved?"
+              placeholder={t.programme.testimonial.otherPlaceholder}
               className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
             />
           )}
 
           <p className="mt-4 text-sm font-medium text-ink dark:text-ink-dark">
-            Would you be willing to share this anonymously to encourage other adults?
+            {t.programme.testimonial.consentQuestion}
           </p>
           <div className="mt-2 flex gap-2">
             <button
@@ -654,7 +653,7 @@ function ProgramPageInner() {
                   : "border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
               }`}
             >
-              Yes
+              {t.programme.testimonial.yes}
             </button>
             <button
               onClick={() => {
@@ -667,7 +666,7 @@ function ProgramPageInner() {
                   : "border-border text-ink-soft dark:border-border-dark dark:text-ink-dark-soft"
               }`}
             >
-              No
+              {t.programme.testimonial.no}
             </button>
           </div>
 
@@ -675,7 +674,7 @@ function ProgramPageInner() {
             <div className="mt-4 flex flex-col gap-4 border-t border-border pt-4 dark:border-border-dark">
               <div>
                 <p className="text-sm font-medium text-ink dark:text-ink-dark">
-                  Before this programme, what was your biggest concern about ageing?
+                  {t.programme.testimonial.beforeConcern}
                 </p>
                 <textarea
                   value={testimonial.beforeConcern}
@@ -685,11 +684,11 @@ function ProgramPageInner() {
                   }}
                   rows={2}
                   className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
-                  placeholder="Your answer…"
+                  placeholder={t.programme.day.answerPlaceholder}
                 />
               </div>
               <div>
-                <p className="text-sm font-medium text-ink dark:text-ink-dark">What is one change you&apos;ve noticed?</p>
+                <p className="text-sm font-medium text-ink dark:text-ink-dark">{t.programme.testimonial.changeNoticed}</p>
                 <textarea
                   value={testimonial.changeNoticed}
                   onChange={(e) => {
@@ -698,12 +697,12 @@ function ProgramPageInner() {
                   }}
                   rows={2}
                   className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
-                  placeholder="Your answer…"
+                  placeholder={t.programme.day.answerPlaceholder}
                 />
               </div>
               <div>
                 <p className="text-sm font-medium text-ink dark:text-ink-dark">
-                  What would you say to someone your age who is hesitant to start?
+                  {t.programme.testimonial.recommendation}
                 </p>
                 <textarea
                   value={testimonial.recommendation}
@@ -713,7 +712,7 @@ function ProgramPageInner() {
                   }}
                   rows={2}
                   className="mt-2 w-full rounded-lg border border-border bg-paper px-3 py-2 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
-                  placeholder="Your answer…"
+                  placeholder={t.programme.day.answerPlaceholder}
                 />
               </div>
             </div>
@@ -735,7 +734,7 @@ function ProgramPageInner() {
             <path d="M5 13l4.5 4.5L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
-        {saving ? "Saving…" : justSaved ? "Saved" : isToday ? "Save today's progress" : `Save Day ${viewedDay}'s progress`}
+        {saving ? t.common.saving : justSaved ? t.common.saved : isToday ? t.programme.day.saveToday : t.programme.day.saveDay(viewedDay)}
       </button>
       {saveStatus && <p className="mt-2 text-sm text-red-600">{saveStatus}</p>}
 

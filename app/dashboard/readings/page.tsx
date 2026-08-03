@@ -12,6 +12,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { ReadingsStatusIcon } from "@/components/ReadingsStatusIcon";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
+import { useT } from "@/lib/i18n/context";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -24,6 +25,7 @@ export default function ReadingsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [latestByType, setLatestByType] = useState<Map<AssessmentType, ResultRow>>(new Map());
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -74,7 +76,7 @@ export default function ReadingsPage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -88,10 +90,10 @@ export default function ReadingsPage() {
       <div className="relative">
         <AppHeader />
 
-        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
-      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Every check you&apos;ve taken, and your latest result for each.</p>
+        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.readings.title}</p>
+      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.readings.blurb}</p>
 
-      <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Your 9 checks</p>
+      <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.readings.yourChecks}</p>
       <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
         <div
           className="h-2 rounded-full bg-primary transition-all"
@@ -101,18 +103,18 @@ export default function ReadingsPage() {
 
       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-faint dark:text-ink-dark-faint">
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-junebud" aria-hidden="true" /> Typical
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-junebud" aria-hidden="true" /> {t.readings.legend.typical}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-amber-500" aria-hidden="true" /> Worth a look
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-amber-500" aria-hidden="true" /> {t.readings.legend.worthALook}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" aria-hidden="true" /> Discuss with your doctor
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" aria-hidden="true" /> {t.readings.legend.seeDoctor}
         </span>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
-        {ASSESSMENT_TYPES.map(({ type, title }) => {
+        {ASSESSMENT_TYPES.map(({ type }) => {
           const row = latestByType.get(type);
           const tier = row ? readingsTierFor(type, row.entry_data) : null;
           return (
@@ -132,10 +134,10 @@ export default function ReadingsPage() {
                 ) : (
                   <span className="h-2 w-2 shrink-0 rounded-full bg-primary" aria-hidden="true" />
                 )}
-                <span className="text-xs font-bold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{title}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{t.checks[type]}</span>
               </div>
               <div className={`mt-2 text-lg font-bold ${row ? "text-ink dark:text-ink-dark" : "text-primary-dark"}`}>
-                {row ? formatEntryData(type, row.entry_data) : "Not started"}
+                {row ? formatEntryData(type, row.entry_data) : t.readings.notStarted}
               </div>
             </Link>
           );
@@ -143,7 +145,7 @@ export default function ReadingsPage() {
       </div>
 
         <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
-          Missing history from proageing.org?
+          {t.readings.missingHistory}
         </Link>
       </div>
 

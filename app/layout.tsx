@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { LocaleProvider } from "@/lib/i18n/context";
 
 export const metadata: Metadata = {
   title: "ProAgeing — Add life to your years",
@@ -25,7 +26,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <LocaleProvider>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }

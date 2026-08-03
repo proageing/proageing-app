@@ -7,10 +7,12 @@ import { completeSessionFromUrlHash } from "@/lib/authCallback";
 import { recordSignInConsent } from "@/lib/consent";
 import { takeNextPath } from "@/lib/nextPath";
 import { runLegacyImport } from "@/lib/runLegacyImport";
+import { useT } from "@/lib/i18n/context";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     async function complete() {
@@ -48,11 +50,11 @@ export default function AuthCallbackPage() {
         <>
           <p className="text-red-600">{error}</p>
           <a href="/signin" className="mt-4 text-primary underline">
-            Back to sign in
+            {t.signIn.backToSignIn}
           </a>
         </>
       ) : (
-        <p className="text-ink-soft dark:text-ink-dark-soft">Signing you in…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.signIn.signingYouIn}</p>
       )}
     </main>
   );

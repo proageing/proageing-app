@@ -12,15 +12,8 @@ import { HomeCards } from "@/components/HomeCards";
 import { AffirmationCarousel } from "@/components/AffirmationCarousel";
 import { SevenStepsSection } from "@/components/SevenStepsSection";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
+import { useT } from "@/lib/i18n/context";
 import type { AssessmentType } from "@/lib/importHistory";
-
-const AFFIRMATIONS = [
-  "Healthy longevity starts today!",
-  "ProAgeing, a step at a time.",
-  "Small steps, longer years.",
-  "Your decision today, shapes your tomorrow.",
-  "Invest in your future self.",
-];
 
 interface ResultRow {
   assessment_type: AssessmentType;
@@ -28,26 +21,12 @@ interface ResultRow {
   created_at: string;
 }
 
-const WELCOME_STEPS = [
-  {
-    title: "Take your free checks",
-    body: "9 quick, guided checks across the 7 ProAgeing Steps — no clinic, no needles.",
-  },
-  {
-    title: "See your Healthy Longevity Profile",
-    body: "Your results build into a profile below, always up to date as you retake checks.",
-  },
-  {
-    title: "Build the habit",
-    body: "Ready to act on what you find? The 21-Day ProAgeing Challenge turns it into a daily plan.",
-  },
-];
-
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [greetingName, setGreetingName] = useState("there");
   const [latestByType, setLatestByType] = useState<Map<AssessmentType, ResultRow>>(new Map());
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -100,7 +79,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -115,11 +94,11 @@ export default function DashboardPage() {
       <div className="relative">
         <AppHeader />
 
-        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
+        <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.dashboard.greeting(greetingName)}</p>
       {isFirstVisit ? (
-        <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Here&apos;s how ProAge works.</p>
+        <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.dashboard.firstVisit}</p>
       ) : (
-        <AffirmationCarousel quotes={AFFIRMATIONS} />
+        <AffirmationCarousel quotes={t.dashboard.affirmations} />
       )}
 
       <HomeCards completedCount={completedCount} totalCount={ASSESSMENT_TYPES.length} />
@@ -127,7 +106,7 @@ export default function DashboardPage() {
       {isFirstVisit && (
         <>
           <div className="mt-8 flex flex-col gap-4">
-            {WELCOME_STEPS.map((step, i) => (
+            {t.dashboard.welcomeSteps.map((step, i) => (
               <div
                 key={step.title}
                 className="flex gap-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5"

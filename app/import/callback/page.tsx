@@ -6,12 +6,14 @@ import { supabase } from "@/lib/supabase";
 import { sharedSupabase } from "@/lib/sharedSupabase";
 import { completeSessionFromUrlHash } from "@/lib/authCallback";
 import { importProageingHistory } from "@/lib/importHistory";
+import { useT } from "@/lib/i18n/context";
 
 type State = "working" | "needs-primary-signin" | "done" | "error";
 
 export default function ImportCallbackPage() {
   const [state, setState] = useState<State>("working");
   const [message, setMessage] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     async function run() {
@@ -39,9 +41,7 @@ export default function ImportCallbackPage() {
       }
 
       setState("done");
-      setMessage(
-        `Imported ${result.imported} result${result.imported === 1 ? "" : "s"}, skipped ${result.skipped} already imported.`
-      );
+      setMessage(t.importHistory.done(result.imported, result.skipped));
     }
 
     run();
@@ -49,16 +49,15 @@ export default function ImportCallbackPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 text-center">
-      {state === "working" && <p className="text-ink-soft dark:text-ink-dark-soft">Importing your history…</p>}
+      {state === "working" && <p className="text-ink-soft dark:text-ink-dark-soft">{t.importHistory.working}</p>}
 
       {state === "needs-primary-signin" && (
         <>
           <p className="text-ink-soft dark:text-ink-dark-soft">
-            Sign in to your ProAgeing account first, then use the import link from your
-            dashboard again.
+            {t.importHistory.needsPrimary}
           </p>
           <Link href="/signin" className="mt-4 text-primary underline">
-            Sign in
+            {t.signIn.title}
           </Link>
         </>
       )}
@@ -67,7 +66,7 @@ export default function ImportCallbackPage() {
         <>
           <p className="text-ink-soft dark:text-ink-dark-soft">{message}</p>
           <Link href="/dashboard" className="mt-4 text-primary underline">
-            Back to dashboard
+            {t.importHistory.backToDashboard}
           </Link>
         </>
       )}
@@ -76,7 +75,7 @@ export default function ImportCallbackPage() {
         <>
           <p className="text-red-600">{message}</p>
           <Link href="/import" className="mt-4 text-primary underline">
-            Try again
+            {t.importHistory.tryAgain}
           </Link>
         </>
       )}

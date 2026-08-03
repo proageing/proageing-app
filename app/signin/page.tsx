@@ -4,7 +4,8 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/Logo";
 import { rememberNextPath } from "@/lib/nextPath";
-import { CONSENT_CLAUSES, CONSENT_HEADING, markConsentPending } from "@/lib/consent";
+import { markConsentPending } from "@/lib/consent";
+import { useT } from "@/lib/i18n/context";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export default function SignInPage() {
   const [sent, setSent] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const t = useT();
 
   async function handleSend() {
     setBusy(true);
@@ -29,7 +31,7 @@ export default function SignInPage() {
     });
     setBusy(false);
     if (error) {
-      setStatus(`Couldn't send the link: ${error.message}`);
+      setStatus(t.signIn.failed(error.message));
       return;
     }
     setSent(true);
@@ -39,17 +41,17 @@ export default function SignInPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-10">
       <Logo size={48} />
       <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-        Sign in to ProAgeing
+        {t.signIn.title}
       </h1>
       <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-        We&apos;ll email you a sign-in link — no password needed.
+        {t.signIn.blurb}
       </p>
 
       {!sent ? (
         <div className="mt-8 flex flex-col gap-3">
           <input
             type="email"
-            placeholder="you@example.com"
+            placeholder={t.signIn.emailPlaceholder}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="rounded-xl border border-border bg-white px-4 py-3 text-ink outline-none transition focus:border-primary dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
@@ -63,12 +65,12 @@ export default function SignInPage() {
               className="mt-0.5 h-[18px] w-[18px] shrink-0 accent-primary"
             />
             <span className="text-xs leading-relaxed text-ink-soft dark:text-ink-dark-soft">
-              <strong className="text-ink dark:text-ink-dark">{CONSENT_HEADING}</strong>
+              <strong className="text-ink dark:text-ink-dark">{t.consent.heading}</strong>
               <br />
-              {CONSENT_CLAUSES.map((clause, i) => (
+              {t.consent.clauses.map((clause, i) => (
                 <span key={i}>
                   {i + 1}. {clause}
-                  {i < CONSENT_CLAUSES.length - 1 && <br />}
+                  {i < t.consent.clauses.length - 1 && <br />}
                 </span>
               ))}
             </span>
@@ -79,12 +81,12 @@ export default function SignInPage() {
             disabled={busy || !email || !consented}
             className="rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
           >
-            {busy ? "Sending…" : "Send sign-in link"}
+            {busy ? t.signIn.sending : t.signIn.send}
           </button>
         </div>
       ) : (
         <p className="mt-8 rounded-xl border border-border bg-white px-4 py-3 text-sm text-ink-soft dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft">
-          Check your email for a sign-in link — tap it to continue. You can close this tab.
+          {t.signIn.sent}
         </p>
       )}
 

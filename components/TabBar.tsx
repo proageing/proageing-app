@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useT } from "@/lib/i18n/context";
 
 // Solid, filled, curved-edge icons per ProAge's Brand Identity guide
 // ("Icon choices must resemble and compliment the Title Font... with fill
@@ -42,13 +43,14 @@ function PlansIcon() {
 }
 
 const TABS = [
-  { href: "/dashboard", label: "Home", Icon: HomeIcon },
-  { href: "/program", label: "Programme", Icon: ProgrammeIcon },
-  { href: "/upgrade", label: "Plans", Icon: PlansIcon },
-];
+  { href: "/dashboard", key: "home", Icon: HomeIcon },
+  { href: "/program", key: "programme", Icon: ProgrammeIcon },
+  { href: "/upgrade", key: "plans", Icon: PlansIcon },
+] as const;
 
 export function TabBar() {
   const pathname = usePathname();
+  const t = useT();
 
   return (
     <nav
@@ -56,7 +58,7 @@ export function TabBar() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto flex max-w-2xl">
-        {TABS.map(({ href, label, Icon }) => {
+        {TABS.map(({ href, key, Icon }) => {
           const active = pathname === href || pathname?.startsWith(`${href}/`);
           return (
             <Link
@@ -67,7 +69,7 @@ export function TabBar() {
               }`}
             >
               <Icon />
-              {label}
+              {t.tabs[key]}
             </Link>
           );
         })}

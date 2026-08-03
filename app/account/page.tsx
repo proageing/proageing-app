@@ -8,6 +8,8 @@ import { signInHrefFor } from "@/lib/nextPath";
 import { greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { useLocale } from "@/lib/i18n/context";
+import { LOCALES, LOCALE_LABELS } from "@/lib/i18n/types";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function AccountPage() {
   const [justSaved, setJustSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
+  const { locale, setLocale, t } = useLocale();
 
   useEffect(() => {
     async function load() {
@@ -76,7 +79,7 @@ export default function AccountPage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -93,10 +96,10 @@ export default function AccountPage() {
         href="/dashboard"
         className="mt-6 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
       >
-        ← Back
+        {t.common.back}
       </Link>
 
-      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Account</h1>
+      <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.account.title}</h1>
 
       <div className="mt-5 flex items-center gap-3">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-light font-serif text-xl font-bold text-primary-dark dark:bg-primary-light-dark">
@@ -109,8 +112,8 @@ export default function AccountPage() {
       </div>
 
       <div className="mt-5 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Display name</p>
-        <p className="mt-1 text-sm font-medium text-ink dark:text-ink-dark">This is the name shown in the app</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.account.displayName}</p>
+        <p className="mt-1 text-sm font-medium text-ink dark:text-ink-dark">{t.account.displayNameBlurb}</p>
         <input
           type="text"
           value={name}
@@ -134,23 +137,23 @@ export default function AccountPage() {
               <path d="M5 13l4.5 4.5L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           )}
-          {saving ? "Saving…" : justSaved ? "Saved" : "Save"}
+          {saving ? t.common.saving : justSaved ? t.common.saved : t.common.save}
         </button>
-        {saveError && <p className="mt-2 text-sm text-red-600">Couldn&apos;t save: {saveError}</p>}
+        {saveError && <p className="mt-2 text-sm text-red-600">{t.account.couldntSave(saveError)}</p>}
       </div>
 
       <div className="mt-4 rounded-xl border border-border bg-white shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
-          Your data
+          {t.account.yourData}
         </p>
         <Link
           href="/import"
           className="flex items-center justify-between px-4 py-3.5 text-sm font-semibold text-ink transition hover:text-primary-dark dark:text-ink-dark"
         >
           <span>
-            Find history from another email
+            {t.account.findHistory}
             <span className="mt-0.5 block text-xs font-normal text-ink-faint dark:text-ink-dark-faint">
-              Results saved on proageing.org under a different address
+              {t.account.findHistoryBlurb}
             </span>
           </span>
           <span className="shrink-0 text-ink-faint dark:text-ink-dark-faint" aria-hidden="true">
@@ -159,15 +162,38 @@ export default function AccountPage() {
         </Link>
       </div>
 
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
+          {t.account.language}
+        </p>
+        <p className="mt-1 text-sm font-medium text-ink dark:text-ink-dark">{t.account.languageBlurb}</p>
+        <div className="mt-3 flex gap-2">
+          {LOCALES.map((code) => (
+            <button
+              key={code}
+              onClick={() => setLocale(code)}
+              aria-pressed={locale === code}
+              className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                locale === code
+                  ? "border-primary bg-primary-light text-primary-dark dark:bg-primary-light-dark"
+                  : "border-border text-ink-soft hover:border-primary dark:border-border-dark dark:text-ink-dark-soft"
+              }`}
+            >
+              {LOCALE_LABELS[code]}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="mt-4 rounded-xl border border-border bg-white shadow-sm dark:border-border-dark dark:bg-white/5">
-        <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">Account</p>
+        <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.account.accountSection}</p>
         <a
           href="https://proageing.org/privacy.html"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-between border-b border-border px-4 py-3.5 text-sm font-semibold text-ink transition hover:text-primary-dark dark:border-border-dark dark:text-ink-dark"
         >
-          Privacy Policy
+          {t.account.privacy}
           <span className="text-ink-faint dark:text-ink-dark-faint" aria-hidden="true">
             ↗
           </span>
@@ -178,7 +204,7 @@ export default function AccountPage() {
           rel="noopener noreferrer"
           className="flex items-center justify-between px-4 py-3.5 text-sm font-semibold text-ink transition hover:text-primary-dark dark:text-ink-dark"
         >
-          Terms of Use
+          {t.account.terms}
           <span className="text-ink-faint dark:text-ink-dark-faint" aria-hidden="true">
             ↗
           </span>
@@ -190,7 +216,7 @@ export default function AccountPage() {
         disabled={signingOut}
         className="mt-5 w-full rounded-xl border border-border px-4 py-3 font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-50 dark:border-border-dark dark:hover:bg-red-950/20"
       >
-        {signingOut ? "Signing out…" : "Sign out"}
+        {signingOut ? t.common.signingOut : t.common.signOut}
       </button>
 
       <TabBar />

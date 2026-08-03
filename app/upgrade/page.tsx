@@ -9,6 +9,7 @@ import { signInHrefFor } from "@/lib/nextPath";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
+import { useT } from "@/lib/i18n/context";
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function UpgradePage() {
   const [error, setError] = useState<string | null>(null);
   // proageing.org's pricing page links here as /upgrade?plan=21-day.
   const [requestedPlan, setRequestedPlan] = useState<PlanId | null>(null);
+  const t = useT();
 
   useEffect(() => {
     const raw = new URLSearchParams(window.location.search).get("plan");
@@ -58,7 +60,7 @@ export default function UpgradePage() {
     const body = await res.json();
     setBusyPlan(null);
     if (!res.ok) {
-      setError(body.error ?? "Couldn't start checkout.");
+      setError(body.error ?? t.upgrade.couldntStart);
       return;
     }
     window.location.href = body.url;
@@ -67,7 +69,7 @@ export default function UpgradePage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -81,23 +83,21 @@ export default function UpgradePage() {
       <div className="relative">
         <AppHeader />
         <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
-          Plans &amp; pricing
+          {t.upgrade.title}
         </h1>
         <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
-          Your 9 free assessment checks are always free, and your account
-          keeps a free history of every check you take over time. These are
-          the guided programmes that turn your results into a daily plan.
+          {t.upgrade.blurb}
         </p>
 
       {active && (
         <p className="mt-6 rounded-xl border border-primary bg-primary-light px-4 py-3 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
-          You're currently on {PLANS.find((p) => p.id === active.plan)?.title ?? active.plan}.
+          {t.upgrade.currentlyOn(PLANS.find((p) => p.id === active.plan)?.title ?? active.plan)}
         </p>
       )}
 
       {requestedPlanIsComingSoon && (
         <p className="mt-6 rounded-xl border border-border bg-white px-4 py-3 text-sm text-ink-soft shadow-sm dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft">
-          The {planById(requestedPlan!)?.title} isn&apos;t open yet — here&apos;s what&apos;s available today.
+          {t.upgrade.notOpenYet(planById(requestedPlan!)?.title ?? "")}
         </p>
       )}
 
@@ -112,7 +112,7 @@ export default function UpgradePage() {
             } ${plan.comingSoon ? "bg-border/20 dark:bg-white/[0.02]" : "bg-white dark:bg-white/5"}`}
           >
             {highlighted && (
-              <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Your selection</p>
+              <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.upgrade.yourSelection}</p>
             )}
             <h2 className={`font-serif text-lg font-semibold ${plan.comingSoon ? "text-ink-faint dark:text-ink-dark-faint" : "text-ink dark:text-ink-dark"} ${highlighted ? "mt-1" : ""}`}>
               {plan.title}
@@ -123,7 +123,7 @@ export default function UpgradePage() {
                 disabled
                 className="mt-3 w-full cursor-not-allowed rounded-xl bg-border px-4 py-3 font-semibold text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint"
               >
-                Coming soon
+                {t.upgrade.comingSoon}
               </button>
             ) : (
               <button
@@ -131,7 +131,7 @@ export default function UpgradePage() {
                 disabled={busyPlan !== null || active?.plan === plan.id}
                 className="mt-3 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
               >
-                {active?.plan === plan.id ? "Current plan" : busyPlan === plan.id ? "Redirecting…" : "Choose this plan"}
+                {active?.plan === plan.id ? t.upgrade.currentPlan : busyPlan === plan.id ? t.upgrade.redirecting : t.upgrade.choosePlan}
               </button>
             )}
           </div>

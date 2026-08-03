@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useT } from "@/lib/i18n/context";
 
 // Solid, filled, curved-edge icons per ProAge's Brand Identity guide —
 // see components/TabBar.tsx for the same treatment and rationale.
@@ -30,6 +33,8 @@ function ChallengeIcon() {
 }
 
 export function HomeCards({ completedCount, totalCount }: { completedCount: number; totalCount: number }) {
+  const t = useT();
+
   return (
     <div className="mt-6 grid grid-cols-2 gap-3">
       <Link
@@ -39,9 +44,9 @@ export function HomeCards({ completedCount, totalCount }: { completedCount: numb
       >
         <DashboardIcon />
         <div>
-          <p className="font-serif text-base font-semibold leading-tight">My Longevity Dashboard</p>
+          <p className="font-serif text-base font-semibold leading-tight">{t.dashboard.cards.checks}</p>
           <p className="mt-1 text-xs font-medium text-white/85">
-            {completedCount} of {totalCount} checks
+            {t.dashboard.cards.checksProgress(completedCount, totalCount)}
           </p>
         </div>
       </Link>
@@ -53,8 +58,8 @@ export function HomeCards({ completedCount, totalCount }: { completedCount: numb
       >
         <ChallengeIcon />
         <div>
-          <p className="font-serif text-base font-semibold leading-tight">21-Day Challenge</p>
-          <p className="mt-1 text-xs font-medium opacity-85">Daily plan &amp; streaks</p>
+          <p className="font-serif text-base font-semibold leading-tight">{t.dashboard.cards.challenge}</p>
+          <p className="mt-1 text-xs font-medium opacity-85">{t.dashboard.cards.challengeBlurb}</p>
         </div>
       </Link>
     </div>
