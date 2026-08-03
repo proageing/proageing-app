@@ -15,6 +15,10 @@ export interface Plan {
   priceLabel: string;
   mode: "payment" | "subscription";
   priceEnvVar: string;
+  // 90-day programme content doesn't exist yet (lib/program21.ts only
+  // covers the 21-day track) — greyed out on /upgrade so nobody can pay
+  // for something that isn't there to deliver.
+  comingSoon?: boolean;
 }
 
 export const PLANS: Plan[] = [
@@ -31,6 +35,7 @@ export const PLANS: Plan[] = [
     priceLabel: "S$129 one-time",
     mode: "payment",
     priceEnvVar: "STRIPE_PRICE_90DAY",
+    comingSoon: true,
   },
 ];
 

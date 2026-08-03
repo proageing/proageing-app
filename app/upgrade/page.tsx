@@ -88,17 +88,30 @@ export default function UpgradePage() {
         {PLANS.map((plan) => (
           <div
             key={plan.id}
-            className="rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5"
+            className={`rounded-xl border border-border p-4 shadow-sm dark:border-border-dark ${
+              plan.comingSoon ? "bg-border/20 dark:bg-white/[0.02]" : "bg-white dark:bg-white/5"
+            }`}
           >
-            <h2 className="font-serif text-lg font-semibold text-ink dark:text-ink-dark">{plan.title}</h2>
+            <h2 className={`font-serif text-lg font-semibold ${plan.comingSoon ? "text-ink-faint dark:text-ink-dark-faint" : "text-ink dark:text-ink-dark"}`}>
+              {plan.title}
+            </h2>
             <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{plan.priceLabel}</p>
-            <button
-              onClick={() => handleUpgrade(plan.id)}
-              disabled={busyPlan !== null || active?.plan === plan.id}
-              className="mt-3 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
-            >
-              {active?.plan === plan.id ? "Current plan" : busyPlan === plan.id ? "Redirecting…" : "Choose this plan"}
-            </button>
+            {plan.comingSoon ? (
+              <button
+                disabled
+                className="mt-3 w-full cursor-not-allowed rounded-xl bg-border px-4 py-3 font-semibold text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint"
+              >
+                Coming soon
+              </button>
+            ) : (
+              <button
+                onClick={() => handleUpgrade(plan.id)}
+                disabled={busyPlan !== null || active?.plan === plan.id}
+                className="mt-3 w-full rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark disabled:opacity-50"
+              >
+                {active?.plan === plan.id ? "Current plan" : busyPlan === plan.id ? "Redirecting…" : "Choose this plan"}
+              </button>
+            )}
           </div>
         ))}
       </div>
