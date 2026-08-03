@@ -44,6 +44,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    // Generic on purpose: a misconfigured environment throws messages that
+    // name STRIPE_SECRET_KEY and friends, which shouldn't be handed back
+    // to the caller. The detail goes to the server log instead.
+    console.error("Checkout route failed", err);
+    return NextResponse.json({ error: "Couldn't start checkout." }, { status: 500 });
   }
 }
