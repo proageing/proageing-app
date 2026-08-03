@@ -36,7 +36,7 @@ const config: Config = {
         },
         primary: {
           DEFAULT: "#ff9c00", // Orange Peel, brand guide exact
-          dark: "#a84e00",
+          dark: "var(--primary-dark)",
           light: "#ffefd6",
           "light-dark": "#3d2a0a",
         },

@@ -283,6 +283,7 @@ export const en = {
       setupStop: "Stop",
       setup4Rest: " the moment your foot touches down, you shift, or your hands leave your hips.",
       capNote: "We'll time up to 60 seconds — that's the cap used in the research, so there's no need to go on longer.",
+      stopNote: "Stop the moment you touch down, shift, or your hands leave your hips — capped at 60s.",
       ready: "I'm ready",
       balancingNow: "Balancing now",
       tapStopWhen: "Balancing… tap Stop when you touch down",
@@ -956,6 +957,12 @@ export const en = {
 
   landing: {
     tagline: "Add life to your years.",
+  },
+
+  upgradeSuccess: {
+    title: "You're all set",
+    body: "Your payment went through. It may take a few seconds for your plan to show as active.",
+    backToDashboard: "Back to dashboard",
   },
 
   consent: {

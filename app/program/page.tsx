@@ -64,7 +64,7 @@ function MovementPill({ direction, t }: { direction: MovementDirection; t: Dicti
     // raw score moved would need a per-check direction map — more reps is
     // better, a lower PSQI is better — and one entry backwards would tell
     // someone they improved when they declined.
-    better: { label: t.programme.complete.betterRange, className: "bg-junebud/25 text-cognitive" },
+    better: { label: t.programme.complete.betterRange, className: "bg-junebud/25 text-cognitive dark:text-junebud" },
     held: { label: t.programme.complete.sameRange, className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint" },
     lower: { label: t.programme.complete.lowerRange, className: "bg-primary-light text-primary-dark dark:bg-primary-light-dark" },
     "first-time": {
@@ -320,10 +320,10 @@ function ProgramPageInner() {
           <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
           <div className="relative">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">{t.programme.notStarted.eyebrow}</p>
-            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink">
+            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
               {t.programme.notStarted.title}
             </h1>
-            <p className="mt-2 text-sm text-ink-soft">
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
               {t.programme.notStarted.blurb}
             </p>
           </div>
@@ -374,12 +374,12 @@ function ProgramPageInner() {
         <div className="relative -mx-6 -mt-4 overflow-hidden border-b border-primary/25 bg-primary-light px-6 pb-6 pt-6 dark:bg-primary-light-dark">
           <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
           <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-wide text-cognitive">
+            <p className="text-xs font-semibold uppercase tracking-wide text-cognitive dark:text-junebud">
               {t.programme.complete.eyebrow(PROGRAM_LENGTH_DAYS)}
             </p>
-            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink">{t.programme.complete.title}</h1>
+            <h1 className="mt-2 text-balance font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.programme.complete.title}</h1>
             {summary.finishedOn && (
-              <p className="mt-2 text-sm text-ink-soft">
+              <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
                 {t.programme.complete.finishedOn(
                   new Date(summary.finishedOn).toLocaleDateString(locale === "zh" ? "zh-Hans-SG" : "en-SG", {
                     day: "numeric",
@@ -393,11 +393,11 @@ function ProgramPageInner() {
 
         {summary.keystoneHabit && (
           <div className="mt-6 rounded-xl border-[1.5px] border-junebud bg-junebud/10 p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-cognitive">{t.programme.complete.keystone}</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-cognitive dark:text-junebud">{t.programme.complete.keystone}</p>
             <p className="mt-2 font-serif text-lg leading-snug text-ink dark:text-ink-dark">
               &ldquo;{summary.keystoneHabit}&rdquo;
             </p>
-            <p className="mt-2 text-xs text-cognitive">{t.programme.complete.keystoneFooter(PROGRAM_LENGTH_DAYS)}</p>
+            <p className="mt-2 text-xs text-cognitive dark:text-junebud">{t.programme.complete.keystoneFooter(PROGRAM_LENGTH_DAYS)}</p>
           </div>
         )}
 
@@ -506,7 +506,7 @@ function ProgramPageInner() {
           </button>
         </div>
 
-        <h1 className="relative mt-3 text-balance font-serif text-2xl font-semibold text-ink">{content.pillar}</h1>
+        <h1 className="relative mt-3 text-balance font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{content.pillar}</h1>
       </div>
 
       {enrollment?.status === "completed" && (
@@ -527,9 +527,9 @@ function ProgramPageInner() {
       {content.isProfileReveal && (
         <div className="mt-4 rounded-xl border border-primary bg-primary-light p-4 dark:bg-primary-light-dark">
           <p className="text-sm font-semibold text-primary-dark">
-            All 7 ProAgeing Steps checked — see your full Healthy Longevity Profile on your{" "}
+            {t.programme.day.profileReveal}{" "}
             <Link href="/dashboard" className="underline">
-              dashboard
+              {t.programme.day.profileRevealLink}
             </Link>
             .
           </p>

@@ -291,6 +291,7 @@ export const zh: Dictionary = {
       setupStop: "停止",
       setup4Rest: "。",
       capNote: "我们最多会计时 60 秒——这是研究中使用的上限，因此不需要坚持更久。",
+      stopNote: "当你触地、晃动，或双手离开腰部时，立刻停止——上限为 60 秒。",
       ready: "我准备好了",
       balancingNow: "正在平衡",
       tapStopWhen: "正在计时……触地时请点击「停止」",
@@ -937,6 +938,12 @@ export const zh: Dictionary = {
 
   landing: {
     tagline: "为你的岁月，增添生命。",
+  },
+
+  upgradeSuccess: {
+    title: "一切就绪",
+    body: "你的付款已完成。方案状态可能需要几秒钟才会显示为已启用。",
+    backToDashboard: "返回首页",
   },
 
   consent: {

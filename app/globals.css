@@ -11,12 +11,20 @@ html {
 :root {
   --paper: #faf9f7;
   --ink: #444444;
+  /* Orange Peel's deep shade. It is the readable orange on light
+     surfaces, but unreadable on dark ones -- 35 places use it as text,
+     including on the tinted hero panels, so it flips at the token rather
+     than needing a dark: variant at every call site. */
+  --primary-dark: #a84e00;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --paper: #1e1d1b;
     --ink: #f2f0ea;
+    /* Full-strength Orange Peel: legible on the dark paper and on the
+       dark hero tint, where the deep shade was not. */
+    --primary-dark: #ff9c00;
   }
 }
 

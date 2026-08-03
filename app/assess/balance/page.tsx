@@ -341,7 +341,7 @@ function BalancePageInner() {
             {running ? "keep your eyes open and hands on hips" : "seconds"}
           </div>
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            Stop the moment you touch down, shift, or your hands leave your hips — capped at 60s.
+            {c.stopNote}
           </p>
           <button
             onClick={handleTimerButton}
