@@ -33,13 +33,30 @@ function resultKey(userId, assessmentType, createdAt) {
   return `${userId}::${assessmentType}::${Number.isNaN(instant) ? createdAt : instant}`;
 }
 
+// Reports every missing variable at once. Naming them one at a time meant
+// re-running four times to discover four requirements -- tedious anywhere,
+// and this is a script you run on a machine with two service-role keys
+// loaded, so it should ask for everything up front.
+const REQUIRED = [
+  ["NEXT_PUBLIC_SUPABASE_URL", "app project URL"],
+  ["SUPABASE_SERVICE_ROLE_KEY", "app project service_role key"],
+  ["SITE_SUPABASE_URL", "legacy proageing.org project URL"],
+  ["SITE_SUPABASE_SERVICE_ROLE_KEY", "legacy project service_role key (read-only use)"],
+];
+
+const missing = REQUIRED.filter(([name]) => !process.env[name]);
+if (missing.length > 0) {
+  console.error(`Missing ${missing.length} required value${missing.length === 1 ? "" : "s"}:\n`);
+  for (const [name, what] of missing) console.error(`  ${name}  — ${what}`);
+  console.error(
+    "\nThe two SITE_ values are the same ones proageing-admin uses for its" +
+      "\n/site-users view, so they can be copied from that deployment."
+  );
+  process.exit(1);
+}
+
 function need(name) {
-  const value = process.env[name];
-  if (!value) {
-    console.error(`Missing ${name}`);
-    process.exit(1);
-  }
-  return value;
+  return process.env[name];
 }
 
 const app = createClient(need("NEXT_PUBLIC_SUPABASE_URL"), need("SUPABASE_SERVICE_ROLE_KEY"), {
@@ -145,6 +162,17 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(err);
+  const msg = String(err?.message ?? err);
+  if (/fetch failed|ENOTFOUND|ECONNREFUSED/i.test(msg)) {
+    console.error(
+      `\nCould not reach one of the projects: ${msg}` +
+        "\nCheck the two URLs, and that this machine can reach *.supabase.co." +
+        "\nNothing was written."
+    );
+  } else if (/JWT|Invalid API key|401|403/i.test(msg)) {
+    console.error(`\nRejected by Supabase: ${msg}\nCheck the service_role keys. Nothing was written.`);
+  } else {
+    console.error(err);
+  }
   process.exit(1);
 });
