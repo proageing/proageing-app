@@ -540,6 +540,72 @@ export const en = {
         },
       },
     },
+    connection: {
+      eyebrow: "Connection Check · ~3 minutes",
+      title: "Connection Check",
+      intro1:
+        "This check combines two validated instruments: the Lubben Social Network Scale (LSNS-6), which maps the size of your family and friend networks, and the UCLA-3 Loneliness Scale, which asks how connected you actually feel.",
+      intro2:
+        "In a 2022 Singapore study of 606 older adults, feeling lonely — not network size alone — was the one linked to higher frailty risk (Ge, Yap & Heng, BMC Geriatrics). So this check tracks both, but pays closest attention to how you feel.",
+      begin: "Let's begin",
+      questionsHeading: "Your family, friends, and feelings",
+      questionsBlurb: "There are no right or wrong answers — just answer as accurately as you can.",
+      sections: { family: "Your family", friends: "Your friends", feelings: "How you've been feeling" },
+      questions: [
+        "How many relatives do you see or hear from at least once a month?",
+        "How many relatives do you feel at ease with that you can talk about private matters?",
+        "How many relatives do you feel close to, such that you could call on them for help?",
+        "How many friends do you see or hear from at least once a month?",
+        "How many friends do you feel at ease with that you can talk about private matters?",
+        "How many friends do you feel close to, such that you could call on them for help?",
+        "How often do you feel that you lack companionship?",
+        "How often do you feel left out?",
+        "How often do you feel isolated from others?",
+      ],
+      frequency: ["None", "One", "Two", "Three or four", "Five to eight", "Nine or more"],
+      loneliness: ["Hardly ever", "Some of the time", "Often"],
+      seeResults: "See my results",
+      scoreCaption: "loneliness score (UCLA-3) · lower means less lonely",
+      bands: (total: number) =>
+        `Score ${total} of 9 (range 3–9). In the Singapore sample this check is based on: 3 = not lonely, 4–5 = somewhat lonely, 6–9 = lonely.`,
+      networkHeading: "Your social network (LSNS-6)",
+      familyNetwork: (n: number) => `Family network (${n}/15)`,
+      friendsNetwork: (n: number) => `Friend network (${n}/15)`,
+      isolated: "Isolated",
+      connected: "Connected",
+      nextStepsHeading: "✅ Suggested next steps",
+      disclaimer:
+        "This is a research-based screening tool, not a diagnosis. If persistent loneliness is affecting your wellbeing, please talk to your doctor or a counsellor.",
+      result: {
+        good: {
+          label: "Not lonely",
+          title: "A well-connected picture, going by how you feel",
+          text: "In the Singapore study this check is based on, this is the range linked to lower frailty risk — feeling connected mattered more than network size alone.",
+          nextSteps: [
+            "Keep up the social activities behind this — in the same study they were linked to lower frailty on their own.",
+            "Recheck every few months, since this shifts with life changes.",
+          ],
+        },
+        watch: {
+          label: "Somewhat lonely",
+          title: "Worth paying attention to",
+          text: "This is the middle band — not the highest-risk range, but the Singapore study found loneliness at this level is worth taking seriously rather than waiting for it to become more pronounced.",
+          nextSteps: [
+            "In the same study, regular social participation (classes, clubs, volunteering) was linked to lower frailty risk, independent of network size.",
+            "Recheck in a few months to see which way this is heading.",
+          ],
+        },
+        elevated: {
+          label: "Lonely",
+          title: "Please take this seriously",
+          text: 'A score of 6 or higher is the range the Singapore study classified as "lonely" — the one factor, among those measured, that was directly linked to higher frailty risk.',
+          nextSteps: [
+            "Consider talking to your doctor or a counsellor if this feeling has been persistent.",
+            "Regular social participation (classes, clubs, volunteering) was linked to lower frailty independent of network size — even small, regular activities can help.",
+          ],
+        },
+      },
+    },
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",
