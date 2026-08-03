@@ -40,6 +40,7 @@ function NutritionProteinPageInner() {
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
   const returnLabelKey = returnLabelKeyFrom(searchParams.get("from"));
   const t = useT();
+  const c = t.assess.nutritionProtein;
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<NutritionAnswers>(emptyNutritionAnswers());
@@ -105,38 +106,34 @@ function NutritionProteinPageInner() {
 
       {screen === "welcome" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Nutrition & Protein · ~3 minutes</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Nutrition & Protein Check</h1>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.eyebrow}</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{c.title}</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            Older adults need more protein per kg of body weight than younger adults do, just to
-            maintain the same muscle — but intake often quietly falls short. This check screens
-            how often you're eating protein-rich foods across a typical week.
+            {c.intro1}
           </p>
           <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
-            Adapted from the Protein Screener 55+ (a validated Dutch tool) using food items
-            confirmed relevant to Singapore's multi-ethnic diet. It's a directional guide, not a
-            lab-grade measurement.
+            {c.intro2}
           </p>
           <button
             onClick={() => setScreen("questions")}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
-            Let&apos;s begin
+            {c.begin}
           </button>
         </div>
       )}
 
       {screen === "questions" && (
         <div>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How often do you eat these?</h2>
-          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Think about a normal week for you — no right or wrong answers.</p>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.questionsHeading}</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{c.questionsBlurb}</p>
 
           <div className="mt-6 flex flex-col gap-2.5">
-            {PROTEIN_FOOD_QUESTIONS.map((q) => (
+            {PROTEIN_FOOD_QUESTIONS.map((q, i) => (
               <LikertQuestionCard
                 key={q.key}
-                question={q.label}
-                options={FREQUENCY_OPTIONS}
+                question={c.foods[i]}
+                options={FREQUENCY_OPTIONS.map((o, oi) => ({ ...o, label: c.frequency[oi] }))}
                 value={answers[q.key]}
                 onChange={(v) => setAnswer(q.key, v)}
                 style={PILLAR_STYLES.nutrition}
@@ -144,8 +141,8 @@ function NutritionProteinPageInner() {
             ))}
 
             <LikertQuestionCard
-              question="At your main meal, how much meat, fish, tofu, or eggs do you usually have?"
-              options={PORTION_OPTIONS}
+              question={c.portionQuestion}
+              options={PORTION_OPTIONS.map((o, oi) => ({ ...o, label: c.portions[oi] }))}
               value={answers.portion}
               onChange={(v) => setAnswer("portion", v)}
               style={PILLAR_STYLES.nutrition}
@@ -157,32 +154,32 @@ function NutritionProteinPageInner() {
             disabled={!isNutritionComplete(answers)}
             className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            See my results
+            {c.seeResults}
           </button>
         </div>
       )}
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-nutrition-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-nutrition-dark">{t.assess.common.yourResult}</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-nutrition-dark">{score}</div>
-            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">protein-source frequency score · out of 32</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">{c.scoreCaption}</div>
           </div>
 
           <p className="mt-6 rounded-full bg-nutrition-tint px-3 py-1 text-center text-sm font-semibold text-nutrition-dark">
-            {result.label}
+            {c.result[result.status].label}
           </p>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {c.result[result.status].title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{c.result[result.status].text}</p>
           </div>
 
           <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">{c.nextStepsHeading}</h3>
             <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
-              {result.nextSteps.map((step) => (
+              {c.result[result.status].nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
                 </li>
@@ -191,8 +188,7 @@ function NutritionProteinPageInner() {
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            This is an informational screening tool, not a diagnosis. For a precise measurement
-            of your protein intake, ask your doctor for a referral to a dietitian.
+            {c.disclaimer}
           </p>
 
           <button

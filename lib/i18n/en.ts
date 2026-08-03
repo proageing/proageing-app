@@ -400,6 +400,65 @@ export const en = {
         },
       },
     },
+    nutritionProtein: {
+      eyebrow: "Nutrition & Protein · ~3 minutes",
+      title: "Nutrition & Protein Check",
+      intro1:
+        "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. This check screens how often you're eating protein-rich foods across a typical week.",
+      intro2:
+        "Adapted from the Protein Screener 55+ (a validated Dutch tool) using food items confirmed relevant to Singapore's multi-ethnic diet. It's a directional guide, not a lab-grade measurement.",
+      begin: "Let's begin",
+      questionsHeading: "How often do you eat these?",
+      questionsBlurb: "Think about a normal week for you — no right or wrong answers.",
+      foods: [
+        "Fish or seafood",
+        "Chicken or other poultry",
+        "Red meat (beef, pork, lamb)",
+        "Eggs",
+        "Tofu, tempeh, or other soy products",
+        "Milk, soy milk, or yoghurt",
+        "Beans, lentils, or other legumes",
+        "Nuts or peanuts",
+      ],
+      frequency: ["Never", "1–2x/week", "3–4x/week", "5–6x/week", "Daily+"],
+      portionQuestion: "At your main meal, how much meat, fish, tofu, or eggs do you usually have?",
+      portions: ["A small amount", "About a palm-sized portion", "More than a palm-sized portion", "Not sure"],
+      seeResults: "See my results",
+      scoreCaption: "protein-source frequency score · out of 32",
+      nextStepsHeading: "✅ Suggested next steps",
+      disclaimer:
+        "This is an informational screening tool, not a diagnosis. For a precise measurement of your protein intake, ask your doctor for a referral to a dietitian.",
+      result: {
+        elevated: {
+          label: "Low frequency",
+          title: "Worth a closer look",
+          text: "Protein-rich foods seem to be showing up infrequently across your week. Since older adults need more protein per kg of body weight than younger adults to maintain muscle, this is worth actively addressing.",
+          nextSteps: [
+            "Try adding a protein source to each meal, not just one meal a day.",
+            "Tofu, eggs, and canned fish are inexpensive, low-effort ways to add protein at home.",
+            "Consider asking your doctor for a referral to a dietitian for a precise assessment.",
+          ],
+        },
+        watch: {
+          label: "Moderate frequency",
+          title: "A reasonable base, with room to build",
+          text: "You're getting protein-rich foods regularly, but there may be room to spread them more evenly across meals, or increase portion size at meals where it's currently small.",
+          nextSteps: [
+            "Aim for a protein source at breakfast too, not just lunch and dinner.",
+            "Frequency and portion size both matter — check your usual portion below.",
+          ],
+        },
+        good: {
+          label: "Good frequency",
+          title: "A strong protein-source pattern",
+          text: "Protein-rich foods are showing up often across your week — a good foundation for maintaining muscle as you age, especially alongside regular strength activity.",
+          nextSteps: [
+            "Keep this pattern going — it pairs well with the Build Strength & Balance checks.",
+            "Recheck every few months to make sure this holds steady.",
+          ],
+        },
+      },
+    },
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",

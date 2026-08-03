@@ -104,7 +104,10 @@ function significantTokensIn(s) {
     }
   }
   // Named instruments cited outside brackets.
-  for (const w of s.match(/\b(?:Rikli|Jones|Seino|Vellas|Morioka|Holt-Lunstad|Okinawan|Singapore|ProAge|ProAgeing|ProAger)\b/g) ?? []) {
+  // Author surnames and brand names only. Place names and adjectives
+  // (Singapore, Okinawan, Dutch) are ordinary words that translate --
+  // 新加坡 is not a dropped citation.
+  for (const w of s.match(/\b(?:Rikli|Jones|Seino|Vellas|Morioka|Holt-Lunstad|ProAge|ProAgeing|ProAger)\b/g) ?? []) {
     out.add(w);
   }
   return [...out].filter((w) => !TRANSLATED_TERMS.has(w));
