@@ -4,19 +4,36 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { completeSessionFromUrlHash } from "@/lib/authCallback";
+import { recordPendingConsent } from "@/lib/consent";
+import { takeNextPath } from "@/lib/nextPath";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    completeSessionFromUrlHash(supabase).then((result) => {
+    async function complete() {
+      const result = await completeSessionFromUrlHash(supabase);
       if (result.error) {
         setError(result.error);
         return;
       }
-      router.replace("/dashboard");
-    });
+
+      // The consent ticked before the link was sent can only be attributed
+      // now that there's a user to attach it to. Deliberately awaited, but
+      // it never throws — a consent-log failure must not strand someone on
+      // this screen.
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        await recordPendingConsent(user.id);
+      }
+
+      router.replace(takeNextPath());
+    }
+
+    complete();
   }, [router]);
 
   return (

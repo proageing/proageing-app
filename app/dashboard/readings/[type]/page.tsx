@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { signInHrefFor } from "@/lib/nextPath";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { PILLAR_HEX } from "@/lib/pillarHex";
@@ -55,7 +56,7 @@ export default function AssessmentTrendPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/signin");
+        router.push(signInHrefFor(window.location.pathname + window.location.search));
         return;
       }
 

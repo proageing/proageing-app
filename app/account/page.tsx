@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { signInHrefFor } from "@/lib/nextPath";
 import { greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
@@ -27,7 +28,7 @@ export default function AccountPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/signin");
+        router.push(signInHrefFor(window.location.pathname + window.location.search));
         return;
       }
 

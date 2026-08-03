@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { PLANS, type PlanId } from "@/lib/plans";
+import { PLANS, planById, type PlanId } from "@/lib/plans";
 import { getActiveSubscription, type ActiveSubscription } from "@/lib/subscription";
+import { signInHrefFor } from "@/lib/nextPath";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
@@ -15,11 +16,19 @@ export default function UpgradePage() {
   const [active, setActive] = useState<ActiveSubscription | null>(null);
   const [busyPlan, setBusyPlan] = useState<PlanId | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // proageing.org's pricing page links here as /upgrade?plan=21-day.
+  const [requestedPlan, setRequestedPlan] = useState<PlanId | null>(null);
 
   useEffect(() => {
+    const raw = new URLSearchParams(window.location.search).get("plan");
+    const matched = raw ? planById(raw) : undefined;
+    if (matched) setRequestedPlan(matched.id);
+
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) {
-        router.push("/signin");
+        // Keep the plan they picked on the way through sign-in, so they
+        // come back to the same choice rather than a bare plan list.
+        router.push(signInHrefFor(`/upgrade${window.location.search}`));
         return;
       }
       setActive(await getActiveSubscription(user.id));
@@ -34,7 +43,7 @@ export default function UpgradePage() {
       data: { session },
     } = await supabase.auth.getSession();
     if (!session) {
-      router.push("/signin");
+      router.push(signInHrefFor(`/upgrade?plan=${planId}`));
       return;
     }
 
@@ -63,6 +72,8 @@ export default function UpgradePage() {
     );
   }
 
+  const requestedPlanIsComingSoon = requestedPlan ? (planById(requestedPlan)?.comingSoon ?? false) : false;
+
   return (
     <main className="relative mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-8">
       <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
@@ -84,15 +95,26 @@ export default function UpgradePage() {
         </p>
       )}
 
+      {requestedPlanIsComingSoon && (
+        <p className="mt-6 rounded-xl border border-border bg-white px-4 py-3 text-sm text-ink-soft shadow-sm dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft">
+          The {planById(requestedPlan!)?.title} isn&apos;t open yet — here&apos;s what&apos;s available today.
+        </p>
+      )}
+
       <div className="mt-6 flex flex-col gap-4">
-        {PLANS.map((plan) => (
+        {PLANS.map((plan) => {
+          const highlighted = plan.id === requestedPlan && !plan.comingSoon;
+          return (
           <div
             key={plan.id}
-            className={`rounded-xl border border-border p-4 shadow-sm dark:border-border-dark ${
-              plan.comingSoon ? "bg-border/20 dark:bg-white/[0.02]" : "bg-white dark:bg-white/5"
-            }`}
+            className={`rounded-xl border p-4 shadow-sm ${
+              highlighted ? "border-primary" : "border-border dark:border-border-dark"
+            } ${plan.comingSoon ? "bg-border/20 dark:bg-white/[0.02]" : "bg-white dark:bg-white/5"}`}
           >
-            <h2 className={`font-serif text-lg font-semibold ${plan.comingSoon ? "text-ink-faint dark:text-ink-dark-faint" : "text-ink dark:text-ink-dark"}`}>
+            {highlighted && (
+              <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Your selection</p>
+            )}
+            <h2 className={`font-serif text-lg font-semibold ${plan.comingSoon ? "text-ink-faint dark:text-ink-dark-faint" : "text-ink dark:text-ink-dark"} ${highlighted ? "mt-1" : ""}`}>
               {plan.title}
             </h2>
             <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{plan.priceLabel}</p>
@@ -113,7 +135,8 @@ export default function UpgradePage() {
               </button>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
         {error && <p className="mt-4 text-sm text-red-600">{error}</p>}

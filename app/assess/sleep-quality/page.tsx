@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { signInHrefFor } from "@/lib/nextPath";
 import { saveAssessmentResult } from "@/lib/assessments/saveResult";
 import { LikertQuestionCard } from "@/components/LikertQuestionCard";
 import { AssessmentTopBar } from "@/components/AssessmentTopBar";
@@ -71,7 +72,7 @@ function SleepQualityPageInner() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) {
-        router.push("/signin");
+        router.push(signInHrefFor(window.location.pathname + window.location.search));
         return;
       }
       setUserId(user.id);

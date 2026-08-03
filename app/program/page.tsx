@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { signInHrefFor } from "@/lib/nextPath";
 import {
   completeEnrollment,
   computeCurrentDay,
@@ -105,7 +106,7 @@ function ProgramPageInner() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/signin");
+        router.push(signInHrefFor(window.location.pathname + window.location.search));
         return;
       }
       setUserId(user.id);
