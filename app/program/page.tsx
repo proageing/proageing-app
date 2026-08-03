@@ -268,15 +268,15 @@ function ProgramPageInner() {
 
   return (
     <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-4">
-      <div className="relative -mx-6 -mt-4 overflow-hidden bg-ink px-6 pb-6 pt-6">
-        <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-white opacity-30" />
+      <div className="relative -mx-6 -mt-4 overflow-hidden border-b border-primary/25 bg-primary-light px-6 pb-6 pt-6 dark:bg-primary-light-dark">
+        <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
 
         <div className="relative flex items-center justify-between">
           <button
             onClick={() => goToDay(viewedDay - 1)}
             disabled={viewedDay <= 1 || dayLoading}
             aria-label="Previous day"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white transition hover:border-white disabled:opacity-30 disabled:hover:border-white/40"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6" />
@@ -284,11 +284,11 @@ function ProgramPageInner() {
           </button>
 
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-wide text-white/90">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-dark">
               Day {viewedDay} of {PROGRAM_LENGTH_DAYS}
             </p>
             {viewedDay !== currentDay && (
-              <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-white/75 underline">
+              <button onClick={() => goToDay(currentDay)} className="text-xs font-semibold text-ink-faint underline">
                 Back to today (Day {currentDay})
               </button>
             )}
@@ -298,7 +298,7 @@ function ProgramPageInner() {
             onClick={() => goToDay(viewedDay + 1)}
             disabled={viewedDay >= currentDay || dayLoading}
             aria-label="Next day"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white transition hover:border-white disabled:opacity-30 disabled:hover:border-white/40"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6" />
@@ -306,7 +306,7 @@ function ProgramPageInner() {
           </button>
         </div>
 
-        <h1 className="relative mt-3 text-balance font-serif text-2xl font-semibold text-white">{content.pillar}</h1>
+        <h1 className="relative mt-3 text-balance font-serif text-2xl font-semibold text-ink">{content.pillar}</h1>
       </div>
 
       {streak > 0 && (
