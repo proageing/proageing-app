@@ -15,7 +15,6 @@ import {
   type ProgramEnrollment,
 } from "@/lib/program";
 import { contentForDay } from "@/lib/program21";
-import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { getActiveSubscription } from "@/lib/subscription";
 import {
   emptyTestimonial,
@@ -266,11 +265,10 @@ function ProgramPageInner() {
 
   const content = contentForDay(viewedDay);
   const isToday = viewedDay === currentDay;
-  const pillar = PILLAR_STYLES[content.pillarColor];
 
   return (
     <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-4">
-      <div className={`relative -mx-6 -mt-4 overflow-hidden px-6 pt-6 pb-6 ${pillar.dot}`}>
+      <div className="relative -mx-6 -mt-4 overflow-hidden bg-ink px-6 pb-6 pt-6">
         <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-white opacity-30" />
 
         <div className="relative flex items-center justify-between">
@@ -329,8 +327,8 @@ function ProgramPageInner() {
         </div>
       )}
 
-      <div className={`mt-6 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
-        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Learn</p>
+      <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Learn</p>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
           <input
@@ -346,8 +344,8 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
-        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Act</p>
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Act</p>
         {content.assessments && content.assessments.length > 0 && (
           <div className="mt-2 flex flex-col gap-2">
             {content.assessments.map((a) => (
@@ -376,8 +374,8 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
-        <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Reflect</p>
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Reflect</p>
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         {content.reflectExamples && (
           <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">
@@ -397,8 +395,8 @@ function ProgramPageInner() {
       </div>
 
       {content.isClose && (
-        <div className={`mt-4 rounded-xl border p-4 shadow-sm ${pillar.card}`}>
-          <p className={`text-xs font-bold uppercase tracking-wide ${pillar.eyebrow}`}>Share your story</p>
+        <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">Share your story</p>
           <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">What has improved the most?</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {IMPROVED_MOST_OPTIONS.map((opt) => (
