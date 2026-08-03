@@ -934,6 +934,30 @@ export const en = {
     },
   },
 
+  trends: {
+    title: "Your Trends",
+    blurb:
+      "Every check you've ever taken, so you can see how you're changing over time — not just your latest result.",
+    noChecks: "No checks yet.",
+    retake: "Retake",
+    start: "Start",
+  },
+
+  readingDetail: {
+    unknown: "Unknown assessment.",
+    backToReadings: "← Back to readings",
+    yourProgress: "Your progress",
+    trendTitle: (name: string) => `${name} Trend`,
+    noResults: "No results saved yet. Take this check to start building your trend here.",
+    history: "History",
+    takeCheck: "Take this check",
+    retakeCheck: "Retake this check",
+  },
+
+  landing: {
+    tagline: "Add life to your years.",
+  },
+
   consent: {
     heading: "Consent of data usage & PDPA",
     clauses: [

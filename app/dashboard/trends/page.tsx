@@ -11,6 +11,7 @@ import { formatEntryData } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
+import { useT } from "@/lib/i18n/context";
 import type { AssessmentType } from "@/lib/importHistory";
 
 interface ResultRow {
@@ -26,6 +27,7 @@ function formatDate(iso: string): string {
 export default function TrendsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const t = useT();
   const [historyByType, setHistoryByType] = useState<Map<AssessmentType, ResultRow[]>>(new Map());
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function TrendsPage() {
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -88,13 +90,13 @@ export default function TrendsPage() {
       <div className="relative">
         <AppHeader />
 
-        <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Trends</h1>
+        <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.trends.title}</h1>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">
-          Every check you've ever taken, so you can see how you're changing over time — not just your latest result.
+          {t.trends.blurb}
         </p>
 
       <div className="mt-6 flex flex-col gap-4">
-        {ASSESSMENT_TYPES.map(({ type, title, href, color }) => {
+        {ASSESSMENT_TYPES.map(({ type, href, color }) => {
           const history = historyByType.get(type) ?? [];
           const style = PILLAR_STYLES[color];
           return (
@@ -112,17 +114,17 @@ export default function TrendsPage() {
                   ) : (
                     <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
                   )}
-                  <span className="font-semibold text-ink dark:text-ink-dark">{title}</span>
+                  <span className="font-semibold text-ink dark:text-ink-dark">{t.checks[type]}</span>
                 </span>
                 {href && (
                   <Link href={href} className={`text-sm font-semibold underline ${style.eyebrow}`}>
-                    {history.length > 0 ? "Retake" : "Start"}
+                    {history.length > 0 ? t.trends.retake : t.trends.start}
                   </Link>
                 )}
               </div>
 
               {history.length === 0 ? (
-                <p className="mt-2 text-sm text-ink-faint dark:text-ink-dark-faint">No checks yet.</p>
+                <p className="mt-2 text-sm text-ink-faint dark:text-ink-dark-faint">{t.trends.noChecks}</p>
               ) : (
                 <ul className="mt-3 flex flex-col gap-1.5 border-t border-border pt-3 dark:border-border-dark">
                   {history.map((row, i) => (

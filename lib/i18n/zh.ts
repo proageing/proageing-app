@@ -916,6 +916,29 @@ export const zh: Dictionary = {
     },
   },
 
+  trends: {
+    title: "你的趋势",
+    blurb: "你做过的每一次检测都在这里，让你看见自己随时间的变化——而不只是最新一次的结果。",
+    noChecks: "尚未检测。",
+    retake: "重测",
+    start: "开始",
+  },
+
+  readingDetail: {
+    unknown: "找不到这项检测。",
+    backToReadings: "← 返回我的记录",
+    yourProgress: "你的进展",
+    trendTitle: (name: string) => `${name}趋势`,
+    noResults: "尚未保存任何结果。做一次这项检测，就能开始建立你的趋势。",
+    history: "历史记录",
+    takeCheck: "做这项检测",
+    retakeCheck: "重测这项检测",
+  },
+
+  landing: {
+    tagline: "为你的岁月，增添生命。",
+  },
+
   consent: {
     heading: "数据使用同意与个人资料保护法（PDPA）",
     clauses: [

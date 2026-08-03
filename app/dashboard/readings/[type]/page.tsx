@@ -9,7 +9,8 @@ import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { PILLAR_HEX } from "@/lib/pillarHex";
 import { TREND_METRICS } from "@/lib/assessments/trendConfig";
-import { ASSESSMENT_INTROS } from "@/lib/assessments/intro";
+import { introsFor } from "@/lib/assessments/intro";
+import { useT } from "@/lib/i18n/context";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { TrendChart } from "@/components/TrendChart";
@@ -40,6 +41,7 @@ function DeltaBadge({ delta, good, flat, pillClass }: { delta: number; good: boo
 export default function AssessmentTrendPage() {
   const router = useRouter();
   const params = useParams<{ type: string }>();
+  const t = useT();
   const typeParam = params.type as AssessmentType;
   const meta = ASSESSMENT_TYPES.find((a) => a.type === typeParam);
   const metrics = TREND_METRICS[typeParam] ?? [];
@@ -90,9 +92,9 @@ export default function AssessmentTrendPage() {
     return (
       <main className="mx-auto max-w-2xl px-6 pb-28 pt-8">
         <AppHeader />
-        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">Unknown assessment.</p>
+        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">{t.readingDetail.unknown}</p>
         <Link href="/dashboard/readings" className="mt-2 inline-block text-sm text-primary-dark underline">
-          ← Back to readings
+          {t.readingDetail.backToReadings}
         </Link>
         <TabBar />
       </main>
@@ -100,12 +102,12 @@ export default function AssessmentTrendPage() {
   }
 
   const style = PILLAR_STYLES[meta.color];
-  const intro = ASSESSMENT_INTROS[typeParam];
+  const intro = introsFor(t)[typeParam];
 
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Loading…</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.common.loading}</p>
       </main>
     );
   }
@@ -121,11 +123,11 @@ export default function AssessmentTrendPage() {
           href="/dashboard/readings"
           className="mt-3 inline-block text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
         >
-          ← Back to readings
+          {t.readingDetail.backToReadings}
         </Link>
 
-      <p className={`mt-4 text-[0.74rem] font-bold uppercase tracking-[0.13em] ${style.eyebrow}`}>Your progress</p>
-      <h1 className="font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{meta.title} Trend</h1>
+      <p className={`mt-4 text-[0.74rem] font-bold uppercase tracking-[0.13em] ${style.eyebrow}`}>{t.readingDetail.yourProgress}</p>
+      <h1 className="font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.readingDetail.trendTitle(t.checks[meta.type])}</h1>
 
       {intro && (
         <div className="mt-3 flex flex-col gap-2">
@@ -139,7 +141,7 @@ export default function AssessmentTrendPage() {
 
       {rows.length === 0 ? (
         <div className="mt-6 rounded-xl border border-border bg-white p-4 text-sm text-ink-soft shadow-sm dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-soft">
-          No results saved yet. Take this check to start building your trend here.
+          {t.readingDetail.noResults}
         </div>
       ) : (
         <>
@@ -194,7 +196,7 @@ export default function AssessmentTrendPage() {
             );
           })}
 
-          <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">History</p>
+          <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.readingDetail.history}</p>
           <div className="mt-2 flex flex-col gap-2">
             {rows
               .slice()
@@ -238,7 +240,7 @@ export default function AssessmentTrendPage() {
           href={`/assess/${typeParam}?from=readings`}
           className={`mt-8 block w-full rounded-2xl py-4 text-center text-base font-bold text-white ${style.solidButton}`}
         >
-          {rows.length === 0 ? "Take this check" : "Retake this check"}
+          {rows.length === 0 ? t.readingDetail.takeCheck : t.readingDetail.retakeCheck}
         </Link>
       </div>
 
