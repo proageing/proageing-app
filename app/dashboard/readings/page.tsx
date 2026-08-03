@@ -70,11 +70,6 @@ export default function ReadingsPage() {
     };
   }, [router]);
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/signin");
-  }
-
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -90,7 +85,7 @@ export default function ReadingsPage() {
       <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
       <div className="relative">
-        <AppHeader onSignOut={handleSignOut} />
+        <AppHeader />
 
         <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Your Longevity Readings</p>
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Every check you&apos;ve taken, and your latest result for each.</p>

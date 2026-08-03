@@ -96,11 +96,6 @@ export default function DashboardPage() {
     };
   }, [router]);
 
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/signin");
-  }
-
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -117,7 +112,7 @@ export default function DashboardPage() {
       <WatermarkSwirl className="pointer-events-none absolute -right-24 -top-20 w-[420px] text-primary opacity-[0.06]" />
 
       <div className="relative">
-        <AppHeader onSignOut={handleSignOut} />
+        <AppHeader />
 
         <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Hello, {greetingName}!</p>
       {isFirstVisit ? (
