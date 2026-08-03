@@ -1,11 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SEVEN_STEPS } from "@/lib/sevenSteps";
-import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
-import { PILLAR_STYLES } from "@/lib/pillarStyles";
 
-// Replaces the article teasers with the framework itself — same "Why it
-// matters" copy as proageing.org/7-steps.html, but the call to action
-// points at the native in-app check instead of the site's legacy version.
+// Same card design as proageing.org's own article list — photo, step
+// eyebrow, serif title, one-line meta — but tapping opens the step
+// in-app instead of linking out.
 export function SevenStepsSection() {
   return (
     <div className="mt-8">
@@ -13,43 +12,24 @@ export function SevenStepsSection() {
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">The science-backed framework behind every check in this app.</p>
 
       <div className="mt-4 flex flex-col gap-3">
-        {SEVEN_STEPS.map((step) => {
-          const pillar = PILLAR_STYLES[step.pillarColor];
-          return (
-            <div key={step.step} className={`rounded-[14px] border-[1.5px] p-4 ${pillar.card}`}>
-              <p className={`text-[0.7rem] font-bold uppercase tracking-[0.08em] ${pillar.eyebrow}`}>
+        {SEVEN_STEPS.map((step) => (
+          <Link
+            key={step.step}
+            href={`/steps/${step.step}`}
+            className="overflow-hidden rounded-[14px] border-[1.5px] border-border bg-white shadow-sm transition hover:border-primary dark:border-border-dark dark:bg-white/5"
+          >
+            <div className="relative aspect-[16/9] w-full">
+              <Image src={step.photo} alt="" fill className="object-cover" />
+            </div>
+            <div className="p-4">
+              <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">
                 Step {step.step} · {step.tagline}
               </p>
               <h3 className="mt-1 font-serif text-base font-semibold leading-snug text-ink dark:text-ink-dark">{step.title}</h3>
-              <p className="mt-1.5 text-sm text-ink-soft dark:text-ink-dark-soft">{step.why}</p>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {step.assessments.map((a) => {
-                  const meta = ASSESSMENT_TYPES.find((x) => x.type === a.type);
-                  if (!meta?.href) return null;
-                  return (
-                    <Link
-                      key={a.type}
-                      href={meta.href}
-                      className="rounded-full border-[1.5px] border-primary bg-white px-3 py-1 text-xs font-bold text-primary-dark transition hover:bg-primary-light dark:bg-transparent dark:hover:bg-primary-light-dark"
-                    >
-                      Take the {a.label} check →
-                    </Link>
-                  );
-                })}
-              </div>
-
-              <a
-                href={step.learnMoreHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block text-xs font-semibold text-ink-faint underline dark:text-ink-dark-faint"
-              >
-                Read more on proageing.org
-              </a>
+              <p className="mt-1 line-clamp-2 text-xs text-ink-soft dark:text-ink-dark-soft">{step.why}</p>
             </div>
-          );
-        })}
+          </Link>
+        ))}
       </div>
     </div>
   );
