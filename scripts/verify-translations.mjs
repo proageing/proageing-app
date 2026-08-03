@@ -81,7 +81,12 @@ function chineseQuantities(s) {
 // Acronyms the site's own Chinese pages render as words rather than
 // keeping in Latin. Their absence is the published translation's choice,
 // not an omission.
-const TRANSLATED_TERMS = new Set(["VO2", "HR", "RHR"]);
+// Acronyms Chinese medical writing spells out rather than borrowing:
+// VO2 → 最大摄氧量, HDL → 高密度脂蛋白, MCI → 轻度认知障碍. The site's own
+// pages do the same, so their absence is the published rendering, not a
+// dropped term. PSQI, PDPA, LSNS-6 and UCLA-3 are deliberately NOT here --
+// those stay in Latin on both sides and should still be checked.
+const TRANSLATED_TERMS = new Set(["VO2", "HR", "RHR", "HDL", "MCI"]);
 
 function significantTokensIn(s) {
   const out = new Set();

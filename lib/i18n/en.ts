@@ -606,6 +606,92 @@ export const en = {
         },
       },
     },
+    cognitiveDecline: {
+      eyebrow: "Cognitive Health Check · ~3 minutes",
+      title: "Cognitive Decline Risk Check",
+      intro1:
+        "This check uses the SLAS Risk Index, developed and validated by the Singapore Longitudinal Ageing Study (Ng et al., 2021). It's a short, self-reported checklist of 10 personal, lifestyle and health factors shown to predict a person's 3–5 year risk of mild cognitive impairment (MCI) or dementia.",
+      intro2:
+        "It was field-tested with over 400 community-living older adults in Singapore to identify who would benefit most from early lifestyle support — the same approach we're using here.",
+      begin: "Let's begin",
+      questionsHeading: "Tell us about yourself",
+      questionsBlurb:
+        "These are the same questions used in the original research checklist. There are no right or wrong answers — just answer as accurately as you can.",
+      sections: {
+        about: "About you",
+        feelings: "How you've been feeling",
+        senses: "Your senses",
+        markers: "Health markers (ask your doctor if unsure)",
+      },
+      questions: [
+        "What is your age?",
+        "What is your sex?",
+        "What is your highest level of education?",
+        "Have you been treated for depression, or do you currently have 5 or more symptoms of depression (such as low mood, loss of interest, poor sleep, low energy, or poor concentration)?",
+        "Overall, would you say you are not very satisfied with your life?",
+        "Do you have problems hearing well?",
+        "Is your waist circumference wide? (over 90cm / 35in for men, over 80cm / 31in for women)",
+        "Do you have pre-diabetes or diabetes, or take medicine for high blood sugar?",
+        "Do you have high blood pressure (130/85mmHg or more), or take medicine for it?",
+        'Do you have high triglycerides or low HDL ("good") cholesterol, or take medicine for abnormal blood lipids?',
+      ],
+      options: {
+        age: ["Under 65", "65–74", "75 or older"],
+        sex: ["Male", "Female"],
+        education: ["Secondary school or higher", "Primary school or no formal schooling"],
+        lifeSat: ["No, I'm satisfied", "Yes, not very satisfied"],
+        yesNo: ["No", "Yes"],
+      },
+      seeResults: "See my results",
+      scoreCaption: "risk index score · higher means higher risk",
+      bands: (total: number) =>
+        `Score ${total} of 13. In the original research, scores under 6 were linked to under 10% predicted risk; 6–7 was the study's screening threshold; 8 and above showed a clinically meaningful drop in cognitive test scores.`,
+      behindScore: "What's behind your score",
+      components: {
+        age: "Age",
+        sex: "Sex",
+        education: "Education",
+        depression: "Mood / depression",
+        lifeSat: "Life satisfaction",
+        hearing: "Hearing",
+        cardio: (n: number) => `Metabolic health (${n} of 4 factors)`,
+      },
+      nextStepsHeading: "✅ Suggested next steps",
+      disclaimer:
+        "This is a research-based screening tool, not a diagnosis. Only a doctor can assess memory or thinking changes properly — please share this result with yours, especially if your score is 6 or higher.",
+      result: {
+        good: {
+          label: "Below the screening threshold",
+          title: "A lower-risk profile right now",
+          text: 'In the original research, scores below 6 were associated with a predicted MCI/dementia risk of well under 10% over 3–5 years — the range the study used as its "below threshold" band. Many of these factors (mood, hearing, metabolic health) are also changeable, so this is a good score to protect.',
+          nextSteps: [
+            "Look at \"What's behind your score\" below — any flagged item is worth addressing even at a lower total score.",
+            "Recheck every few months, since scores can shift with health changes.",
+            "Keep up whatever is keeping your metabolic health, hearing, and mood in good shape.",
+          ],
+        },
+        watch: {
+          label: "At the screening threshold",
+          title: "Worth a conversation with your doctor",
+          text: "A score of 6 or 7 is the exact threshold the original study used to identify people for a 6-month lifestyle support programme — not because dementia is present, but because this range is where early support made a measurable difference to cognitive test scores in that trial.",
+          nextSteps: [
+            "Share this result with your doctor — ask specifically about the flagged items below.",
+            "Multidomain lifestyle programmes (exercise, diet, cognitive and social activity) are what the original study used at this score range.",
+            "Recheck in a few months to see whether your score is trending down.",
+          ],
+        },
+        elevated: {
+          label: "Above the screening threshold",
+          title: "Please discuss this with your doctor soon",
+          text: "In the original study, participants scoring 8 or higher had noticeably lower cognitive test scores than those at 6–7 — a large enough gap to matter clinically. This is a screening flag, not a diagnosis, but it's a strong enough signal to act on.",
+          nextSteps: [
+            "Book a check-up with your doctor and bring this result — ask about a proper cognitive assessment.",
+            "Review the flagged items below together; several (blood pressure, hearing, mood) are treatable.",
+            "Consider a structured lifestyle programme covering exercise, diet, and social and cognitive activity.",
+          ],
+        },
+      },
+    },
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",

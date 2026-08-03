@@ -39,6 +39,7 @@ function CognitiveDeclinePageInner() {
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
   const returnLabelKey = returnLabelKeyFrom(searchParams.get("from"));
   const t = useT();
+  const c = t.assess.cognitiveDecline;
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<CognitiveAnswers>(emptyCognitiveAnswers());
@@ -107,46 +108,60 @@ function CognitiveDeclinePageInner() {
 
       {screen === "welcome" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Cognitive Health Check · ~3 minutes</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Cognitive Decline Risk Check</h1>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.eyebrow}</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{c.title}</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            This check uses the SLAS Risk Index, developed and validated by the Singapore
-            Longitudinal Ageing Study (Ng et al., 2021). It&apos;s a short, self-reported
-            checklist of 10 personal, lifestyle and health factors shown to predict a person&apos;s
-            3–5 year risk of mild cognitive impairment (MCI) or dementia.
+            {c.intro1}
           </p>
           <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
-            It was field-tested with over 400 community-living older adults in Singapore to
-            identify who would benefit most from early lifestyle support — the same approach
-            we&apos;re using here.
+            {c.intro2}
           </p>
           <button
             onClick={() => setScreen("questions")}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
-            Let&apos;s begin
+            {c.begin}
           </button>
         </div>
       )}
 
       {screen === "questions" && (
         <div>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">Tell us about yourself</h2>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.questionsHeading}</h2>
           <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">
-            These are the same questions used in the original research checklist. There are no
-            right or wrong answers — just answer as accurately as you can.
+            {c.questionsBlurb}
           </p>
 
           <div className="mt-6 flex flex-col gap-2.5">
-            {COGNITIVE_QUESTIONS.map((q) => {
+            {COGNITIVE_QUESTIONS.map((q, i) => {
               const showSection = q.section !== lastSection;
               lastSection = q.section;
+              // Which translated option set a question uses is derived from
+              // its key, so a question can't be given the wrong scale.
+              const optionLabels =
+                q.key === "age"
+                  ? c.options.age
+                  : q.key === "sex"
+                    ? c.options.sex
+                    : q.key === "education"
+                      ? c.options.education
+                      : q.key === "lifeSat"
+                        ? c.options.lifeSat
+                        : c.options.yesNo;
+              const sectionLabel =
+                q.key === "depression" || q.key === "lifeSat"
+                  ? c.sections.feelings
+                  : q.key === "hearing"
+                    ? c.sections.senses
+                    : ["waist", "glucose", "bp", "lipids"].includes(q.key)
+                      ? c.sections.markers
+                      : c.sections.about;
               return (
                 <LikertQuestionCard
                   key={q.key}
-                  section={showSection ? q.section : undefined}
-                  question={q.question}
-                  options={q.opts}
+                  section={showSection ? sectionLabel : undefined}
+                  question={c.questions[i]}
+                  options={q.opts.map((o, oi) => ({ ...o, label: optionLabels[oi] }))}
                   value={answers[q.key]}
                   onChange={(v) => setAnswer(q.key, v)}
                   style={PILLAR_STYLES.cognitive}
@@ -160,53 +175,53 @@ function CognitiveDeclinePageInner() {
             disabled={!isCognitiveComplete(answers)}
             className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            See my results
+            {c.seeResults}
           </button>
         </div>
       )}
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-cognitive-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-cognitive-dark">{t.assess.common.yourResult}</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-cognitive-dark">{score.total}</div>
-            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">risk index score · higher means higher risk</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">{c.scoreCaption}</div>
           </div>
 
           <p className="mt-6 rounded-full bg-cognitive-tint px-3 py-1 text-center text-sm font-semibold text-cognitive-dark">
-            {result.label}
+            {c.result[result.status].label}
           </p>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            Score {score.total} of 13. In the original research, scores under 6 were linked to
-            under 10% predicted risk; 6–7 was the study&apos;s screening threshold; 8 and above
-            showed a clinically meaningful drop in cognitive test scores.
+            {c.bands(score.total)}
           </p>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">What&apos;s behind your score</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{c.behindScore}</p>
           <div className="mt-2 flex flex-col gap-2">
-            {componentMeta.map((c) => (
-              <div key={c.key} className="flex items-center gap-3">
-                <span className="w-56 shrink-0 text-sm text-ink-soft dark:text-ink-dark-soft">{c.label}</span>
+            {componentMeta.map((comp) => (
+              <div key={comp.key} className="flex items-center gap-3">
+                <span className="w-56 shrink-0 text-sm text-ink-soft dark:text-ink-dark-soft">
+                  {comp.key === "cardio" ? c.components.cardio(score.cardioCount) : c.components[comp.key]}
+                </span>
                 <div className="h-2 flex-1 rounded-full bg-border/60 dark:bg-border-dark">
-                  <div className="h-2 rounded-full bg-cognitive" style={{ width: `${(score.parts[c.key] / c.max) * 100}%` }} />
+                  <div className="h-2 rounded-full bg-cognitive" style={{ width: `${(score.parts[comp.key] / comp.max) * 100}%` }} />
                 </div>
                 <span className="w-10 text-right text-sm text-ink-soft dark:text-ink-dark-soft">
-                  {score.parts[c.key]}/{c.max}
+                  {score.parts[comp.key]}/{comp.max}
                 </span>
               </div>
             ))}
           </div>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {c.result[result.status].title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{c.result[result.status].text}</p>
           </div>
 
           <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">{c.nextStepsHeading}</h3>
             <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
-              {result.nextSteps.map((step) => (
+              {c.result[result.status].nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
                 </li>
@@ -215,9 +230,7 @@ function CognitiveDeclinePageInner() {
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            This is a research-based screening tool, not a diagnosis. Only a doctor can assess
-            memory or thinking changes properly — please share this result with yours, especially
-            if your score is 6 or higher.
+            {c.disclaimer}
           </p>
 
           <button
