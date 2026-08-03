@@ -692,6 +692,107 @@ export const en = {
         },
       },
     },
+    familyHistory: {
+      eyebrow: "Family History · ~2 minutes",
+      title: "Family History: Know Your Risk",
+      intro1:
+        "Knowing your family's medical history tells you which risks to watch most closely. Answer a few short questions to map your inherited risk across the main categories that run in families — then share the answers with your doctor to guide earlier, smarter screening.",
+      intro2:
+        "Wherever Singapore-specific guidance exists (MOH Clinical Practice Guidelines), we use it — it's often stricter or differently calibrated than international guidelines. Where it doesn't, we fall back to international standards, and say so.",
+      begin: "Let's begin",
+      questionsHeading: "Has this run in your family?",
+      questionsBlurb:
+        "For each category, tell us if a first-degree relative (parent, sibling, or child) has been diagnosed — and at what age, if you know it.",
+      yourSex: "Your sex",
+      sexNote: "Used only to apply the right cardiovascular screening threshold (Singapore MOH: male <50, female <60).",
+      male: "male",
+      female: "female",
+      yes: "Yes",
+      no: "No",
+      ageLabel: "Age of the youngest relative when diagnosed (your best estimate is fine)",
+      cancerTypeLabel: "Which type, mainly? (pick the one you know best)",
+      cancerTypes: { breast: "Breast", colorectal: "Colorectal", ovarian: "Ovarian", other: "Other" },
+      seeResults: "See my results",
+      flaggedCaption: (elevated: number) =>
+        `of 4 categories show family history${elevated > 0 ? ` (${elevated} early-onset)` : ""}`,
+      flags: { none: "No flag", present: "Family history", elevated: "Elevated — early onset" },
+      disclaimer:
+        "This is an informational screening tool, not a diagnosis. Only a doctor can properly assess your personal and family risk — please share these answers with them, especially for any category flagged above.",
+      categories: {
+        cvd: { title: "Cardiovascular Disease", sub: "Heart attack, stroke, or heart disease in a parent, sibling, or child." },
+        cancer: { title: "Cancer", sub: "Breast, ovarian, colorectal, or other cancer in a parent, sibling, or child." },
+        neuro: { title: "Alzheimer's / Neurological Disease", sub: "Dementia, Parkinson's, or another neurological condition in a parent, sibling, or child." },
+        metabolic: { title: "Metabolic Disease", sub: "Diabetes, obesity, or metabolic syndrome in a parent, sibling, or child." },
+      },
+      noneText: "No reported family history in this category.",
+      noneSteps: {
+        cvd: ["Keep up with routine cardiovascular screening as your doctor recommends."],
+        cancer: ["Keep up with routine age-appropriate cancer screening."],
+        neuro: ["Our Cognitive Decline Risk check is still a good baseline to establish, regardless of family history."],
+        metabolic: ["Keep up with routine metabolic screening (blood sugar, weight) as your doctor recommends."],
+      },
+      cvd: {
+        femaleRelative: "female relative diagnosed before 60",
+        maleRelative: "male relative diagnosed before 50",
+        earlyText: (who: string) =>
+          `Singapore's MOH Lipids guideline classifies a first-degree ${who} as "premature" family heart disease — a recognised risk-enhancing factor.`,
+        earlySteps: [
+          "Ask your doctor about earlier and more frequent blood pressure and cholesterol checks.",
+          "Ask about the Singapore-modified Framingham Risk Score (SG-FRS) to put your own numbers in context.",
+        ],
+        presentText:
+          "Family history of heart disease still matters, even without early onset — it's worth mentioning at your next check-up.",
+        presentSteps: ["Bring this up at your next routine check-up.", "Keep your blood pressure and cholesterol checks on schedule."],
+      },
+      cancer: {
+        colorectalEarly:
+          "Singapore's MOH guideline classifies a first-degree relative with colorectal cancer at 60 or younger as needing earlier, more frequent screening.",
+        colorectalLate:
+          "Even with a later diagnosis in the family, MOH guidance still recommends starting colorectal screening earlier than the general population.",
+        colorectalStep: (startAge: number, interval: number) =>
+          `MOH guidance: start colonoscopy screening at age ${startAge}, repeated every ${interval} years.`,
+        colorectalStep2: "Share this with your doctor to confirm the right starting point for you.",
+        breastEarly:
+          "A first-degree relative with breast cancer at 60 or younger is a recognised reason to consider starting mammography earlier than the general population.",
+        breastLate: "Family history of breast cancer still raises your own risk, even with a later diagnosis.",
+        breastEarlySteps: [
+          "Guidelines commonly suggest starting roughly 10 years before your relative's age at diagnosis — though recent research (BCSC, 2022) questions applying this uniformly, especially for relatives diagnosed 35–45. Discuss the right starting point with your doctor.",
+          "Share your relative's exact age and cancer subtype — these details change the recommendation.",
+        ],
+        breastLateSteps: ["Mention it at your next check-up.", "Keep up with age-appropriate mammography screening."],
+        otherEarly:
+          "Early-onset cancer in a first-degree relative — or certain cancers (breast, ovarian, colorectal) running in the family — can point to an inherited gene mutation such as BRCA1/2 or Lynch syndrome.",
+        otherLate: "Family history of cancer is worth tracking even without early onset.",
+        otherEarlySteps: [
+          "Consider asking your doctor for a referral to genetic counselling.",
+          "Share exactly which relative, which cancer, and their age at diagnosis — these details change the recommendation.",
+        ],
+        otherLateSteps: ["Mention it at your next check-up.", "Keep up with age-appropriate cancer screening."],
+      },
+      neuro: {
+        earlyText:
+          "A first-degree relative diagnosed before 65 is classed as early-onset — rarer, and in a small share of cases linked to an inherited form (genes such as PSEN1 or APP) rather than just raising general risk.",
+        earlySteps: [
+          "Discuss your family history with your doctor, especially the early age of onset.",
+          "Ask about a referral to genetic counselling if you want to explore this further — this is where testing is most likely to be informative.",
+          "Our Cognitive Decline Risk check is a good next step to establish your own baseline.",
+        ],
+        presentText:
+          "Family history of dementia or Parkinson's after 65 is a well-documented risk factor, though routine genetic testing generally isn't recommended at this stage — it's a risk modifier, not a diagnosis.",
+        presentSteps: ["Mention it at your next check-up.", "Our Cognitive Decline Risk check is a good next step to establish your own baseline."],
+      },
+      metabolic: {
+        veryEarlyText:
+          "A relative diagnosed with diabetes quite young (under 35) is worth specifically mentioning to your doctor — very early-onset diabetes in a family sometimes follows a stronger genetic pattern.",
+        presentText:
+          "Singapore's MOH guideline treats any first-degree relative with diabetes as a screening risk factor, regardless of the age they were diagnosed — this is also one of the most modifiable categories here.",
+        steps: [
+          "Ask about screening — MOH recommends it for adults with a family history of diabetes at any age.",
+          "For Asians, the BMI threshold for increased risk is lower than Western guidelines (≥23, vs ≥25) — worth knowing your own number.",
+          "Lifestyle changes meaningfully reduce this risk — see our Daily Movement and Nutrition checks.",
+        ],
+      },
+    },
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",
