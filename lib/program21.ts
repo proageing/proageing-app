@@ -9,6 +9,8 @@
 // assessments that can plausibly shift in 21 days.
 
 
+import { PROGRAM21_DAYS_ZH } from "./program21Zh";
+
 export interface AssessmentLink {
   label: string;
   href: string;
@@ -199,6 +201,7 @@ export const PROGRAM21_DAYS: Program21Day[] = [
   },
 ];
 
-export function contentForDay(day: number): Program21Day {
-  return PROGRAM21_DAYS.find((d) => d.day === day) ?? PROGRAM21_DAYS[PROGRAM21_DAYS.length - 1];
+export function contentForDay(day: number, locale: string = "en"): Program21Day {
+  const days = locale === "zh" ? PROGRAM21_DAYS_ZH : PROGRAM21_DAYS;
+  return days.find((d) => d.day === day) ?? days[days.length - 1];
 }

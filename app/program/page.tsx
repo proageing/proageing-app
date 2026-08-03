@@ -463,7 +463,7 @@ function ProgramPageInner() {
     );
   }
 
-  const content = contentForDay(viewedDay);
+  const content = contentForDay(viewedDay, locale);
   const isToday = viewedDay === currentDay;
 
   return (
