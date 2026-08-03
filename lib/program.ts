@@ -57,6 +57,38 @@ export async function getActiveEnrollment(userId: string): Promise<ProgramEnroll
   return data;
 }
 
+// The most recent enrollment whatever its status. getActiveEnrollment
+// filters to 'active', so on its own it can't tell "never started" apart
+// from "finished" — both come back null. The programme page needs that
+// distinction to show a completion screen instead of offering a restart.
+export async function getLatestEnrollment(userId: string): Promise<ProgramEnrollment | null> {
+  const { data, error } = await supabase
+    .from("program_enrollments")
+    .select("id, user_id, program_length_days, started_at, status")
+    .eq("user_id", userId)
+    .neq("status", "cancelled")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to load enrollment", error);
+    return null;
+  }
+  return data;
+}
+
+// Moves an enrollment off 'active' once the closing day is done. Nothing
+// else in the app writes this column, so an enrollment that never reaches
+// here simply stays active and the user keeps seeing the final day.
+export async function completeEnrollment(enrollmentId: string): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from("program_enrollments")
+    .update({ status: "completed" })
+    .eq("id", enrollmentId);
+  return { error: error?.message ?? null };
+}
+
 export async function startEnrollment(
   userId: string,
   programLengthDays: number
