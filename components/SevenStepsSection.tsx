@@ -9,7 +9,7 @@ export function SevenStepsSection() {
   return (
     <div className="mt-8">
       <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">The 7 ProAgeing Steps</p>
-      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">The science-backed framework behind every check in this app.</p>
+      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Seven simple steps toward a longer, fuller life.</p>
 
       <div className="mt-4 flex flex-col gap-3">
         {SEVEN_STEPS.map((step) => (
