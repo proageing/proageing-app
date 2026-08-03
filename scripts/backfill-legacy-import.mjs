@@ -19,6 +19,25 @@
 // --dry-run reports exactly what it would copy and writes nothing.
 
 import { createClient } from "@supabase/supabase-js";
+import { readFileSync, existsSync } from "node:fs";
+
+// Read .env.local the way the Next app does, so the two values that
+// already live there don't have to be retyped on the command line. Only
+// fills variables that aren't already set, so anything passed explicitly
+// still wins. .env.local is gitignored, so nothing here reaches the repo.
+function loadEnvLocal() {
+  const path = new URL("../.env.local", import.meta.url);
+  if (!existsSync(path)) return false;
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)$/);
+    if (!m) continue;
+    const value = m[2].trim().replace(/^["']|["']$/g, "");
+    if (value && !process.env[m[1]]) process.env[m[1]] = value;
+  }
+  return true;
+}
+
+const usedEnvFile = loadEnvLocal();
 
 const DRY_RUN = process.argv.includes("--dry-run");
 const LEGACY_SOURCE = "proageing_site_import";
@@ -46,14 +65,20 @@ const REQUIRED = [
 
 const missing = REQUIRED.filter(([name]) => !process.env[name]);
 if (missing.length > 0) {
-  console.error(`Missing ${missing.length} required value${missing.length === 1 ? "" : "s"}:\n`);
+  if (usedEnvFile) console.error("Read .env.local. Still missing:\n");
+  else console.error(`Missing ${missing.length} required value${missing.length === 1 ? "" : "s"}:\n`);
   for (const [name, what] of missing) console.error(`  ${name}  — ${what}`);
   console.error(
-    "\nThe two SITE_ values are the same ones proageing-admin uses for its" +
-      "\n/site-users view, so they can be copied from that deployment."
+    "\nPass them on the command line, for example:\n" +
+      `\n  ${missing.map(([n]) => `${n}='...'`).join(" \\\n  ")} \\\n  node scripts/backfill-legacy-import.mjs --dry-run\n` +
+      "\nThe two SITE_ values are the same ones proageing-admin uses for its" +
+      "\n/site-users view, so they can be copied from that deployment's" +
+      "\nenvironment rather than created fresh."
   );
   process.exit(1);
 }
+
+if (usedEnvFile) console.log("Read .env.local for values not passed on the command line.");
 
 function need(name) {
   return process.env[name];
