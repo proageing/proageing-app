@@ -10,7 +10,7 @@ import type { AssessmentType } from "@/lib/importHistory";
 // from the raw number — the numbers run in opposite directions across
 // checks (more sit-to-stand reps is better, a lower PSQI score is better),
 // and the tier already encodes that per type.
-export type MovementDirection = "better" | "held" | "lower" | "unrated" | "first-time";
+export type MovementDirection = "better" | "held" | "lower" | "unrated" | "first-time" | "not-retaken";
 
 export interface CheckMovement {
   type: AssessmentType;
@@ -26,6 +26,7 @@ export interface CompletionSummary {
   keystoneHabit: string | null;
   finishedOn: string | null;
   movements: CheckMovement[];
+  retakenCount: number;
 }
 
 interface ResultRow {
@@ -65,10 +66,62 @@ export function bestStreakFrom(completedDays: Set<number>, programLengthDays: nu
   return best;
 }
 
+// Pure, and exported so the edge cases can be tested without a database:
+// what a programme "moved" depends entirely on which rows count as before
+// and after, and getting that wrong misreports someone's health.
+//
+// `rows` must be oldest-first. `startMs` is the enrollment start.
+export function movementFor(
+  type: AssessmentType,
+  title: string,
+  rows: { entry_data: Record<string, unknown>; created_at: string }[],
+  startMs: number
+): CheckMovement | null {
+  if (rows.length === 0) return null;
+
+  // Split at the programme start. This matters more than it looks:
+  // history imported from proageing.org can be years old, so the earliest
+  // row overall is often nothing to do with these 21 days. Comparing
+  // against it would credit the programme with change that happened long
+  // before it began.
+  const before = rows.filter((r) => new Date(r.created_at).getTime() < startMs);
+  const during = rows.filter((r) => new Date(r.created_at).getTime() >= startMs);
+
+  const retake = during.length > 0 ? during[during.length - 1] : null;
+
+  if (!retake) {
+    // A reading exists, but none since day 1 — there is no movement to
+    // report here, only a stale number.
+    return {
+      type,
+      title,
+      firstLabel: null,
+      latestLabel: formatEntryData(type, rows[rows.length - 1].entry_data),
+      direction: "not-retaken",
+    };
+  }
+
+  // What they entered the programme with: their last reading beforehand,
+  // or failing that their first one during it.
+  const baseline = before.length > 0 ? before[before.length - 1] : during[0];
+  const isFirstEver = baseline === retake;
+
+  return {
+    type,
+    title,
+    firstLabel: isFirstEver ? null : formatEntryData(type, baseline.entry_data),
+    latestLabel: formatEntryData(type, retake.entry_data),
+    direction: isFirstEver
+      ? "first-time"
+      : directionFor(readingsTierFor(type, baseline.entry_data), readingsTierFor(type, retake.entry_data)),
+  };
+}
+
 export async function getCompletionSummary(
   userId: string,
   enrollmentId: string,
-  programLengthDays: number
+  programLengthDays: number,
+  startedAt: string
 ): Promise<CompletionSummary> {
   const [progressRes, resultsRes] = await Promise.all([
     supabase
@@ -98,24 +151,14 @@ export async function getCompletionSummary(
 
   const titleByType = new Map(ASSESSMENT_TYPES.map((a) => [a.type, a.title]));
 
+  // Day 1 is the start date itself, matching computeCurrentDay.
+  const startMs = new Date(startedAt + "T00:00:00").getTime();
+
   const movements: CheckMovement[] = [];
   for (const type of retakeTypes(programLengthDays)) {
     const rows = byType.get(type);
-    if (!rows || rows.length === 0) continue;
-
-    const first = rows[0];
-    const latest = rows[rows.length - 1];
-    const onlyOne = rows.length < 2;
-
-    movements.push({
-      type,
-      title: titleByType.get(type) ?? type,
-      firstLabel: onlyOne ? null : formatEntryData(type, first.entry_data),
-      latestLabel: formatEntryData(type, latest.entry_data),
-      direction: onlyOne
-        ? "first-time"
-        : directionFor(readingsTierFor(type, first.entry_data), readingsTierFor(type, latest.entry_data)),
-    });
+    const movement = movementFor(type, titleByType.get(type) ?? type, rows ?? [], startMs);
+    if (movement) movements.push(movement);
   }
 
   return {
@@ -124,5 +167,6 @@ export async function getCompletionSummary(
     keystoneHabit: closeDay?.checkin_note?.trim() || null,
     finishedOn: closeDay?.completed_at ?? null,
     movements,
+    retakenCount: movements.filter((m) => m.direction !== "not-retaken").length,
   };
 }

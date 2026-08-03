@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { completeSessionFromUrlHash } from "@/lib/authCallback";
-import { recordPendingConsent } from "@/lib/consent";
+import { recordSignInConsent } from "@/lib/consent";
 import { takeNextPath } from "@/lib/nextPath";
 import { runLegacyImport } from "@/lib/runLegacyImport";
 
@@ -28,7 +28,7 @@ export default function AuthCallbackPage() {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        await recordPendingConsent(user.id);
+        await recordSignInConsent(user.id);
       }
 
       // Bring across anything this person saved on proageing.org before

@@ -51,23 +51,28 @@ function clearPendingConsent() {
 // second sign-in on the same consent version finds the existing row and
 // leaves the log alone. Never throws — a failure here must not be able to
 // block someone from getting into the app.
-export async function recordPendingConsent(userId: string): Promise<void> {
-  const pending = readPendingConsent();
-  if (!pending) return;
+//
+// Reaching the auth callback at all means a magic link was requested, and
+// the only place to request one is /signin, where the checkbox is required
+// before the button enables. So consent is recorded whether or not the
+// local flag survived — otherwise requesting the link on a laptop and
+// opening it on a phone would lose a consent the person did give.
+export async function recordSignInConsent(userId: string): Promise<void> {
+  const version = readPendingConsent() ?? CONSENT_VERSION;
 
   try {
     const { data: existing } = await supabase
       .from("consent_records")
       .select("id")
       .eq("user_id", userId)
-      .eq("consent_version", pending)
+      .eq("consent_version", version)
       .eq("scope", CONSENT_SCOPE)
       .maybeSingle();
 
     if (!existing) {
       await supabase.from("consent_records").insert({
         user_id: userId,
-        consent_version: pending,
+        consent_version: version,
         scope: CONSENT_SCOPE,
       });
     }

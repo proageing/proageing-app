@@ -56,11 +56,21 @@ function MovementPill({ direction }: { direction: MovementDirection }) {
   if (direction === "unrated") return null;
 
   const style: Record<Exclude<MovementDirection, "unrated">, { label: string; className: string }> = {
-    better: { label: "Better", className: "bg-junebud/25 text-cognitive" },
-    held: { label: "Held", className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint" },
-    lower: { label: "Lower", className: "bg-primary-light text-primary-dark dark:bg-primary-light-dark" },
+    // These name the band a reading falls in, not the raw number. 11 reps
+    // and 15 reps are both "typical", so "Same range" is true where "Held"
+    // would read as though nothing had changed at all. Saying which way a
+    // raw score moved would need a per-check direction map — more reps is
+    // better, a lower PSQI is better — and one entry backwards would tell
+    // someone they improved when they declined.
+    better: { label: "Better range", className: "bg-junebud/25 text-cognitive" },
+    held: { label: "Same range", className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint" },
+    lower: { label: "Lower range", className: "bg-primary-light text-primary-dark dark:bg-primary-light-dark" },
     "first-time": {
       label: "First time",
+      className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint",
+    },
+    "not-retaken": {
+      label: "Not retaken",
       className: "bg-border/50 text-ink-faint dark:bg-border-dark dark:text-ink-dark-faint",
     },
   };
@@ -137,7 +147,7 @@ function ProgramPageInner() {
       // user back onto the last day with nothing left to do.
       if (active.status === "completed") {
         setViewedDay(active.program_length_days);
-        setSummary(await getCompletionSummary(user.id, active.id, active.program_length_days));
+        setSummary(await getCompletionSummary(user.id, active.id, active.program_length_days, active.started_at));
         setLoadState("completed");
         return;
       }
@@ -241,7 +251,7 @@ function ProgramPageInner() {
       const { error: completeError } = await completeEnrollment(enrollment.id);
       if (!completeError) {
         setEnrollment({ ...enrollment, status: "completed" });
-        setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days));
+        setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at));
         setSaving(false);
         setLoadState("completed");
         return;
@@ -265,7 +275,7 @@ function ProgramPageInner() {
 
   async function backToSummary() {
     if (!enrollment || !userId) return;
-    setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days));
+    setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at));
     setLoadState("completed");
   }
 
@@ -396,7 +406,7 @@ function ProgramPageInner() {
           {[
             { n: summary.daysCompleted, l: "Days done" },
             { n: summary.bestStreak, l: "Best streak" },
-            { n: summary.movements.length, l: "Retaken" },
+            { n: summary.retakenCount, l: "Retaken" },
           ].map((stat) => (
             <div
               key={stat.l}
@@ -413,7 +423,7 @@ function ProgramPageInner() {
         {summary.movements.length > 0 && (
           <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
             <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">What moved</p>
-            <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">Day 1 → today</p>
+            <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">When you started → now</p>
             <div className="mt-2 flex flex-col">
               {summary.movements.map((m) => (
                 <div
