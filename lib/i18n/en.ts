@@ -400,6 +400,77 @@ export const en = {
         },
       },
     },
+    purpose: {
+      eyebrow: "Purpose Check · ~3 minutes",
+      title: "Sense of Purpose Check",
+      intro1Pre: "This check is based on the Ikigai-9 (Imai, Osada & Nishi, 2012), a validated Japanese scale measuring ",
+      intro1Em: "ikigai",
+      intro1Post:
+        " — roughly, \u201Ca reason for being\u201D — across three themes: how you feel about your life, your attitude towards the future, and the sense that your existence matters.",
+      intro2:
+        "The concept of ikigai has been linked in Japanese cohort research (e.g. the Ohsaki study, Sone et al., 2008) to a lower risk of death over time — one of several strands of evidence connecting a sense of purpose to healthy ageing.",
+      begin: "Let's begin",
+      seeResults: "See my results",
+      questionsEyebrow: "Your own honest reaction",
+      questionsHeading: "How much do you agree with each?",
+      questionsBlurb: "Thinking about your life right now — there are no right or wrong answers.",
+      questions: [
+        "I often feel that I am happy.",
+        "My life is mentally rich and fulfilled.",
+        "I am interested in many things.",
+        "I would like to develop myself.",
+        "I would like to learn something new or start something.",
+        "I have room in my mind.",
+        "I believe that I have some impact on someone.",
+        "I feel that I am contributing to someone or to society.",
+        "I think that my existence is needed by something or someone.",
+      ],
+      agreement: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],
+      outOf45: "out of 45 · higher means stronger ikigai",
+      bands: (total: number) =>
+        `Score ${total} of 45. Illustrative bands only: 9–20 lower, 21–32 moderate, 33–45 strong — not official clinical cutoffs.`,
+      behindScore: "What's behind your score",
+      subscales: [
+        "Positive feelings towards life",
+        "Active attitude towards the future",
+        "Sense that your existence matters",
+      ],
+      nextStepsHeading: "✅ Suggested next steps",
+      disclaimer:
+        "This is a wellness reflection tool based on a published research questionnaire, not a mental health diagnosis. If you're feeling persistently low, hopeless, or unmotivated, please reach out to your doctor or a counsellor — support helps.",
+      result: {
+        low: {
+          label: "Lower sense of ikigai right now",
+          title: "This is worth paying attention to",
+          text: 'Your answers suggest your sense of "reason for being" feels thin right now. That\'s a common, changeable state — not a diagnosis — and often shifts when you reconnect with activities, people, or goals that matter to you.',
+          nextSteps: [
+            "Look at your lowest-scoring theme below — that's the most useful place to start.",
+            "Pick one small activity this week that feels meaningful, not just necessary.",
+            "If low motivation or low mood has lasted more than two weeks, mention it to your doctor.",
+          ],
+        },
+        mid: {
+          label: "Moderate sense of ikigai",
+          title: "A fairly typical, mixed picture",
+          text: "Some parts of your life feel purposeful, others less so — which is normal. Research links even modest gains in purpose-related measures with better health outcomes over time, so small changes can still be worthwhile.",
+          nextSteps: [
+            "Notice which theme below scores lowest, and try one small step towards it this week.",
+            "Consider a small goal or role (volunteering, a hobby, family involvement) that gives structure to your week.",
+            "Retake this check in a few weeks to track any shift.",
+          ],
+        },
+        high: {
+          label: "Strong sense of ikigai",
+          title: "A real protective factor",
+          text: "Your answers reflect a strong, consistent sense of purpose across all three themes — one of the more robust psychological correlates of healthy ageing in the research literature. Whatever is giving your days meaning right now, it's worth protecting.",
+          nextSteps: [
+            "Keep investing time in the activities and relationships driving this.",
+            "Retake this check every few months — ikigai can shift with life changes like retirement or loss.",
+            "Share what's working with someone else — purpose is often contagious.",
+          ],
+        },
+      },
+    },
     sitToStand: {
       eyebrow: "Physical Function Check · ~4 minutes",
       title: "Sit-to-Stand Check",

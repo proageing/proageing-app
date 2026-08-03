@@ -25,6 +25,16 @@
 import { en } from "../lib/i18n/en.ts";
 import { zh } from "../lib/i18n/zh.ts";
 
+// Reviewed and accepted: cases where the site's own Chinese deliberately
+// departs from a mechanical match. Each needs a reason, so the list can't
+// quietly become a way of silencing real findings.
+const ACCEPTED = {
+  "assess.purpose.intro1Em":
+    "'ikigai' is a loanword; proageing.org/zh keeps it in Latin script too.",
+  "assess.purpose.intro2":
+    "The Ohsaki study is written 大崎研究 on the site's own Chinese page.",
+};
+
 const problems = [];
 let checked = 0;
 
@@ -181,7 +191,16 @@ function compareStrings(path, e, z, opts = {}) {
 
 walk("", en, zh);
 
-console.log(`Compared ${checked} strings.\n`);
+// Drop accepted findings last, so an accepted path that stops being
+// reported doesn't hide a new problem at the same path.
+const beforeAccept = problems.length;
+for (let i = problems.length - 1; i >= 0; i--) {
+  const path = problems[i].split(":")[0];
+  if (path in ACCEPTED) problems.splice(i, 1);
+}
+const suppressed = beforeAccept - problems.length;
+
+console.log(`Compared ${checked} strings.` + (suppressed ? ` ${suppressed} reviewed exception(s) accepted.` : "") + "\n");
 if (problems.length === 0) {
   console.log("No discrepancies found.");
   process.exit(0);

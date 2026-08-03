@@ -40,6 +40,7 @@ function PurposePageInner() {
   const returnTo = returnPathFrom(searchParams.get("from"), searchParams.get("day"));
   const returnLabelKey = returnLabelKeyFrom(searchParams.get("from"));
   const t = useT();
+  const c = t.assess.purpose;
   const [userId, setUserId] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<IkigaiAnswers>(emptyIkigaiAnswers());
@@ -105,40 +106,37 @@ function PurposePageInner() {
 
       {screen === "welcome" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Purpose Check · ~3 minutes</p>
-          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">Sense of Purpose Check</h1>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.eyebrow}</p>
+          <h1 className="mt-1 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{c.title}</h1>
           <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-            This check is based on the Ikigai-9 (Imai, Osada & Nishi, 2012), a validated Japanese
-            scale measuring <em>ikigai</em> — roughly, &ldquo;a reason for being&rdquo; — across
-            three themes: how you feel about your life, your attitude towards the future, and the
-            sense that your existence matters.
+            {c.intro1Pre}
+            <em>{c.intro1Em}</em>
+            {c.intro1Post}
           </p>
           <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">
-            The concept of ikigai has been linked in Japanese cohort research (e.g. the Ohsaki
-            study, Sone et al., 2008) to a lower risk of death over time — one of several strands
-            of evidence connecting a sense of purpose to healthy ageing.
+            {c.intro2}
           </p>
           <button
             onClick={() => setScreen("questions")}
             className={`mt-6 w-full rounded-2xl py-4 text-base font-bold text-white ${pillar.solidButton}`}
           >
-            Let&apos;s begin
+            {c.begin}
           </button>
         </div>
       )}
 
       {screen === "questions" && (
         <div>
-          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>Your own honest reaction</p>
-          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">How much do you agree with each?</h2>
-          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">Thinking about your life right now — there are no right or wrong answers.</p>
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.questionsEyebrow}</p>
+          <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark">{c.questionsHeading}</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{c.questionsBlurb}</p>
 
           <div className="mt-6 flex flex-col gap-2.5">
-            {IKIGAI_QUESTIONS.map((q) => (
+            {IKIGAI_QUESTIONS.map((q, i) => (
               <LikertQuestionCard
                 key={q.key}
-                question={q.text}
-                options={AGREEMENT_OPTIONS}
+                question={c.questions[i]}
+                options={AGREEMENT_OPTIONS.map((o, oi) => ({ ...o, label: c.agreement[oi] }))}
                 value={answers[q.key]}
                 onChange={(v) => setAnswer(q.key, v)}
                 style={PILLAR_STYLES.purpose}
@@ -151,33 +149,32 @@ function PurposePageInner() {
             disabled={!isIkigaiComplete(answers)}
             className={`mt-8 w-full rounded-2xl py-4 text-base font-bold text-white disabled:opacity-50 ${pillar.solidButton}`}
           >
-            See my results
+            {c.seeResults}
           </button>
         </div>
       )}
 
       {screen === "results" && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-purpose-dark">Your result</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-purpose-dark">{t.assess.common.yourResult}</p>
           <div className="mt-2 text-center">
             <div className="text-5xl font-bold text-purpose-dark">{score.total}</div>
-            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">out of 45 · higher means stronger ikigai</div>
+            <div className="text-sm font-medium text-ink-soft dark:text-ink-dark-soft">{c.outOf45}</div>
           </div>
 
           <p className="mt-6 rounded-full bg-purpose-tint px-3 py-1 text-center text-sm font-semibold text-purpose-dark">
-            {result.label}
+            {c.result[result.status].label}
           </p>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            Score {score.total} of 45. Illustrative bands only: 9–20 lower, 21–32 moderate, 33–45
-            strong — not official clinical cutoffs.
+            {c.bands(score.total)}
           </p>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">What&apos;s behind your score</p>
+          <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{c.behindScore}</p>
           <div className="mt-2 flex flex-col gap-2">
-            {SUBSCALE_META.map((m) => (
+            {SUBSCALE_META.map((m, i) => (
               <div key={m.key} className="flex items-center gap-3">
-                <span className="w-64 shrink-0 text-sm text-ink-soft dark:text-ink-dark-soft">{m.label}</span>
+                <span className="w-64 shrink-0 text-sm text-ink-soft dark:text-ink-dark-soft">{c.subscales[i]}</span>
                 <div className="h-2 flex-1 rounded-full bg-border/60 dark:bg-border-dark">
                   <div className="h-2 rounded-full bg-purpose" style={{ width: `${(score.subs[m.key] / 15) * 100}%` }} />
                 </div>
@@ -187,14 +184,14 @@ function PurposePageInner() {
           </div>
 
           <div className="mt-6 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {result.title}</h3>
-            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{result.text}</p>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">💡 {c.result[result.status].title}</h3>
+            <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{c.result[result.status].text}</p>
           </div>
 
           <div className="mt-4 rounded-lg border border-border dark:border-border-dark p-4">
-            <h3 className="font-semibold text-ink dark:text-ink-dark">✅ Suggested next steps</h3>
+            <h3 className="font-semibold text-ink dark:text-ink-dark">{c.nextStepsHeading}</h3>
             <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft dark:text-ink-dark-soft">
-              {result.nextSteps.map((step) => (
+              {c.result[result.status].nextSteps.map((step) => (
                 <li key={step} className="mt-1">
                   {step}
                 </li>
@@ -203,9 +200,7 @@ function PurposePageInner() {
           </div>
 
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
-            This is a wellness reflection tool based on a published research questionnaire, not a
-            mental health diagnosis. If you&apos;re feeling persistently low, hopeless, or
-            unmotivated, please reach out to your doctor or a counsellor — support helps.
+            {c.disclaimer}
           </p>
 
           <button
