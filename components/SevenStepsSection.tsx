@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useT } from "@/lib/i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 import Link from "next/link";
-import { SEVEN_STEPS } from "@/lib/sevenSteps";
+import { stepsForLocale } from "@/lib/sevenSteps";
 
 // Same card design as proageing.org's own article list — photo, step
 // eyebrow, serif title, one-line meta — but tapping opens the step
 // in-app instead of linking out.
 export function SevenStepsSection() {
-  const t = useT();
+  const { locale, t } = useLocale();
 
   return (
     <div className="mt-8">
@@ -17,7 +17,7 @@ export function SevenStepsSection() {
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.dashboard.sevenSteps.blurb}</p>
 
       <div className="mt-4 flex flex-col gap-3">
-        {SEVEN_STEPS.map((step) => (
+        {stepsForLocale(locale).map((step) => (
           <Link
             key={step.step}
             href={`/steps/${step.step}`}

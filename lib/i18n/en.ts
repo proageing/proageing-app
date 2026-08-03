@@ -219,6 +219,16 @@ export const en = {
     },
   },
 
+  stepDetail: {
+    unknown: "Unknown step.",
+    backToDashboard: "← Back to dashboard",
+    whyItMatters: "Why it matters",
+    scienceShows: "What the science shows",
+    takeCheck: (label: string) => `Take the ${label} check →`,
+    prevStep: (n: number) => `← Step ${n}`,
+    nextStep: (n: number) => `Step ${n} →`,
+  },
+
   consent: {
     heading: "Consent of data usage & PDPA",
     clauses: [

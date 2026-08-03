@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { stepByNumber } from "@/lib/sevenSteps";
+import { stepByNumberForLocale } from "@/lib/sevenSteps";
+import { useLocale } from "@/lib/i18n/context";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { TabBar } from "@/components/TabBar";
 
@@ -15,23 +16,24 @@ import { TabBar } from "@/components/TabBar";
 export default function StepDetailPage() {
   const router = useRouter();
   const params = useParams<{ step: string }>();
+  const { locale, t } = useLocale();
   const stepNumber = Number(params.step);
-  const step = stepByNumber(stepNumber);
+  const step = stepByNumberForLocale(stepNumber, locale);
 
   if (!step) {
     return (
       <main className="mx-auto max-w-xl px-6 pb-28 pt-6">
-        <p className="text-ink-soft dark:text-ink-dark-soft">Unknown step.</p>
+        <p className="text-ink-soft dark:text-ink-dark-soft">{t.stepDetail.unknown}</p>
         <Link href="/dashboard" className="mt-2 inline-block text-sm text-primary-dark underline">
-          ← Back to dashboard
+          {t.stepDetail.backToDashboard}
         </Link>
         <TabBar />
       </main>
     );
   }
 
-  const prev = stepByNumber(step.step - 1);
-  const next = stepByNumber(step.step + 1);
+  const prev = stepByNumberForLocale(step.step - 1, locale);
+  const next = stepByNumberForLocale(step.step + 1, locale);
 
   return (
     <main className="mx-auto max-w-xl px-6 pb-28 pt-6">
@@ -39,7 +41,7 @@ export default function StepDetailPage() {
         href="/dashboard"
         className="text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
       >
-        ← Back
+        {t.common.back}
       </Link>
 
       <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-[24px] shadow-card">
@@ -56,10 +58,10 @@ export default function StepDetailPage() {
       <h1 className="mt-4 font-serif text-[1.9rem] font-semibold leading-tight text-ink dark:text-ink-dark">{step.title}</h1>
       <p className="mt-1.5 text-[1.02rem] italic text-ink-soft dark:text-ink-dark-soft">{step.tagline}</p>
 
-      <h2 className="mt-6 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">Why it matters</h2>
+      <h2 className="mt-6 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{t.stepDetail.whyItMatters}</h2>
       <p className="mt-1.5 text-[1.02rem] leading-[1.7] text-ink-soft dark:text-ink-dark-soft">{step.why}</p>
 
-      <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">What the science shows</h2>
+      <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{t.stepDetail.scienceShows}</h2>
       <p className="mt-1.5 text-[1.02rem] leading-[1.7] text-ink-soft dark:text-ink-dark-soft">{step.science}</p>
 
       <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{step.listHeading}</h2>
@@ -83,7 +85,7 @@ export default function StepDetailPage() {
               href={meta.href}
               className="inline-flex items-center gap-1.5 text-[0.94rem] font-bold text-primary-dark transition hover:text-cognitive"
             >
-              Take the {a.label} check →
+              {t.stepDetail.takeCheck(a.label)}
             </Link>
           );
         })}
@@ -92,14 +94,14 @@ export default function StepDetailPage() {
       <div className="mt-10 flex items-center justify-between border-t border-border pt-4 dark:border-border-dark">
         {prev ? (
           <button onClick={() => router.push(`/steps/${prev.step}`)} className="text-sm font-semibold text-ink-soft hover:text-ink dark:text-ink-dark-soft dark:hover:text-ink-dark">
-            ← Step {prev.step}
+            {t.stepDetail.prevStep(prev.step)}
           </button>
         ) : (
           <span />
         )}
         {next ? (
           <button onClick={() => router.push(`/steps/${next.step}`)} className="text-sm font-semibold text-ink-soft hover:text-ink dark:text-ink-dark-soft dark:hover:text-ink-dark">
-            Step {next.step} →
+            {t.stepDetail.nextStep(next.step)}
           </button>
         ) : (
           <span />

@@ -225,6 +225,16 @@ export const zh: Dictionary = {
     },
   },
 
+  stepDetail: {
+    unknown: "找不到这个步骤。",
+    backToDashboard: "← 返回首页",
+    whyItMatters: "为什么重要",
+    scienceShows: "科学怎么说",
+    takeCheck: (label: string) => `做${label} →`,
+    prevStep: (n: number) => `← 步骤 ${n}`,
+    nextStep: (n: number) => `步骤 ${n} →`,
+  },
+
   consent: {
     heading: "数据使用同意与个人资料保护法（PDPA）",
     clauses: [

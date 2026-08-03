@@ -1,4 +1,5 @@
 import type { AssessmentType } from "./importHistory";
+import { SEVEN_STEPS_ZH } from "./sevenStepsZh";
 
 export interface StepAssessmentLink {
   label: string;
@@ -129,4 +130,14 @@ export const SEVEN_STEPS: SevenStep[] = [
 
 export function stepByNumber(n: number): SevenStep | undefined {
   return SEVEN_STEPS.find((s) => s.step === n);
+}
+
+// Locale-aware accessors. The Chinese content is the website's own
+// published copy (lib/sevenStepsZh.ts), not a re-translation.
+export function stepsForLocale(locale: string): SevenStep[] {
+  return locale === "zh" ? SEVEN_STEPS_ZH : SEVEN_STEPS;
+}
+
+export function stepByNumberForLocale(n: number, locale: string): SevenStep | undefined {
+  return stepsForLocale(locale).find((s) => s.step === n);
 }
