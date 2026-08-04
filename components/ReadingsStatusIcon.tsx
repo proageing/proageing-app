@@ -1,8 +1,10 @@
 import type { ReadingsTier } from "@/lib/assessments/readingsTier";
 
 // null = completed but predates status being stored on the row — shown
-// as a neutral "done" mark rather than guessing at good or bad.
-const TIER_COLOR: Record<ReadingsTier | "unrated", string> = {
+// as a neutral "done" mark rather than guessing at good or bad. Exported
+// so anything showing tier-colored text (not just this icon) uses the
+// same mapping — e.g. the insight line on the Readings grid.
+export const TIER_COLOR: Record<ReadingsTier | "unrated", string> = {
   good: "text-junebud",
   watch: "text-amber-500",
   attention: "text-red-500",

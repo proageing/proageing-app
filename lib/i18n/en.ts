@@ -86,6 +86,7 @@ export const en = {
     blurb: "Every check you've taken, and your latest result for each.",
     yourChecks: "Your 9 checks",
     notStarted: "Not started",
+    step: (n: number) => `Step ${n}`,
     legend: {
       typical: "Typical",
       worthALook: "Worth a look",

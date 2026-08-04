@@ -94,6 +94,7 @@ export const zh: Dictionary = {
     blurb: "你做过的每一项检测，以及各项的最新结果。",
     yourChecks: "你的 9 项检测",
     notStarted: "尚未开始",
+    step: (n: number) => `第 ${n} 步`,
     legend: {
       typical: "正常范围",
       worthALook: "值得留意",

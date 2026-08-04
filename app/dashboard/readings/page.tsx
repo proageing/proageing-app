@@ -8,9 +8,10 @@ import { signInHrefFor } from "@/lib/nextPath";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { formatEntryData } from "@/lib/formatResult";
 import { readingsTierFor } from "@/lib/assessments/readingsTier";
+import { insightFor } from "@/lib/assessments/insightFor";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
-import { ReadingsStatusIcon } from "@/components/ReadingsStatusIcon";
+import { ReadingsStatusIcon, TIER_COLOR } from "@/components/ReadingsStatusIcon";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
 import { useT } from "@/lib/i18n/context";
 import type { AssessmentType } from "@/lib/importHistory";
@@ -114,21 +115,29 @@ export default function ReadingsPage() {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
-        {ASSESSMENT_TYPES.map(({ type }) => {
+        {ASSESSMENT_TYPES.map(({ type, step }) => {
           const row = latestByType.get(type);
           const tier = row ? readingsTierFor(type, row.entry_data) : null;
+          const insight = row ? insightFor(type, row.entry_data, t) : null;
           return (
             <Link
               key={type}
               href={`/dashboard/readings/${type}`}
-              className={`flex flex-col justify-between rounded-2xl border p-4 shadow-sm transition ${
+              className={`relative flex flex-col justify-between rounded-2xl border p-4 shadow-sm transition ${
                 row
                   ? "border-border bg-white hover:border-primary dark:border-border-dark dark:bg-white/5"
                   : "border-primary/25 bg-primary-light hover:border-primary dark:border-primary/20 dark:bg-primary-light-dark"
               }`}
               style={{ minHeight: "104px" }}
             >
-              <div className="flex items-center gap-2">
+              <span
+                className={`absolute right-3 top-3 text-[0.6rem] font-extrabold tracking-wide ${
+                  row ? "text-ink-faint dark:text-ink-dark-faint" : "text-primary-dark/65"
+                }`}
+              >
+                {t.readings.step(step)}
+              </span>
+              <div className="flex items-center gap-2 pr-9">
                 {row ? (
                   <ReadingsStatusIcon tier={tier} />
                 ) : (
@@ -136,8 +145,11 @@ export default function ReadingsPage() {
                 )}
                 <span className="text-xs font-bold uppercase tracking-wide text-ink-soft dark:text-ink-dark-soft">{t.checks[type]}</span>
               </div>
-              <div className={`mt-2 text-lg font-bold ${row ? "text-ink dark:text-ink-dark" : "text-primary-dark"}`}>
-                {row ? formatEntryData(type, row.entry_data) : t.readings.notStarted}
+              <div>
+                <div className={`mt-2 text-lg font-bold ${row ? "text-ink dark:text-ink-dark" : "text-primary-dark"}`}>
+                  {row ? formatEntryData(type, row.entry_data) : t.readings.notStarted}
+                </div>
+                {insight && <div className={`mt-0.5 text-xs font-bold ${TIER_COLOR[tier ?? "unrated"]}`}>{insight}</div>}
               </div>
             </Link>
           );
