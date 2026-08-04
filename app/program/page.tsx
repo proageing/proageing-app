@@ -59,6 +59,32 @@ function assessmentTypesForDay(day: number): string[] {
   return content.assessments.map((a) => a.href.split("/").pop()!);
 }
 
+// The Act card's Done checkbox pre-fills as checked when a day's linked
+// assessment was already taken, but that's a UI default only — it left
+// silent gaps in day_progress (and therefore in the streak) for anyone
+// who took the check without ever pressing Save on that day. This
+// persists the detected completion immediately instead of just
+// reflecting it in local state.
+async function loadDayState(
+  enrollmentId: string,
+  day: number,
+  userId: string
+): Promise<{ progress: Awaited<ReturnType<typeof getDayProgress>>; actionDone: boolean }> {
+  const progress = await getDayProgress(enrollmentId, day);
+  if (progress?.habit_completed) {
+    return { progress, actionDone: true };
+  }
+  const detected = await hasCompletedAssessments(userId, assessmentTypesForDay(day));
+  if (detected) {
+    await saveDayProgress(enrollmentId, day, {
+      videoWatched: progress?.video_watched ?? false,
+      habitCompleted: true,
+      checkinNote: progress?.checkin_note ?? "",
+    });
+  }
+  return { progress, actionDone: detected };
+}
+
 // Deliberately understated. A check that didn't move, or moved the wrong
 // way, still gets a neutral label rather than being hidden or dressed up —
 // the point of the retake is an honest read, not a guaranteed win.
@@ -184,16 +210,8 @@ function ProgramPageInner() {
       const day = requestedDay >= 1 && requestedDay <= today ? requestedDay : today;
       setViewedDay(day);
 
-      const [progress, habitStreak] = await Promise.all([
-        getDayProgress(active.id, day),
-        computeHabitStreak(active.id, today),
-      ]);
-
-      if (progress?.habit_completed) {
-        setActionDone(true);
-      } else {
-        setActionDone(await hasCompletedAssessments(user.id, assessmentTypesForDay(day)));
-      }
+      const { progress, actionDone } = await loadDayState(active.id, day, user.id);
+      setActionDone(actionDone);
       setCompletedChecksCount(await countCompletedAssessments(user.id, ASSESSMENT_TYPES.map((a) => a.type)));
       if (progress) {
         setLearned(progress.video_watched);
@@ -203,7 +221,9 @@ function ProgramPageInner() {
       if (contentForDay(day).isClose) {
         setTestimonial((await getTestimonial(active.id, day)) ?? emptyTestimonial());
       }
-      setStreak(habitStreak);
+      // Recomputed after loadDayState, which may have just backfilled a
+      // gap day — streak needs the fresh data, not a value fetched before.
+      setStreak(await computeHabitStreak(active.id, today));
       setLoadState("ready");
     }
 
@@ -217,13 +237,9 @@ function ProgramPageInner() {
     setJustSaved(false);
     setSaveStatus(null);
     setDayLoading(true);
-    const progress = await getDayProgress(enrollment.id, day);
+    const { progress, actionDone } = await loadDayState(enrollment.id, day, userId);
     setLearned(progress?.video_watched ?? false);
-    if (progress?.habit_completed) {
-      setActionDone(true);
-    } else {
-      setActionDone(await hasCompletedAssessments(userId, assessmentTypesForDay(day)));
-    }
+    setActionDone(actionDone);
     setCompletedChecksCount(await countCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
     setReflection(progress?.checkin_note ?? "");
     await refreshMomentum(enrollment.id, day, currentDay);
@@ -232,6 +248,9 @@ function ProgramPageInner() {
     } else {
       setTestimonial(emptyTestimonial());
     }
+    // A day visited here may have just been backfilled by loadDayState,
+    // which can change the consecutive-day count ending at currentDay.
+    setStreak(await computeHabitStreak(enrollment.id, currentDay));
     setDayLoading(false);
   }
 
@@ -575,15 +594,16 @@ function ProgramPageInner() {
         </button>
       )}
 
-      {streak > 0 && (
-        <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
-          {t.programme.day.streak(streak)}
-        </p>
-      )}
-
       {weeklyMomentum && (
         <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
-          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.momentum.title}</p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.momentum.title}</p>
+            {streak > 0 && (
+              <p className="shrink-0 rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary-dark dark:bg-primary-light-dark">
+                {t.programme.day.streak(streak)}
+              </p>
+            )}
+          </div>
           <p className="mt-1 font-serif text-2xl font-bold text-ink dark:text-ink-dark">
             {weeklyMomentum.completedCount}
             <span className="ml-1 font-sans text-base font-medium text-ink-faint dark:text-ink-dark-faint">
@@ -636,7 +656,7 @@ function ProgramPageInner() {
         </div>
       )}
 
-      <div className="mt-6 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.learn}</p>
         <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
@@ -653,7 +673,7 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+      <div className="mt-3 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.act}</p>
         {content.assessments && content.assessments.length > 0 && (
           <div className="mt-2 flex flex-col gap-2">
@@ -683,7 +703,7 @@ function ProgramPageInner() {
         </label>
       </div>
 
-      <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+      <div className="mt-3 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.reflect}</p>
         <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
         {content.reflectExamples && (
@@ -704,7 +724,7 @@ function ProgramPageInner() {
       </div>
 
       {content.isClose && (
-        <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+        <div className="mt-3 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
           <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.testimonial.heading}</p>
           <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{t.programme.testimonial.improvedMost}</p>
           <div className="mt-2 flex flex-wrap gap-2">
