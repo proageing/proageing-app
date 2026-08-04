@@ -336,7 +336,7 @@ function ProgramPageInner() {
         )}
 
         <div className="mt-6 overflow-hidden rounded-2xl border border-border shadow-card dark:border-border-dark">
-          <Image src="/programme-preview.png" alt="" width={920} height={1280} className="block h-auto w-full" />
+          <Image src="/programme-preview.png" alt="" width={880} height={1050} className="block h-auto w-full" />
         </div>
         <p className="mt-2 text-center text-xs font-semibold text-ink-faint dark:text-ink-dark-faint">
           {t.programme.noAccess.previewCaption}
