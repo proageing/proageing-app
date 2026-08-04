@@ -40,7 +40,7 @@ function SitToStandPageInner() {
   const [userId, setUserId] = useState<string | null>(null);
   const t = useT();
   const c = t.assess.sitToStand;
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>(searchParams.get("retake") === "1" ? "check" : "welcome");
   const [answers, setAnswers] = useState<SitToStandAnswers>(emptySitToStandAnswers());
   const [testPhase, setTestPhase] = useState<"countdown" | "running">("countdown");
   const [preCountdown, setPreCountdown] = useState(3);

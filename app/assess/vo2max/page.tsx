@@ -39,7 +39,7 @@ function VO2MaxPageInner() {
   const [userId, setUserId] = useState<string | null>(null);
   const t = useT();
   const c = t.assess.vo2max;
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>(searchParams.get("retake") === "1" ? "questions" : "welcome");
   const [answers, setAnswers] = useState<VO2Answers>(emptyVO2Answers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

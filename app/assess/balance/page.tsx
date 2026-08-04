@@ -41,7 +41,7 @@ function BalancePageInner() {
   const [userId, setUserId] = useState<string | null>(null);
   const t = useT();
   const c = t.assess.balance;
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>(searchParams.get("retake") === "1" ? "check" : "welcome");
   const [answers, setAnswers] = useState<BalanceAnswers>(emptyBalanceAnswers());
   const [running, setRunning] = useState(false);
   const [preCountdown, setPreCountdown] = useState<number | null>(null);

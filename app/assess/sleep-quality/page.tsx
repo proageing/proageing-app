@@ -66,7 +66,7 @@ function SleepQualityPageInner() {
   const t = useT();
   const c = t.assess.sleepQuality;
   const [userId, setUserId] = useState<string | null>(null);
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>(searchParams.get("retake") === "1" ? "times" : "welcome");
   const [answers, setAnswers] = useState<SleepAnswers>(emptySleepAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

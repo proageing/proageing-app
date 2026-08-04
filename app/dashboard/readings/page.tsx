@@ -123,7 +123,7 @@ export default function ReadingsPage() {
           return (
             <Link
               key={type}
-              href={`/dashboard/readings/${type}`}
+              href={row ? `/dashboard/readings/${type}` : `/assess/${type}?from=readings`}
               className={`relative flex flex-col justify-between rounded-2xl border p-4 shadow-sm transition ${
                 row
                   ? "border-border bg-white hover:border-primary dark:border-border-dark dark:bg-white/5"

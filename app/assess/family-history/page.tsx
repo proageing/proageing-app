@@ -46,7 +46,7 @@ function FamilyHistoryPageInner() {
   const t = useT();
   const c = t.assess.familyHistory;
   const [userId, setUserId] = useState<string | null>(null);
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>(searchParams.get("retake") === "1" ? "questions" : "welcome");
   const [answers, setAnswers] = useState<FamilyHistoryAnswers>(emptyFamilyHistoryAnswers());
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

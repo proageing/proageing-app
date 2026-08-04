@@ -237,7 +237,7 @@ export default function AssessmentTrendPage() {
       )}
 
         <Link
-          href={`/assess/${typeParam}?from=readings`}
+          href={`/assess/${typeParam}?from=readings${rows.length > 0 ? "&retake=1" : ""}`}
           className={`mt-8 block w-full rounded-2xl py-4 text-center text-base font-bold text-white ${style.solidButton}`}
         >
           {rows.length === 0 ? t.readingDetail.takeCheck : t.readingDetail.retakeCheck}
