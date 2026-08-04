@@ -91,7 +91,6 @@ export const zh: Dictionary = {
 
   readings: {
     title: "你的长寿档案",
-    blurb: "你做过的每一项检测，以及各项的最新结果。",
     notStarted: "尚未开始",
     step: (n: number) => `第 ${n} 步`,
     areasFlagged: (n: number) => `${n} 项已标记`,

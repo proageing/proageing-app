@@ -83,7 +83,6 @@ export const en = {
 
   readings: {
     title: "Your Longevity Profile",
-    blurb: "Every check you've taken, and your latest result for each.",
     notStarted: "Not started",
     step: (n: number) => `Step ${n}`,
     areasFlagged: (n: number) => `${n} area${n === 1 ? "" : "s"} flagged`,

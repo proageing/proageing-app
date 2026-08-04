@@ -92,7 +92,6 @@ export default function ReadingsPage() {
         <AppHeader />
 
         <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.readings.title}</p>
-      <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.readings.blurb}</p>
 
       <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
         {t.dashboard.cards.checksProgress(completedCount, ASSESSMENT_TYPES.length)}
