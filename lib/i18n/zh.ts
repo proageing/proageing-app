@@ -250,6 +250,8 @@ export const zh: Dictionary = {
       saveAndReturn: (target: string) => `保存并返回${target}`,
       notNow: "暂不进行",
       yourResult: "你的结果",
+      getReady: "准备开始",
+      setPhoneDown: "放下手机，摆好姿势。",
       returnTo: {
         program: "21 天挑战",
         readings: "我的记录",
@@ -893,7 +895,7 @@ export const zh: Dictionary = {
       halfway: "过半了——继续保持。",
       almostDone: "快结束了。",
       countInHead: "🧠 请在心里默数每一次完整站立。不必触碰手机——计时结束后我们会请你输入总次数。",
-      stopRest: "停止 — 我需要休息",
+      stopRest: "停止",
       timesUp: "时间到",
       howMany: "你完成了多少次？",
       countOnlyFull: "只计算完整的站立——完全站起，再完全坐下。",

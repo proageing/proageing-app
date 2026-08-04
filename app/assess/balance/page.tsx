@@ -44,6 +44,7 @@ function BalancePageInner() {
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<BalanceAnswers>(emptyBalanceAnswers());
   const [running, setRunning] = useState(false);
+  const [preCountdown, setPreCountdown] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -89,20 +90,44 @@ function BalancePageInner() {
     setScreen("results");
   }
 
+  function beginRunning() {
+    setRunning(true);
+    speak("Go.");
+    startedAtRef.current = performance.now() - elapsed * 1000;
+    intervalRef.current = setInterval(() => {
+      const now = (performance.now() - startedAtRef.current) / 1000;
+      if (now >= TIME_CAP) {
+        setElapsed(TIME_CAP);
+        finishTimer(TIME_CAP);
+        return;
+      }
+      setElapsed(now);
+    }, 100);
+  }
+
+  // A brief 3-2-1 countdown before the timer actually starts, so someone
+  // can set their phone down and lift their foot after tapping "Start"
+  // instead of losing balance seconds to that setup.
+  useEffect(() => {
+    if (preCountdown === null) return;
+    if (preCountdown === 0) {
+      setPreCountdown(null);
+      beginRunning();
+      return;
+    }
+    const id = setTimeout(() => {
+      speak(preCountdown === 2 ? "Two" : "One");
+      setPreCountdown((p) => (p === null ? null : p - 1));
+    }, 1000);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preCountdown]);
+
   function handleTimerButton() {
     if (!running) {
-      setRunning(true);
-      speak("Timer started.");
-      startedAtRef.current = performance.now() - elapsed * 1000;
-      intervalRef.current = setInterval(() => {
-        const now = (performance.now() - startedAtRef.current) / 1000;
-        if (now >= TIME_CAP) {
-          setElapsed(TIME_CAP);
-          finishTimer(TIME_CAP);
-          return;
-        }
-        setElapsed(now);
-      }, 100);
+      if (preCountdown !== null) return;
+      setPreCountdown(3);
+      speak("Get ready. Three.");
     } else {
       finishTimer(elapsed);
     }
@@ -119,6 +144,7 @@ function BalancePageInner() {
   function startTest() {
     setElapsed(0);
     setRunning(false);
+    setPreCountdown(null);
     setScreen("test");
   }
 
@@ -330,7 +356,15 @@ function BalancePageInner() {
         </div>
       )}
 
-      {screen === "test" && (
+      {screen === "test" && preCountdown !== null && (
+        <div className="flex flex-col items-center text-center">
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{t.assess.common.getReady}</p>
+          <div className="mt-6 text-8xl font-bold tabular-nums text-strength-dark">{preCountdown}</div>
+          <p className="mt-4 text-ink-soft dark:text-ink-dark-soft">{t.assess.common.setPhoneDown}</p>
+        </div>
+      )}
+
+      {screen === "test" && preCountdown === null && (
         <div className="flex flex-col items-center text-center">
           <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.balancingNow}</p>
           <h2 className="mt-1 font-serif text-xl font-semibold text-ink dark:text-ink-dark">
@@ -343,14 +377,21 @@ function BalancePageInner() {
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
             {c.stopNote}
           </p>
-          <button
-            onClick={handleTimerButton}
-            className={`mt-8 w-full rounded-2xl py-4 text-base font-bold ${
-              running ? "border-[1.5px] border-border dark:border-border-dark text-ink-soft dark:text-ink-dark-soft" : `text-white ${pillar.solidButton}`
-            }`}
-          >
-            {running ? c.stop : c.start}
-          </button>
+          {running ? (
+            <button
+              onClick={handleTimerButton}
+              className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-full border-4 border-red-700 bg-red-50 text-center text-lg font-bold leading-tight text-red-700 transition hover:bg-red-100 dark:border-red-500 dark:bg-red-950/40 dark:text-red-400"
+            >
+              {c.stop}
+            </button>
+          ) : (
+            <button
+              onClick={handleTimerButton}
+              className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-full border-4 border-junebud bg-junebud text-center text-lg font-bold leading-tight text-ink transition hover:brightness-105"
+            >
+              {c.start}
+            </button>
+          )}
         </div>
       )}
 

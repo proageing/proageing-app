@@ -241,6 +241,8 @@ export const en = {
       saveAndReturn: (target: string) => `Save & return to ${target}`,
       notNow: "Not now",
       yourResult: "Your result",
+      getReady: "Get ready",
+      setPhoneDown: "Set your phone down and get into position.",
       returnTo: {
         program: "the 21-Day Challenge",
         readings: "your readings",
@@ -910,7 +912,7 @@ export const en = {
       almostDone: "Almost done.",
       countInHead:
         "🧠 Count each full stand in your head. No need to touch your phone — we'll ask for your total when time's up.",
-      stopRest: "Stop — I need to rest",
+      stopRest: "Stop",
       timesUp: "Time's up",
       howMany: "How many did you complete?",
       countOnlyFull: "Count only full stands — all the way up, all the way back down.",

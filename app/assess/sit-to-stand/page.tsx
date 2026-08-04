@@ -42,6 +42,8 @@ function SitToStandPageInner() {
   const c = t.assess.sitToStand;
   const [screen, setScreen] = useState<Screen>("welcome");
   const [answers, setAnswers] = useState<SitToStandAnswers>(emptySitToStandAnswers());
+  const [testPhase, setTestPhase] = useState<"countdown" | "running">("countdown");
+  const [preCountdown, setPreCountdown] = useState(3);
   const [timeLeft, setTimeLeft] = useState(30);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -76,8 +78,32 @@ function SitToStandPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 
+  // A brief 3-2-1 countdown before the real 30-second timer starts, so
+  // someone can set their phone down and get into position after tapping
+  // "I'm ready" instead of losing rep time to that setup.
   useEffect(() => {
     if (screen !== "test") return;
+    setTestPhase("countdown");
+    setPreCountdown(3);
+    speak("Get ready. Three.");
+    const steps = [2, 1, 0];
+    let i = 0;
+    const id = setInterval(() => {
+      const next = steps[i];
+      i++;
+      if (next === 0) {
+        clearInterval(id);
+        setTestPhase("running");
+      } else {
+        setPreCountdown(next);
+        speak(next === 2 ? "Two" : "One");
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [screen]);
+
+  useEffect(() => {
+    if (screen !== "test" || testPhase !== "running") return;
     setTimeLeft(30);
     speak("Go — as many full stands as you can.");
     intervalRef.current = setInterval(() => {
@@ -97,7 +123,7 @@ function SitToStandPageInner() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen]);
+  }, [screen, testPhase]);
 
   function handleCheckContinue() {
     if (isUnsafe(answers)) {
@@ -339,7 +365,15 @@ function SitToStandPageInner() {
         </div>
       )}
 
-      {screen === "test" && (
+      {screen === "test" && testPhase === "countdown" && (
+        <div className="flex flex-col items-center text-center">
+          <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{t.assess.common.getReady}</p>
+          <div className="mt-6 text-8xl font-bold tabular-nums text-primary-dark">{preCountdown}</div>
+          <p className="mt-4 text-ink-soft dark:text-ink-dark-soft">{t.assess.common.setPhoneDown}</p>
+        </div>
+      )}
+
+      {screen === "test" && testPhase === "running" && (
         <div className="flex flex-col items-center text-center">
           <p className={`text-[0.74rem] font-bold uppercase tracking-[0.13em] ${pillar.eyebrow}`}>{c.timeRemaining}</p>
           <div className="mt-4 text-7xl font-bold tabular-nums text-primary-dark">{timeLeft}</div>
@@ -354,7 +388,7 @@ function SitToStandPageInner() {
               if (intervalRef.current) clearInterval(intervalRef.current);
               setScreen("welcome");
             }}
-            className="mt-8 rounded border border-red-300 px-4 py-2 font-medium text-red-600"
+            className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-full border-4 border-red-700 bg-red-50 text-center text-lg font-bold leading-tight text-red-700 transition hover:bg-red-100 dark:border-red-500 dark:bg-red-950/40 dark:text-red-400"
           >
             {c.stopRest}
           </button>
