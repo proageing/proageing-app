@@ -16,20 +16,30 @@ Nothing here is inferred. Where the code doesn't state a value, it says
 
 **Source files:** `lib/assessments/sitToStand.ts`, `app/assess/sit-to-stand/page.tsx`, `lib/i18n/en.ts` (`assess.sitToStand`)
 
-1. **Raw measure:** `reps` — count of full chair stands completed in a fixed 30-second timer. No cap on the rep count itself; the *timer* is fixed at 30s (not a score cap, a test-duration limit).
+1. **Raw measure:** `reps` — count of full chair stands completed in a fixed 30-second timer. No cap on the rep count itself; the *timer* is fixed at 30s (not a score cap, a test-duration limit). Age is collected as a raw number (stepper input, floored at 60 — see below), not a pre-selected band.
 
-2. **Cut-off table (as coded, `NORMS` in `sitToStand.ts`):**
+2. **Cut-off table (as coded, `NORMS` in `sitToStand.ts`, updated to the full published set of Rikli & Jones (1999) 5-year bands):**
 
    | Sex | Age band | Range (stands/30s) |
    |---|---|---|
-   | Female | 60 | 12–17 |
-   | Female | 70 | 10–15 |
-   | Female | 80 | 9–14 |
-   | Male | 60 | 14–19 |
-   | Male | 70 | 12–17 |
-   | Male | 80 | 10–15 |
+   | Female | 60–64 | 12–17 |
+   | Female | 65–69 | 11–16 |
+   | Female | 70–74 | 10–15 |
+   | Female | 75–79 | 10–15 |
+   | Female | 80–84 | 9–14 |
+   | Female | 85–89 | 8–13 |
+   | Female | 90–94 | 4–11 |
+   | Male | 60–64 | 14–19 |
+   | Male | 65–69 | 12–18 |
+   | Male | 70–74 | 12–17 |
+   | Male | 75–79 | 11–17 |
+   | Male | 80–84 | 10–15 |
+   | Male | 85–89 | 8–14 |
+   | Male | 90–94 | 7–12 |
 
-   `AgeBand` type is a closed enum of exactly `60 | 70 | 80` — no interpolation or clamping logic exists for ages between/outside these three values; the UI must be constraining input to one of the three. Result is `below` if `score < lo`, `above` if `score > hi`, else `within`.
+   `ageBand(age)` maps a raw age to one of these seven bands, clamping at the 90–94 ceiling for any age above it (no extrapolation past the study's own range). **There is no 50–59 band** — confirmed against the primary source and cross-checked against multiple independent reproductions of the same table: Rikli & Jones's own normative study (N=7,183) is titled *"...Community-Residing Older Adults, Ages 60–94"* and no published chair-stand norm for ages under 60 could be found anywhere. Accordingly, the age input in `app/assess/sit-to-stand/page.tsx` is floored at 60 (not 18, unlike Balance and VO2max) rather than silently scoring a younger person against 60–64 data. Result is `below` if `score < lo`, `above` if `score > hi`, else `within`.
+
+   *(Prior state, now fixed: this table previously had only three coarse points — `AgeBand = 60 | 70 | 80` — selected via three buttons in the UI labelled "60–69" / "70–79" / "80+". That meant, for example, a 68-year-old was silently scored against the 60–64 data while being shown a "60–69" label — a real mismatch between what the UI implied and what was actually measured. Fixed to the full 7-band table and a raw-age input, matching the Balance and VO2max checks' pattern.)*
 
 3. **Result labels (verbatim, `en.ts` `assess.sitToStand.result`):**
    - `below` → "Below typical range for your age group"

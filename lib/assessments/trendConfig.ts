@@ -6,7 +6,7 @@ import { interpretProteinScore } from "./nutritionProtein";
 import { interpretPSQI } from "./sleepQuality";
 import { interpretLonelinessScore } from "./connection";
 import { interpretBalance, type Sex } from "./balance";
-import { interpretSitToStand, type AgeBand } from "./sitToStand";
+import { interpretSitToStand } from "./sitToStand";
 import { classifyVO2 } from "./vo2max";
 
 export interface TrendMetric {
@@ -56,7 +56,7 @@ export const TREND_METRICS: Record<AssessmentType, TrendMetric[]> = {
       statusLabel: (e) => {
         const v = num(e, "score"), age = num(e, "age"), sex = sexOf(e);
         if (v === null || age === null || !sex) return null;
-        return interpretSitToStand(v, sex, age as AgeBand).label;
+        return interpretSitToStand(v, sex, age).label;
       },
     },
   ],

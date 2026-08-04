@@ -16,7 +16,6 @@ import {
   interpretSitToStand,
   isSafetyComplete,
   isUnsafe,
-  type AgeBand,
   type Sex,
   type SitToStandAnswers,
 } from "@/lib/assessments/sitToStand";
@@ -108,8 +107,8 @@ function SitToStandPageInner() {
     setScreen("setup");
   }
 
-  const result = answers.sex && answers.age ? interpretSitToStand(answers.reps, answers.sex, answers.age) : null;
-  const normRange = answers.sex && answers.age ? getNormRange(answers.sex, answers.age) : null;
+  const result = answers.sex ? interpretSitToStand(answers.reps, answers.sex, answers.age) : null;
+  const normRange = answers.sex ? getNormRange(answers.sex, answers.age) : null;
 
   function goToResults() {
     if (normRange) {
@@ -227,18 +226,36 @@ function SitToStandPageInner() {
           <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
             {c.compareNote}
           </p>
-          <div className="mt-2 flex gap-2">
-            {([60, 70, 80] as AgeBand[]).map((band) => (
+          <div className="mt-2 rounded-lg border border-border dark:border-border-dark p-4">
+            <p className="font-medium text-ink dark:text-ink-dark">{c.yourAge}</p>
+            <div className="mt-2 flex items-center gap-4">
               <button
-                key={band}
-                onClick={() => setAnswers((p) => ({ ...p, age: band }))}
-                className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                  answers.age === band ? "border-primary bg-primary-tint text-primary-dark" : "border-border text-ink-soft"
-                }`}
+                onClick={() => setAnswers((p) => ({ ...p, age: Math.max(60, Math.min(100, p.age - 1)) }))}
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
               >
-                {band === 80 ? "80+" : `${band}–${band + 9}`}
+                −
               </button>
-            ))}
+              <input
+                type="number"
+                inputMode="numeric"
+                min={60}
+                max={100}
+                value={answers.age}
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  setAnswers((p) => ({ ...p, age: Number.isNaN(n) ? 60 : Math.min(100, Math.max(60, n)) }));
+                }}
+                className="no-spinner w-14 rounded-lg border border-border bg-transparent text-center text-xl font-semibold tabular-nums text-ink outline-none focus:border-primary dark:border-border-dark dark:text-ink-dark"
+              />
+              <button
+                onClick={() => setAnswers((p) => ({ ...p, age: Math.max(60, Math.min(100, p.age + 1)) }))}
+                className="h-10 w-10 rounded-full border border-border dark:border-border-dark text-lg"
+              >
+                +
+              </button>
+              <span className="text-sm text-ink-soft dark:text-ink-dark-soft">{c.yearsUnit}</span>
+            </div>
           </div>
           <div className="mt-2 flex gap-2">
             {(["f", "m"] as Sex[]).map((s) => (

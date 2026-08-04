@@ -882,6 +882,8 @@ export const en = {
       safeYes: "Yes, I'm fine",
       safeNo: "Not today",
       compareNote: "Just so we can compare your result fairly",
+      yourAge: "Your age",
+      yearsUnit: "years",
       female: "Female",
       male: "Male",
       holdOff: "Let's hold off",

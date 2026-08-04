@@ -866,6 +866,8 @@ export const zh: Dictionary = {
       safeYes: "是的，我没问题",
       safeNo: "今天不行",
       compareNote: "这样我们才能公平地比较你的结果",
+      yourAge: "你的年龄",
+      yearsUnit: "岁",
       female: "女性",
       male: "男性",
       holdOff: "先暂缓一下",
