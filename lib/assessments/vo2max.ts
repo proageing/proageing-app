@@ -28,9 +28,11 @@ const VO2_NORMS: Record<Sex, Record<"50-59" | "60-69" | "70-79", VO2Norm>> = {
   },
 };
 
-// Matches the source exactly: only three age bands exist, so anyone under
-// 60 maps to the 50-59 table and anyone 70+ maps to 70-79 — not fixing
-// this, faithfulness to the original instrument is the point.
+// Matches the source exactly: only three age bands exist, so anyone 70+
+// maps to 70-79 — not fixing this, faithfulness to the original
+// instrument is the point. The under-60 branch is exactly the 50-59 band
+// the UI's age input is floored to (this is a 50+ product), so it's no
+// longer a catch-all for arbitrarily younger ages.
 function ageBand(age: number): "50-59" | "60-69" | "70-79" {
   if (age < 60) return "50-59";
   if (age < 70) return "60-69";

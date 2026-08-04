@@ -277,8 +277,8 @@ Keep the check as a **hard gate**: an elevated result routes to a
 
 | # | Issue | Fix |
 |---|---|---|
-| 1 | `AgeBand` enum is `60 \| 70 \| 80` only — a 68-year-old is scored against 60–64 norms | Expand to R&J's published 5-year bands (60–64 … 85–89). Same source, no new citation needed |
-| 2 | No 50–59 band at all, despite a 50+ target audience | Use the extrapolated row in §2.1, labelled as extrapolated, until a published source is added |
+| 1 | `AgeBand` enum is `60 \| 70 \| 80` only — a 68-year-old is scored against 60–64 norms | **Fixed.** Expanded to all seven of R&J's published 5-year bands (60–64 … 90–94), raw-age input. Balance had the same defect (anyone under 70 silently mapped to 65-69) — also fixed |
+| 2 | No 50–59 band at all, despite a 50+ target audience | **Fixed, without extrapolation.** No source publishes 50-59 data for Sit-to-Stand or Balance, so none was invented. Instead, ages 50-59 are scored against the youngest real band available (60-64 / 65-69) — conservative, since a 50-something scoring below an older cohort's typical range is a stronger signal, not a weaker one. Age input floored at 50 (not 18) on all three age-banded checks, including VO2max, which previously had no lower floor at all |
 | 3 | STS norms flagged "illustrative" in the disclaimer | They match published R&J values exactly for 60–64 / 70–74 / 80–84. Verify against the primary source and then drop the hedge — it currently understates your own rigour |
 | 4 | Balance 60s cap causes pile-up | Resolved by the 30s sufficiency target in §2.2 |
 | 5 | Dead duplicate label strings in `sitToStand.ts` | Remove; single source of truth in `en.ts` |

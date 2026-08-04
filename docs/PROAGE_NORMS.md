@@ -16,7 +16,7 @@ Nothing here is inferred. Where the code doesn't state a value, it says
 
 **Source files:** `lib/assessments/sitToStand.ts`, `app/assess/sit-to-stand/page.tsx`, `lib/i18n/en.ts` (`assess.sitToStand`)
 
-1. **Raw measure:** `reps` — count of full chair stands completed in a fixed 30-second timer. No cap on the rep count itself; the *timer* is fixed at 30s (not a score cap, a test-duration limit). Age is collected as a raw number (stepper input, floored at 60 — see below), not a pre-selected band.
+1. **Raw measure:** `reps` — count of full chair stands completed in a fixed 30-second timer. No cap on the rep count itself; the *timer* is fixed at 30s (not a score cap, a test-duration limit). Age is collected as a raw number (stepper input, floored at 50 — see below), not a pre-selected band.
 
 2. **Cut-off table (as coded, `NORMS` in `sitToStand.ts`, updated to the full published set of Rikli & Jones (1999) 5-year bands):**
 
@@ -37,7 +37,7 @@ Nothing here is inferred. Where the code doesn't state a value, it says
    | Male | 85–89 | 8–14 |
    | Male | 90–94 | 7–12 |
 
-   `ageBand(age)` maps a raw age to one of these seven bands, clamping at the 90–94 ceiling for any age above it (no extrapolation past the study's own range). **There is no 50–59 band** — confirmed against the primary source and cross-checked against multiple independent reproductions of the same table: Rikli & Jones's own normative study (N=7,183) is titled *"...Community-Residing Older Adults, Ages 60–94"* and no published chair-stand norm for ages under 60 could be found anywhere. Accordingly, the age input in `app/assess/sit-to-stand/page.tsx` is floored at 60 (not 18, unlike Balance and VO2max) rather than silently scoring a younger person against 60–64 data. Result is `below` if `score < lo`, `above` if `score > hi`, else `within`.
+   `ageBand(age)` maps a raw age to one of these seven bands, clamping at the 90–94 ceiling for any age above it (no extrapolation past the study's own range). **There is no published 50–59 band** — confirmed against the primary source and cross-checked against multiple independent reproductions of the same table: Rikli & Jones's own normative study (N=7,183) is titled *"...Community-Residing Older Adults, Ages 60–94."* Rather than invent one, ages 50–59 are deliberately scored against the 60–64 band — the youngest real data available, and a conservative choice, since scoring below an older cohort's typical range is if anything a stronger signal for a younger person, not a weaker one. The age input in `app/assess/sit-to-stand/page.tsx` is floored at 50 to match (this is a 50+ product), not left open to any age. Result is `below` if `score < lo`, `above` if `score > hi`, else `within`.
 
    *(Prior state, now fixed: this table previously had only three coarse points — `AgeBand = 60 | 70 | 80` — selected via three buttons in the UI labelled "60–69" / "70–79" / "80+". That meant, for example, a 68-year-old was silently scored against the 60–64 data while being shown a "60–69" label — a real mismatch between what the UI implied and what was actually measured. Fixed to the full 7-band table and a raw-age input, matching the Balance and VO2max checks' pattern.)*
 
@@ -79,6 +79,8 @@ Nothing here is inferred. Where the code doesn't state a value, it says
 
    `ageBand()`: `<70`→"65-69", `<75`→"70-74", `<80`→"75-79", `<85`→"80-84", else "85+". Result is `below` if `time < lo`, `above` if `time > hi`, else `typical`.
 
+   The source study covers ages 65+ only — no 50–64 data exists. As with Sit-to-Stand, ages 50–64 are deliberately scored against the youngest real band (65–69) rather than left unscored or given invented numbers; the age input in `app/assess/balance/page.tsx` is floored at 50 to match.
+
    **Extra coded threshold not in `balance.ts` — lives in `app/assess/balance/page.tsx` line 373:** if `answers.time < 5`, a separate fall-risk warning renders regardless of the age/sex band result above. This is a real, coded cutoff that sits outside the interpret function.
 
 3. **Result labels (verbatim, `en.ts` `assess.balance.result`):**
@@ -119,7 +121,7 @@ Nothing here is inferred. Where the code doesn't state a value, it says
    | Female | 60–69 | 13.4 | 17.2 | 23.8 | 27.0 | 29.4 | ≥29.4 |
    | Female | 70–79 | 13.1 | 15.6 | 20.8 | 23.1 | 24.1 | ≥24.1 |
 
-   Age banding is coded exactly as: `<60` → "50-59" table, `<70` → "60-69", else → "70-79". Per an explicit code comment, anyone under 50 is scored on the 50–59 table and anyone 80+ is scored on the 70–79 table — "not fixing this, faithfulness to the original instrument is the point."
+   Age banding is coded exactly as: `<60` → "50-59" table, `<70` → "60-69", else → "70-79". Per an explicit code comment, anyone 80+ is scored on the 70–79 table — "not fixing this, faithfulness to the original instrument is the point." Unlike Sit-to-Stand and Balance, a real 50–59 band exists in this source, so no youngest-band substitution is needed here. The age input in `app/assess/vo2max/page.tsx` is floored at 50 (tightened from 18, which previously let anyone as young as 18 be scored on the 50–59 table with no real basis for that either).
 
 3. **Result labels (verbatim, `en.ts` `assess.vo2max.category`, matches `vo2max.ts` exactly):**
    - `poor` → "Poor for your age & sex"

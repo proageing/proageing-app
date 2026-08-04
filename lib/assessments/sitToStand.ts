@@ -5,9 +5,12 @@
 // 5-year bands are used below.
 //
 // The study population starts at 60 — there is no published 50-59 band
-// for this test, in this source or any other reference found. A person
-// under 60 is not scored against 60-64 data; the UI floors age input at
-// 60 for this check specifically, rather than silently extrapolating.
+// for this test, in this source or any other reference found. Rather than
+// extrapolate invented numbers, ages 50-59 are deliberately scored against
+// the 60-64 band: it's the youngest real data available, applying it
+// downward is conservative (a 50-something scoring below it is a stronger
+// signal, not a weaker one), and this is a 50+ product, so the UI floors
+// age input at 50, not 60.
 //
 // The live camera mirror and demo video from the source are intentionally
 // not ported — they're a self-view aid and a form demonstration, not part

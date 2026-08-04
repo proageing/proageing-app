@@ -3,6 +3,13 @@
 // Fujiwara Y, et al. PLOS ONE. 2014;9(6):e99487 (pooled analysis of 4,683
 // community-dwelling older Japanese adults). Fall-risk link: Vellas B, et
 // al. J Am Geriatr Soc. 1997;45(6):735–738 — under 5s is flagged.
+//
+// The source study covers ages 65+ only. Ages 50-64 are deliberately
+// scored against the 65-69 band (ageBand() below has no branch under 70)
+// rather than left unscored: it's the youngest real data available, and
+// applying it downward is conservative — a 50-something scoring below the
+// 65-69 typical range is a stronger signal, not a weaker one. The UI
+// floors age input at 50 to match, not lower — this is a 50+ product.
 
 export type Sex = "m" | "f";
 export type AgeBand5 = "65-69" | "70-74" | "75-79" | "80-84" | "85+";
