@@ -165,10 +165,29 @@ export const zh: Dictionary = {
       couldntStart: (detail: string) => `无法开始挑战：${detail}`,
     },
     noAccess: {
-      title: "21 天 ProAgeing 挑战",
-      blurb:
-        "你的 9 项检测始终免费。而引导式的 21 天挑战 — 每日行动、连续记录，以及最后的核心习惯 — 属于付费方案。",
-      seePlans: "查看方案与价格",
+      eyebrow: "21 天 ProAgeing 挑战",
+      title: "把你的检测结果变成每日计划",
+      previewCaption: "挑战中的一天是这样的",
+      features: [
+        {
+          strong: "每天学习、行动、反思。",
+          rest: "一则简短的研究洞见、一个小行动，以及一刻反思的时间 —— 在 21 天里带你走完 ProAgeing 七大步骤。",
+        },
+        {
+          strong: "累积真正的动力，而非速成。",
+          rest: "每天的小小步伐，一步一步累积成真正的转变。",
+        },
+        {
+          strong: "与你自己的检测结果紧密结合。",
+          rest: "每一天都紧扣你的检测结果，让你依据自己的深入洞察与趋势采取行动 —— 而不是千篇一律的建议。",
+        },
+        {
+          strong: "第 21 天：看看究竟改变了什么。",
+          rest: "重新检测，看看真实、可衡量的变化，然后选定一个要长期坚持的核心习惯。",
+        },
+      ],
+      cta: "开始 21 天挑战",
+      fine: "你的 9 项免费检测将永远免费 —— 这只是解锁引导式的每日计划。",
     },
     day: {
       dayOf: (day: number, total: number) => `第 ${day} 天 / 共 ${total} 天`,

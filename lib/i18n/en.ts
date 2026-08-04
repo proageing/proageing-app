@@ -159,10 +159,29 @@ export const en = {
       couldntStart: (detail: string) => `Couldn't start your challenge: ${detail}`,
     },
     noAccess: {
-      title: "The 21-Day ProAgeing Challenge",
-      blurb:
-        "Your 9 free assessment checks are always free. The guided 21-Day Challenge — daily actions, streaks, and a Keystone Habit at the end — is a paid programme.",
-      seePlans: "See plans & pricing",
+      eyebrow: "21-Day ProAgeing Challenge",
+      title: "Turn your checks into a daily plan",
+      previewCaption: "What a day inside the Challenge looks like",
+      features: [
+        {
+          strong: "Learn, act, reflect — every day.",
+          rest: "A short research insight, one small action, and a moment to reflect — walking you through all 7 ProAgeing Steps over 21 days.",
+        },
+        {
+          strong: "Real momentum, not a quick fix.",
+          rest: "Small steps, repeated daily, build toward true transformation — one day at a time.",
+        },
+        {
+          strong: "Paired with your own checks.",
+          rest: "Every day connects back to your results, so you're acting on in-depth insights and trends from your own data — not generic advice.",
+        },
+        {
+          strong: "Day 21: see what actually moved.",
+          rest: "Retake your checks to see real, measured change, then choose one Keystone Habit to carry forward.",
+        },
+      ],
+      cta: "Start the 21-Day Challenge",
+      fine: "Your 9 free checks stay free, always — this unlocks the guided daily programme.",
     },
     day: {
       dayOf: (day: number, total: number) => `Day ${day} of ${total}`,

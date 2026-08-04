@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { signInHrefFor } from "@/lib/nextPath";
 import {
@@ -22,6 +23,7 @@ import { contentForDay } from "@/lib/program21";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { computeWeeklyMomentum, getDayCompletions, type WeeklyMomentum } from "@/lib/momentum";
 import { getActiveSubscription } from "@/lib/subscription";
+import { planById } from "@/lib/plans";
 import {
   emptyTestimonial,
   getTestimonial,
@@ -39,10 +41,10 @@ type LoadState = "loading" | "no-access" | "no-enrollment" | "completed" | "read
 
 const PROGRAM_LENGTH_DAYS = 21;
 
-// TEMPORARY: paywall disabled for preview at Isaiah's request (2026-07-29).
-// Flip back to true to restore the subscription gate — no other changes
-// needed.
-const PAYWALL_ENABLED = false;
+// Gates the 21-Day Challenge behind a purchase (docs/PLAN.md §5). Was
+// temporarily disabled for preview (2026-07-29); re-enabled once the
+// no-access screen became a real showcase worth gating behind.
+const PAYWALL_ENABLED = true;
 
 // The linked assessment(s) for a day, so the Act card's Done checkbox can
 // default to checked when someone returns having taken them. Excludes the
@@ -314,23 +316,52 @@ function ProgramPageInner() {
   }
 
   if (loadState === "no-access") {
+    const plan = planById("21-day");
     return (
-      <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 pb-28 text-center">
-        <div className="mx-auto">
-          <Logo size={48} />
+      <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-8">
+        <div className="flex justify-center">
+          <Logo size={40} />
         </div>
-        <h1 className="mt-6 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
+        <p className="mt-4 text-center text-xs font-bold uppercase tracking-wide text-primary-dark">
+          {t.programme.noAccess.eyebrow}
+        </p>
+        <h1 className="mt-1 text-balance text-center font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
           {t.programme.noAccess.title}
         </h1>
-        <p className="mt-3 text-ink-soft dark:text-ink-dark-soft">
-          {t.programme.noAccess.blurb}
+        {plan && (
+          <p className="mt-4 text-center font-serif text-3xl font-bold text-ink dark:text-ink-dark">{plan.priceLabel}</p>
+        )}
+
+        <div className="mt-6 overflow-hidden rounded-2xl border border-border shadow-card dark:border-border-dark">
+          <Image src="/programme-preview.png" alt="" width={920} height={1280} className="block h-auto w-full" />
+        </div>
+        <p className="mt-2 text-center text-xs font-semibold text-ink-faint dark:text-ink-dark-faint">
+          {t.programme.noAccess.previewCaption}
         </p>
+
+        <div className="mt-7 flex flex-col gap-5">
+          {t.programme.noAccess.features.map((f) => (
+            <div key={f.strong} className="flex gap-3">
+              <span className="mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-junebud">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 13l4.5 4.5L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <p className="text-sm leading-relaxed text-ink-soft dark:text-ink-dark-soft">
+                <strong className="text-ink dark:text-ink-dark">{f.strong}</strong> {f.rest}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <Link
-          href="/upgrade"
-          className="mt-6 rounded-xl bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-dark"
+          href="/upgrade?plan=21-day"
+          className="mt-8 block w-full rounded-2xl bg-primary py-4 text-center text-base font-bold text-white transition hover:bg-primary-dark"
         >
-          {t.programme.noAccess.seePlans}
+          {t.programme.noAccess.cta}
         </Link>
+        <p className="mt-3 text-center text-xs text-ink-faint dark:text-ink-dark-faint">{t.programme.noAccess.fine}</p>
+
         <TabBar />
       </main>
     );
