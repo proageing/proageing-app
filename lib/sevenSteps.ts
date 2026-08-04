@@ -13,8 +13,10 @@ export interface SevenStep {
   photo: string;
   why: string;
   science: string;
-  listHeading: string;
-  listItems: string[];
+  // Optional: the site dropped this list from Step 2's layout, so it's
+  // not guaranteed to exist for every step.
+  listHeading?: string;
+  listItems?: string[];
   closing: string;
   assessments: StepAssessmentLink[];
 }
@@ -47,11 +49,9 @@ export const SEVEN_STEPS: SevenStep[] = [
     title: "Understand Your Personal Healthspan Risks",
     tagline: "Know your devils",
     photo: "/steps/step-2.jpg",
-    why: "Healthspan is the number of years you live in good health. Many problems associated with ageing — heart disease, diabetes, falls, frailty, poor sleep and cognitive decline — develop gradually.",
+    why: "Healthspan is the number of years you live in good health. Many problems associated with ageing — heart disease, diabetes, cancer and dementia — can develop as we age.",
     science:
       "The biggest drivers of poor ageing are often modifiable, including inactivity, excess body fat, high blood pressure, poor sleep, smoking, unhealthy diet and social isolation.",
-    listHeading: "Look at your current picture",
-    listItems: ["Blood pressure", "Waist circumference", "Strength and balance", "Sleep quality", "Stress level", "Social connection", "Physical activity"],
     closing:
       "Awareness is not about fear. It is about understanding which risks are most relevant to you so that you can focus your energy where it matters most.",
     assessments: [
@@ -62,14 +62,14 @@ export const SEVEN_STEPS: SevenStep[] = [
   {
     step: 3,
     title: "Invest in Daily Movement",
-    tagline: "Move often, not just intensely",
+    tagline: "Intensity matters",
     photo: "/steps/step-3.jpg",
-    why: "Your body was designed for movement throughout the day. Daily movement supports the heart, lungs, brain, joints and mood.",
+    why: "Physical exercise is the one thing that will yield health benefits that will sustain your function and well-being throughout life. Your body was designed for movement throughout the day — and raising the intensity is what pushes your fitness and improves your health.",
     science:
-      "Regular walking and other moderate activities are associated with lower risk of cardiovascular disease, diabetes, depression and cognitive decline. Even breaking up long periods of sitting can improve health markers.",
-    listHeading: "Think beyond exercise",
-    listItems: ["Walk after meals", "Take the stairs", "Stand up every 30–60 minutes", "Do light household or gardening activities", "Add short movement breaks"],
-    closing: "Healthy longevity is built less by occasional heroic workouts and more by a lifestyle that keeps the body in motion every day.",
+      "Brisk walking and other moderate intensity activities are associated with lowering the risk of health conditions that plague our longevity namely cardiovascular disease, diabetes, dementia, depression and cancer.",
+    listHeading: "Move more, and move harder",
+    listItems: ["Pick up the pace until you are breathing harder but can still talk", "Build towards 150 minutes of moderate intensity activity a week", "Stand up every 30–60 minutes"],
+    closing: "Healthy longevity comes from doing both — keeping the body in motion every day, and lifting the intensity often enough to challenge your heart and lungs.",
     assessments: [{ label: "VO2 Max & Resting HR", type: "vo2max" }],
   },
   {
@@ -77,11 +77,11 @@ export const SEVEN_STEPS: SevenStep[] = [
     title: "Build Strength and Balance Capacity",
     tagline: "Protect your independence",
     photo: "/steps/step-4.jpg",
-    why: "Strength is not just for athletes. It is the foundation of independence: getting up from a chair, climbing stairs, carrying groceries and preventing falls.",
+    why: "We need strength and balance, without which we lose our mobility and likely cause injurious falls. It is the foundation of our independence: getting up from a chair, climbing the stairs, carrying groceries and staying socially connected.",
     science:
-      "Age-related muscle loss (sarcopenia) can begin from midlife onward. Strength training and balance practice improve mobility, reduce fall risk and support healthy ageing.",
-    listHeading: "Focus on functional strength",
-    listItems: ["Sit-to-stand", "Step-ups", "Carrying objects", "Resistance bands", "Heel raises", "Single-leg balance"],
+      "By the age of 30 we start to lose 1–2% of muscle mass annually this coupled with age-related muscle loss (sarcopenia) will accelerate it further. Strength training can reverse this trajectory and couple with balance practice improve mobility, reduce falls and keep doing what we love.",
+    listHeading: "Focus on functional mobility",
+    listItems: ["Resistance training involving major muscle groups", "Focus on movements such as sit to stand, pulling and pushing", "Do activities that intentionally challenge and requires you to maintain your balance"],
     closing: "Maintaining strength and balance is one of the most effective ways to preserve confidence, mobility and independence as we age.",
     assessments: [
       { label: "Sit-to-Stand", type: "sit-to-stand" },

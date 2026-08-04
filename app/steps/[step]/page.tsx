@@ -64,14 +64,18 @@ export default function StepDetailPage() {
       <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{t.stepDetail.scienceShows}</h2>
       <p className="mt-1.5 text-[1.02rem] leading-[1.7] text-ink-soft dark:text-ink-dark-soft">{step.science}</p>
 
-      <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{step.listHeading}</h2>
-      <ul className="mt-1.5 list-disc pl-5 text-ink-soft dark:text-ink-dark-soft">
-        {step.listItems.map((item) => (
-          <li key={item} className="mb-1.5 text-[1.02rem] leading-[1.6]">
-            {item}
-          </li>
-        ))}
-      </ul>
+      {step.listHeading && step.listItems && step.listItems.length > 0 && (
+        <>
+          <h2 className="mt-5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-primary-dark">{step.listHeading}</h2>
+          <ul className="mt-1.5 list-disc pl-5 text-ink-soft dark:text-ink-dark-soft">
+            {step.listItems.map((item) => (
+              <li key={item} className="mb-1.5 text-[1.02rem] leading-[1.6]">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <p className="mt-5 text-[1.02rem] leading-[1.7] text-ink-soft dark:text-ink-dark-soft">{step.closing}</p>
 
