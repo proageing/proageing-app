@@ -1,6 +1,7 @@
 // Ported from proageing-site/connection.html — combines the Lubben Social
 // Network Scale (LSNS-6; Lubben et al., The Gerontologist, 2006) with the
-// UCLA-3 Loneliness Scale. Thresholds (family/friends subscale <6,
+// UCLA-3 Loneliness Scale (Hughes et al., Research on Aging, 2004).
+// Thresholds (family/friends subscale <6,
 // loneliness >=6) are the Singapore-sample values reported in Ge, Yap &
 // Heng, BMC Geriatrics 2022 (606 community-dwelling older adults), not the
 // original Western norms — that study found loneliness, not network size

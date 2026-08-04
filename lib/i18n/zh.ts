@@ -358,7 +358,7 @@ export const zh: Dictionary = {
       estimatedVo2: "估算最大摄氧量（mL/kg/min）",
       maxHr: "最大心率（bpm）",
       restingHrShort: "静息心率（bpm）",
-      estimateFor: (age: number, sex: string) => `基于 ${age} 岁、${sex}的估算值。等级分类依据库珀研究所／ACSM 标准。`,
+      estimateFor: (age: number, sex: string) => `基于 ${age} 岁、${sex}的估算值。最大心率采用 Tanaka、Monahan 与 Seals（2001年）的估算公式。等级分类依据库珀研究所／ACSM 标准。`,
       sexMale: "男性",
       sexFemale: "女性",
       nextStepsHeading: "✅ 建议的下一步",
@@ -408,7 +408,7 @@ export const zh: Dictionary = {
       intro1:
         "上了年纪之后，每公斤体重需要的蛋白质比年轻时更多，才守得住同样的肌肉——但实际吃进去的量，往往会悄悄不够。这项检测评估的是你在一般的一周里，多久吃一次高蛋白食物。",
       intro2:
-        "改编自 Protein Screener 55+（一项经验证的荷兰工具），食物项目已确认符合新加坡多元族群的饮食习惯。这是一项方向性参考，而非实验室等级的测量。",
+        "改编自 Protein Screener 55+（Wijnhoven 等人，PLOS ONE，2018年），一项经验证的荷兰工具，食物项目已确认符合新加坡多元族群的饮食习惯（Whitton、Ho、Rebello 与 van Dam，Public Health Nutrition，2018年）。这是一项方向性参考，而非实验室等级的测量。",
       begin: "开始吧",
       questionsHeading: "这些食物你多久吃一次？",
       questionsBlurb: "想想你平常一周的饮食情况。没有对错之分。",
@@ -540,7 +540,7 @@ export const zh: Dictionary = {
       eyebrow: "社交联系检测 · 约 3 分钟",
       title: "社交联系检测",
       intro1:
-        "本检测结合两项经验证的工具：Lubben 社交网络量表（LSNS-6），用于描绘你的家人与朋友网络规模；以及 UCLA-3 孤独感量表，询问你实际上有多觉得跟人有联系。",
+        "本检测结合两项经验证的工具：Lubben 社交网络量表（LSNS-6；Lubben 等人，《老年学家》，2006年），用于描绘你的家人与朋友网络规模；以及 UCLA-3 孤独感量表（Hughes 等人，《老龄化研究》，2004年），询问你实际上有多觉得跟人有联系。",
       intro2:
         "在 2022 年一项涵盖 606 位新加坡年长者的研究中，真正与较高体弱风险相关的是孤独的感受，而不只是网络规模（Ge、Yap 与 Heng，BMC Geriatrics）。因此本检测两者都追踪，但最看重你的感受。",
       begin: "开始吧",
@@ -897,7 +897,7 @@ export const zh: Dictionary = {
       seeResults: "查看我的结果",
       standsIn30: "30 秒内完整站立次数",
       typicalRange: (lo: number, hi: number) =>
-        `你所在组别的典型范围：${lo}–${hi} 次（示例参考，Rikli & Jones Senior Fitness Test）。`,
+        `你所在组别的典型范围：${lo}–${hi} 次（示例参考，Rikli & Jones Senior Fitness Test，1999年）。`,
       disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
       result: {
         below: {

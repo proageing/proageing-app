@@ -343,12 +343,14 @@ Nothing here is inferred. Where the code doesn't state a value, it says
 
 ## Summary of conflicts/gaps flagged
 
-| Check | Issue |
-|---|---|
-| VO2 Max | Tanaka/Monahan/Seals 2001 citation for the HRmax formula exists in the code comment but is never shown to the user. |
-| Nutrition & Protein | Wijnhoven et al. 2018 / Whitton et al. 2018 citations exist in the code comment and on `proageing-site/nutrition.html`, but are absent from the app's displayed copy (just "a validated Dutch tool"). |
-| Connection | Lubben et al. 2006 citation exists in the code comment and on `proageing-site/connection.html`, but is absent from the app's displayed copy. UCLA-3's own original citation (author/year) is missing everywhere in the app — code, comments, and UI. |
-| Sit-to-Stand | Displayed citation "Rikli & Jones Senior Fitness Test" has no year anywhere in the app. |
-| Family History | No author/year citations by design — uses source tags (Singapore MOH / NCCN / International) instead; this is a structural difference from the other 8 checks, not a gap. |
+| Check | Issue | Status |
+|---|---|---|
+| VO2 Max | Tanaka/Monahan/Seals 2001 citation for the HRmax formula existed in the code comment but was never shown to the user. | **Fixed** — added to `estimateFor()` in `en.ts`/`zh.ts` and to `proageing-site/vo2max.html` (en+zh) |
+| Nutrition & Protein | Wijnhoven et al. 2018 / Whitton et al. 2018 citations existed in the code comment and on `proageing-site/nutrition.html`, but were absent from the app's displayed copy (just "a validated Dutch tool"). | **Fixed** — added to the `intro2` string in `en.ts`/`zh.ts`. The site already had these, no site change needed. |
+| Connection | Lubben et al. 2006 citation existed in the code comment and on `proageing-site/connection.html`, but was absent from the app's displayed copy. UCLA-3's own original citation (Hughes et al., 2004) was missing everywhere — app and site, code and UI. | **Fixed** — both citations added to `intro1` in `en.ts`/`zh.ts`, to the code comment in `connection.ts`, and to `proageing-site/connection.html` (en+zh), which previously named UCLA-3 with no citation at all. |
+| Sit-to-Stand | Displayed citation "Rikli & Jones Senior Fitness Test" had no year anywhere in the app or the site. | **Fixed** — "1999" added in `en.ts`/`zh.ts` and in `proageing-site/sit-to-stand.html` (en+zh). |
+| Family History | No author/year citations by design — uses source tags (Singapore MOH / NCCN / International) instead; this is a structural difference from the other 8 checks, not a gap. | No change — not a gap |
+
+Separately (not a citation issue, but found and fixed alongside this pass): Sit-to-Stand's `AgeBand` enum only covered three coarse points (60/70/80, shown as "60–69"/"70–79"/"80+" buttons), so e.g. a 68-year-old was scored against 60–64 data under a "60–69" label. Expanded to all seven of Rikli & Jones's (1999) published 5-year bands (60–64 through 90–94), with a raw-age input floored at 60 — confirmed via independent research that no 50–59 band exists in this or any other published source. Fixed in both `proageing-app` and `proageing-site` (en+zh on both).
 
 All other citation strings, cut-offs, and labels displayed in the app match their source code exactly.

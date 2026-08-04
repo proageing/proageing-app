@@ -357,7 +357,7 @@ export const en = {
       estimatedVo2: "estimated VO2 max (mL/kg/min)",
       maxHr: "Max HR (bpm)",
       restingHrShort: "Resting HR (bpm)",
-      estimateFor: (age: number, sex: string) => `Estimate for age ${age}, ${sex}. Categories from Cooper Institute / ACSM norms.`,
+      estimateFor: (age: number, sex: string) => `Estimate for age ${age}, ${sex}. Max HR estimated via Tanaka, Monahan & Seals (2001). Categories from Cooper Institute / ACSM norms.`,
       sexMale: "male",
       sexFemale: "female",
       nextStepsHeading: "✅ Suggested next steps",
@@ -407,7 +407,7 @@ export const en = {
       intro1:
         "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. This check screens how often you're eating protein-rich foods across a typical week.",
       intro2:
-        "Adapted from the Protein Screener 55+ (a validated Dutch tool) using food items confirmed relevant to Singapore's multi-ethnic diet. It's a directional guide, not a lab-grade measurement.",
+        "Adapted from the Protein Screener 55+ (Wijnhoven et al., PLOS ONE, 2018), a validated Dutch tool, using food items confirmed relevant to Singapore's multi-ethnic diet (Whitton, Ho, Rebello & van Dam, Public Health Nutrition, 2018). It's a directional guide, not a lab-grade measurement.",
       begin: "Let's begin",
       questionsHeading: "How often do you eat these?",
       questionsBlurb: "Think about a normal week for you — no right or wrong answers.",
@@ -545,7 +545,7 @@ export const en = {
       eyebrow: "Connection Check · ~3 minutes",
       title: "Connection Check",
       intro1:
-        "This check combines two validated instruments: the Lubben Social Network Scale (LSNS-6), which maps the size of your family and friend networks, and the UCLA-3 Loneliness Scale, which asks how connected you actually feel.",
+        "This check combines two validated instruments: the Lubben Social Network Scale (LSNS-6; Lubben et al., The Gerontologist, 2006), which maps the size of your family and friend networks, and the UCLA-3 Loneliness Scale (Hughes et al., Research on Aging, 2004), which asks how connected you actually feel.",
       intro2:
         "In a 2022 Singapore study of 606 older adults, feeling lonely — not network size alone — was the one linked to higher frailty risk (Ge, Yap & Heng, BMC Geriatrics). So this check tracks both, but pays closest attention to how you feel.",
       begin: "Let's begin",
@@ -914,7 +914,7 @@ export const en = {
       seeResults: "See my results",
       standsIn30: "full stands in 30 seconds",
       typicalRange: (lo: number, hi: number) =>
-        `Typical range for your group: ${lo}–${hi} stands (illustrative reference, Rikli & Jones Senior Fitness Test).`,
+        `Typical range for your group: ${lo}–${hi} stands (illustrative reference, Rikli & Jones Senior Fitness Test, 1999).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
       result: {
