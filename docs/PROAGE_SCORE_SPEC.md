@@ -20,6 +20,39 @@ where explicitly marked `EXTRAPOLATED` or `NEW SOURCE REQUIRED`.
 | 8 | Family History | categorical | n/a | Baseline gate only | Immutable |
 | 9 | Purpose (Ikigai-9) | 9–45 | Higher better | Identity metric | Trait-like; expect small 21d change |
 
+### 1.1 Why this table isn't about which traits are modifiable
+
+It's tempting to read "Capacity — scored" vs. everything else as a claim that
+strength and balance respond to training and cardio fitness or sleep don't.
+That's backwards — cardio fitness is arguably *more* trainable over 21 days
+than balance is, and sleep quality clearly changes with behaviour. The line
+being drawn is about **measurement validity for a 21-day retest**, not
+modifiability of the underlying trait:
+
+- **Sit-to-Stand and Balance are scored** because they're objective,
+  in-the-moment physical performance tests. Retest them and the number you
+  get is a clean, direct measurement of right now — nothing about the test
+  itself confounds a Day 1 vs. Day 21 comparison.
+- **VO2max is excluded, not because cardio fitness is hard to move, but
+  because the current implementation can't validly show whether it moved**
+  (§5): the estimate formula has no sex term while the classification table
+  is sex-split, so identical inputs produce systematically different labels
+  by sex — and separately, the whole estimate is driven by a single manual
+  resting-heart-rate reading, where ordinary reading noise (±2bpm) shifts
+  the result more than any real 21-day training effect would. Fix the
+  measurement (§5.3) and this changes.
+- **Sleep is excluded, not because sleep doesn't improve, but because PSQI
+  asks about the past month** (§6). A Day 21 retest using PSQI necessarily
+  asks about a window that mostly overlaps the pre-programme baseline, so a
+  score change can't be cleanly attributed to 21 days of programme
+  behaviour — that's a property of *this instrument's own recall window*,
+  not evidence sleep is static.
+
+If VO2max's formula/table mismatch gets fixed (or it's replaced by the step
+test in §5.3) and Sleep's 21-day tracking moves to a nightly log instead of
+PSQI, there's a legitimate case for a three- or four-domain score. That's an
+open product decision this spec deliberately doesn't make.
+
 ---
 
 ## 2. ProAge Capacity Score (0–100)
@@ -102,6 +135,16 @@ must never be absorbed into the score.
 ## 3. ProAge Momentum Score (0–100, weekly, resets each week)
 
 Self-reported behaviour only. Never blended into Capacity.
+
+**Scoped to whatever guided programme the user is enrolled in — the 21-Day
+Challenge today, and designed to generalize to future programmes (a 90-Day
+Transformation, or whatever comes next), not to the account as a whole.**
+The five components below (movement/strength/protein/sleep-target/connection
+days) are literally the Challenge's own daily check-ins; someone with no
+active programme enrollment has no Momentum to show, because those daily
+actions were never asked of them. The Longevity Dashboard (`PROAGE_DISPLAY_LOGIC.md`)
+reflects this directly — Momentum, and all Day 1/Days 2–20/Day 21 phase
+language, live only in the programme experience, not on the dashboard.
 
 | Component | Target | Points |
 |---|---|---|
