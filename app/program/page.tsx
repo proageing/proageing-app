@@ -20,6 +20,7 @@ import {
 import { getCompletionSummary, type CompletionSummary, type MovementDirection } from "@/lib/programCompletion";
 import { contentForDay } from "@/lib/program21";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
+import { computeWeeklyMomentum, getDayCompletions, type WeeklyMomentum } from "@/lib/momentum";
 import { getActiveSubscription } from "@/lib/subscription";
 import {
   emptyTestimonial,
@@ -113,7 +114,21 @@ function ProgramPageInner() {
   const [starting, setStarting] = useState(false);
   const [summary, setSummary] = useState<CompletionSummary | null>(null);
   const [completedChecksCount, setCompletedChecksCount] = useState(0);
+  const [weeklyMomentum, setWeeklyMomentum] = useState<WeeklyMomentum | null>(null);
   const { locale, t } = useLocale();
+
+  async function refreshMomentum(enrollmentId: string, viewedDayNum: number, currentDayNum: number) {
+    const rows = await getDayCompletions(enrollmentId);
+    setWeeklyMomentum(computeWeeklyMomentum(viewedDayNum, currentDayNum, rows));
+  }
+
+  // Real weekday labels (not a fixed Mon-Sun) since a 21-day programme can
+  // start on any day of the week.
+  function weekdayLabel(startedAt: string, dayNumber: number): string {
+    const date = new Date(startedAt + "T00:00:00");
+    date.setDate(date.getDate() + (dayNumber - 1));
+    return date.toLocaleDateString(locale === "zh" ? "zh-Hans-SG" : "en-SG", { weekday: "short" });
+  }
 
   useEffect(() => {
     async function load() {
@@ -179,6 +194,7 @@ function ProgramPageInner() {
         setLearned(progress.video_watched);
         setReflection(progress.checkin_note ?? "");
       }
+      await refreshMomentum(active.id, day, today);
       if (contentForDay(day).isClose) {
         setTestimonial((await getTestimonial(active.id, day)) ?? emptyTestimonial());
       }
@@ -205,6 +221,7 @@ function ProgramPageInner() {
     }
     setCompletedChecksCount(await countCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
     setReflection(progress?.checkin_note ?? "");
+    await refreshMomentum(enrollment.id, day, currentDay);
     if (contentForDay(day).isClose) {
       setTestimonial((await getTestimonial(enrollment.id, day)) ?? emptyTestimonial());
     } else {
@@ -243,6 +260,7 @@ function ProgramPageInner() {
       setSaveStatus(t.common.couldntSave(error));
       return;
     }
+    await refreshMomentum(enrollment.id, viewedDay, currentDay);
     if (contentForDay(viewedDay).isClose) {
       const { error: testimonialError } = await saveTestimonial(userId, enrollment.id, viewedDay, testimonial);
       if (testimonialError) {
@@ -527,6 +545,49 @@ function ProgramPageInner() {
         <p className="mt-3 inline-block rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">
           {t.programme.day.streak(streak)}
         </p>
+      )}
+
+      {weeklyMomentum && (
+        <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+          <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.momentum.title}</p>
+          <p className="mt-1 font-serif text-2xl font-bold text-ink dark:text-ink-dark">
+            {weeklyMomentum.completedCount}
+            <span className="ml-1 font-sans text-base font-medium text-ink-faint dark:text-ink-dark-faint">
+              {t.programme.momentum.countSuffix(weeklyMomentum.totalCount)}
+            </span>
+          </p>
+          <div className="mt-3 flex justify-between gap-1.5">
+            {weeklyMomentum.dots.map((d) => (
+              <div key={d.dayNumber} className="flex flex-1 flex-col items-center gap-1.5">
+                <span className="text-[0.6rem] font-bold uppercase text-ink-faint dark:text-ink-dark-faint">
+                  {enrollment ? weekdayLabel(enrollment.started_at, d.dayNumber) : ""}
+                </span>
+                <span
+                  className={`flex h-8 w-8 items-center justify-center rounded-full border-2 ${
+                    d.status === "done"
+                      ? "border-junebud bg-junebud"
+                      : d.status === "today"
+                        ? "border-dashed border-primary"
+                        : d.status === "missed"
+                          ? "border-border dark:border-border-dark"
+                          : "border-border opacity-40 dark:border-border-dark"
+                  }`}
+                >
+                  {d.status === "done" && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 13l4.5 4.5L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-center text-xs text-ink-soft dark:text-ink-dark-soft">
+            {weeklyMomentum.completedCount === weeklyMomentum.totalCount
+              ? t.programme.momentum.footerComplete
+              : t.programme.momentum.footerInProgress}
+          </p>
+        </div>
       )}
 
       {content.isProfileReveal && (

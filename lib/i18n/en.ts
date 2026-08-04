@@ -188,6 +188,12 @@ export const en = {
         `${done} of ${total} checks done — finish the rest to unlock your full longevity profile.`,
       backToSummary: "← Back to my summary",
     },
+    momentum: {
+      title: "This week's momentum",
+      countSuffix: (total: number) => `of ${total} days`,
+      footerInProgress: "Do today's action to keep your week going.",
+      footerComplete: "Perfect week — every day counted.",
+    },
     testimonial: {
       heading: "Share your story",
       improvedMost: "What has improved the most?",

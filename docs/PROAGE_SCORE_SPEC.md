@@ -132,30 +132,54 @@ must never be absorbed into the score.
 
 ---
 
-## 3. ProAge Momentum Score (0–100, weekly, resets each week)
+## 3. ProAge Momentum (weekly completion count, resets each week)
 
 Self-reported behaviour only. Never blended into Capacity.
 
 **Scoped to whatever guided programme the user is enrolled in — the 21-Day
 Challenge today, and designed to generalize to future programmes (a 90-Day
 Transformation, or whatever comes next), not to the account as a whole.**
-The five components below (movement/strength/protein/sleep-target/connection
-days) are literally the Challenge's own daily check-ins; someone with no
-active programme enrollment has no Momentum to show, because those daily
-actions were never asked of them. The Longevity Dashboard (`PROAGE_DISPLAY_LOGIC.md`)
-reflects this directly — Momentum, and all Day 1/Days 2–20/Day 21 phase
-language, live only in the programme experience, not on the dashboard.
+Someone with no active programme enrollment has no Momentum to show,
+because these daily actions were never asked of them. The Longevity
+Dashboard (`PROAGE_DISPLAY_LOGIC.md`) reflects this directly — Momentum,
+and all Day 1/Days 2–20/Day 21 phase language, live only in the programme
+experience, not on the dashboard.
 
-| Component | Target | Points |
-|---|---|---|
-| Movement days | 6/7 | 30 |
-| Strength days | 4/7 | 25 |
-| Protein days | 5/7 | 25 |
-| Sleep-target nights | 5/7 | 10 |
-| Connection actions | 2/7 | 10 |
+### 3.1 What it measures, and why it's this simple
 
-Weekly reset matters: a cumulative 21-day figure punishes a bad Week 1
-permanently, which is exactly when dropout happens.
+Two earlier designs were tried and rejected before this one:
+
+1. A 5-category weighted score (Movement/Strength/Protein/Sleep/Connection,
+   each with its own weekly target and point value) — rejected because the
+   programme doesn't offer those categories evenly across weeks (Week 1 has
+   exactly one Movement day; Week 2 has three), so a fixed weekly target
+   like "6 of 7" didn't correspond to anything the programme actually asks
+   for that week.
+2. A separate daily 5-checkbox self-report, independent of that day's own
+   themed action — rejected because it duplicated the Act card's existing
+   "Done for today" checkbox and asked the same question twice in different
+   words, which is exactly the kind of friction that loses engagement in an
+   older audience.
+
+**What shipped instead: Momentum is the existing daily "Done for today"
+completion, tallied across the programme's own 7-day weeks — nothing else.**
+No new checkbox, no category breakdown, no points to explain. If the day's
+action is done, it counts; if it isn't, it doesn't. The target is always
+"7 for a full week" — simple and constant, not something that changes
+depending on which theme a given week happens to cover.
+
+This is still tied to real behaviour-change mechanics, not just simplified
+for its own sake: habit automaticity comes from *consistent repetition in a
+stable context*, not from which specific action is repeated (Lally et al.,
+2010, *Eur. J. Soc. Psychol.*) — a missed day doesn't reset the process, but
+frequency of repetition is what drives it. A plain day-count is a more
+faithful readout of that mechanism than a weighted, multi-category score
+would be, and it's something a senior can read in the time it takes to
+glance at a streak.
+
+Weekly reset matters for the same reason as before: a cumulative 21-day
+figure punishes a bad Week 1 permanently, which is exactly when dropout
+happens.
 
 ---
 

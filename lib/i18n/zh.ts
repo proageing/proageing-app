@@ -194,6 +194,12 @@ export const zh: Dictionary = {
         `已完成 ${done} / ${total} 项检测 — 完成其余检测即可解锁你的完整长寿档案。`,
       backToSummary: "← 返回我的总结",
     },
+    momentum: {
+      title: "本周动力",
+      countSuffix: (total: number) => `/ ${total} 天`,
+      footerInProgress: "完成今天的行动，延续这一周的势头。",
+      footerComplete: "完美的一周 — 每一天都做到了。",
+    },
     testimonial: {
       heading: "分享你的故事",
       improvedMost: "哪方面改善最明显？",
