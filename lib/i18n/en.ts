@@ -299,14 +299,14 @@ export const en = {
       start: "Start",
       stop: "Stop",
       secondsBalanced: "seconds balanced",
-      typicalRange: (lo: string, hi: string) =>
-        `Typical range for your age & sex: ${lo}–${hi}s (illustrative reference, Seino et al., 2014).`,
+      typicalRange: (lo: string, hi: string) => `Typical range for your age & sex: ${lo}–${hi}s (illustrative reference).`,
       doctorFlag: "⚠️ Worth mentioning to your doctor",
       doctorFlagBody:
-        "Holding a one-leg stance for less than 5 seconds has been linked to a significantly higher risk of injurious falls (Vellas et al., 1997). This is a signal worth following up on, not a diagnosis.",
+        "Holding a one-leg stance for less than 5 seconds has been linked to a significantly higher risk of injurious falls. This is a signal worth following up on, not a diagnosis.",
       nextStepsHeading: "✅ Suggested next steps",
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor and consider having someone nearby next time.",
+      sources: "Sources: Seino et al., 2014 (typical range) · Vellas et al., 1997 (fall-risk threshold).",
       result: {
         below: {
           label: "Below typical range for your age group",
@@ -365,12 +365,13 @@ export const en = {
       estimatedVo2: "estimated VO2 max (mL/kg/min)",
       maxHr: "Max HR (bpm)",
       restingHrShort: "Resting HR (bpm)",
-      estimateFor: (age: number, sex: string) => `Estimate for age ${age}, ${sex}. Max HR estimated via Tanaka, Monahan & Seals (2001). Categories from Cooper Institute / ACSM norms.`,
+      estimateFor: (age: number, sex: string) => `Estimate for age ${age}, ${sex}.`,
       sexMale: "male",
       sexFemale: "female",
       nextStepsHeading: "✅ Suggested next steps",
       disclaimer:
         "This is a formula-based estimate, not a lab measurement — individual accuracy varies, and it tends to underestimate VO2 max in fitter people. It's a screening tool, not a diagnosis. Always check with your doctor before starting a new exercise programme.",
+      sources: "Sources: Max HR formula — Tanaka, Monahan & Seals, 2001. Fitness categories — Cooper Institute / ACSM norms.",
       category: {
         poor: "Poor for your age & sex",
         fair: "Fair for your age & sex",
@@ -510,9 +511,9 @@ export const en = {
       awakeQuestion: "How often have you had trouble staying awake while driving, eating meals, or being social?",
       enthusiasmQuestion: "How much of a problem has it been to keep up enough enthusiasm to get things done?",
       problem: ["No problem", "Slight", "Somewhat", "A big problem"],
-      globalScore: "PSQI global score (0–21, lower is better)",
+      globalScore: "Global sleep score (0–21, lower is better)",
       cutoff: (efficiency: number) =>
-        `A score of 5 or below is associated with good sleep quality; above 5 is associated with poor sleep quality (Buysse et al., 1989). Your sleep efficiency: ${efficiency}%.`,
+        `A score of 5 or below is associated with good sleep quality; above 5 is associated with poor sleep quality. Your sleep efficiency: ${efficiency}%.`,
       behindScore: "What's behind your score",
       components: [
         "Sleep quality (your own rating)",
@@ -526,6 +527,7 @@ export const en = {
       nextStepsHeading: "✅ Suggested next steps",
       disclaimer:
         "This is a wellness screening tool based on a published research questionnaire, not a medical diagnosis. If sleep problems are affecting your daily life, it's worth discussing with your doctor.",
+      sources: "Sources: Pittsburgh Sleep Quality Index (PSQI); Buysse et al., 1989.",
       result: {
         good: {
           label: "Good sleep quality",
@@ -922,10 +924,10 @@ export const en = {
       countOnlyFull: "Count only full stands — all the way up, all the way back down.",
       seeResults: "See my results",
       standsIn30: "full stands in 30 seconds",
-      typicalRange: (lo: number, hi: number) =>
-        `Typical range for your group: ${lo}–${hi} stands (illustrative reference, Rikli & Jones Senior Fitness Test, 1999).`,
+      typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (illustrative reference).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
+      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999.",
       result: {
         below: {
           label: "Below typical range for your age group",

@@ -307,14 +307,13 @@ export const zh: Dictionary = {
       start: "开始",
       stop: "停止",
       secondsBalanced: "平衡秒数",
-      typicalRange: (lo: string, hi: string) =>
-        `同龄同性别的典型范围：${lo} 至 ${hi} 秒（参考数值，Seino 等人，2014年）。`,
+      typicalRange: (lo: string, hi: string) => `同龄同性别的典型范围：${lo} 至 ${hi} 秒（参考数值）。`,
       doctorFlag: "⚠️ 值得告知你的医生",
-      doctorFlagBody:
-        "单脚站立时间少于 5 秒，与显著更高的受伤性跌倒风险相关（Vellas 等人，1997年）。这是一个值得进一步追踪的信号，而非诊断结果。",
+      doctorFlagBody: "单脚站立时间少于 5 秒，与显著更高的受伤性跌倒风险相关。这是一个值得进一步追踪的信号，而非诊断结果。",
       nextStepsHeading: "✅ 建议的下一步",
       disclaimer:
         "这是一项教育性质的筛查检测，并非诊断结果。若你在测试过程中感到非常不稳，请告知医生，并考虑下次尝试时找人陪同在旁。",
+      sources: "资料来源：Seino 等人，2014年（典型范围）· Vellas 等人，1997年（跌倒风险阈值）。",
       result: {
         below: {
           label: "低于同龄组的典型范围",
@@ -366,12 +365,13 @@ export const zh: Dictionary = {
       estimatedVo2: "估算最大摄氧量（mL/kg/min）",
       maxHr: "最大心率（bpm）",
       restingHrShort: "静息心率（bpm）",
-      estimateFor: (age: number, sex: string) => `基于 ${age} 岁、${sex}的估算值。最大心率采用 Tanaka、Monahan 与 Seals（2001年）的估算公式。等级分类依据库珀研究所／ACSM 标准。`,
+      estimateFor: (age: number, sex: string) => `基于 ${age} 岁、${sex}的估算值。`,
       sexMale: "男性",
       sexFemale: "女性",
       nextStepsHeading: "✅ 建议的下一步",
       disclaimer:
         "这是一项基于公式的估算值，并非实验室测量数据——个体准确度会有所不同，且对体能较佳的人，往往会低估其最大摄氧量。这是一项筛查工具，并非诊断结果。在开始任何新的运动计划之前，请务必先咨询医生。",
+      sources: "资料来源：最大心率公式——Tanaka、Monahan 与 Seals，2001年。体能等级分类——库珀研究所／ACSM 标准。",
       category: {
         poor: "偏弱（同龄同性别中）",
         fair: "尚可（同龄同性别中）",
@@ -505,9 +505,8 @@ export const zh: Dictionary = {
       awakeQuestion: "你在开车、用餐或社交时，多久会难以保持清醒？",
       enthusiasmQuestion: "你在保持足够热情完成事情方面，问题有多大？",
       problem: ["没有问题", "轻微", "有点", "很大的问题"],
-      globalScore: "PSQI 总分（0–21 分，分数越低越好）",
-      cutoff: (efficiency: number) =>
-        `研究显示，5 分或以下代表睡眠质量良好；高于 5 分则代表睡眠质量较差（Buysse et al., 1989）。你的睡眠效率：${efficiency}%。`,
+      globalScore: "整体睡眠分数（0–21 分，分数越低越好）",
+      cutoff: (efficiency: number) => `研究显示，5 分或以下代表睡眠质量良好；高于 5 分则代表睡眠质量较差。你的睡眠效率：${efficiency}%。`,
       behindScore: "影响你得分的因素",
       components: [
         "睡眠质量（自我评分）",
@@ -521,6 +520,7 @@ export const zh: Dictionary = {
       nextStepsHeading: "✅ 建议的下一步",
       disclaimer:
         "这是一项基于已发表研究问卷的健康筛查工具，并非医学诊断。如果睡眠问题影响到你的日常生活，建议与医生讨论。",
+      sources: "资料来源：匹兹堡睡眠质量指数（PSQI）；Buysse 等人，1989年。",
       result: {
         good: {
           label: "睡眠质量良好",
@@ -905,9 +905,9 @@ export const zh: Dictionary = {
       countOnlyFull: "只计算完整的站立——完全站起，再完全坐下。",
       seeResults: "查看我的结果",
       standsIn30: "30 秒内完整站立次数",
-      typicalRange: (lo: number, hi: number) =>
-        `你所在组别的典型范围：${lo}–${hi} 次（示例参考，Rikli & Jones Senior Fitness Test，1999年）。`,
+      typicalRange: (lo: number, hi: number) => `你所在组别的典型范围：${lo}–${hi} 次（示例参考）。`,
       disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
+      sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年。",
       result: {
         below: {
           label: "低于同年龄组的典型范围",

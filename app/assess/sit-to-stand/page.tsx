@@ -459,6 +459,9 @@ function SitToStandPageInner() {
           <p className="mt-4 text-xs text-ink-faint dark:text-ink-dark-faint">
             {c.disclaimer}
           </p>
+          <p className="mt-2 text-xs text-ink-faint dark:text-ink-dark-faint">
+            {c.sources}
+          </p>
 
           <button
             onClick={handleSave}
