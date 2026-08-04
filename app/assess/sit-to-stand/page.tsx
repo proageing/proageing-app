@@ -388,7 +388,7 @@ function SitToStandPageInner() {
               if (intervalRef.current) clearInterval(intervalRef.current);
               setScreen("welcome");
             }}
-            className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-full border-4 border-red-700 bg-red-50 text-center text-lg font-bold leading-tight text-red-700 transition hover:bg-red-100 dark:border-red-500 dark:bg-red-950/40 dark:text-red-400"
+            className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-full border-4 border-coral bg-coral-tint text-center text-lg font-bold leading-tight text-coral transition hover:brightness-105 dark:border-coral-dark dark:bg-coral-tint-dark dark:text-coral-dark"
           >
             {c.stopRest}
           </button>

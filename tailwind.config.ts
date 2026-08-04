@@ -45,6 +45,15 @@ const config: Config = {
           dark: "#a6d143",
           tint: "#eff7dd",
         },
+        // Stop/danger circle on timed checks (Sit-to-Stand, Balance) —
+        // exact match to proageing.org's own --coral / --coral-tint, so the
+        // in-app button is pixel-identical to the site's, not a Tailwind red.
+        coral: {
+          DEFAULT: "#b23e30",
+          dark: "#e2776a",
+          tint: "#f7e2de",
+          "tint-dark": "#33201d",
+        },
         // Per-pillar accents, matching proageing.org's assessment pages 1:1.
         // "dark" uses each page's own "-deep" shade where one exists;
         // purpose and sleep don't define one on the source pages (their
