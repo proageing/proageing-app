@@ -190,8 +190,6 @@ export const zh: Dictionary = {
       saveDay: (day: number) => `保存第 ${day} 天的进度`,
       profileReveal: "ProAgeing 七大步骤已全部检测完成 — 在你的",
       profileRevealLink: "首页",
-      profileRevealPartial: (done: number, total: number) =>
-        `已完成 ${done} / ${total} 项检测 — 完成其余检测即可解锁你的完整长寿档案。`,
       backToSummary: "← 返回我的总结",
     },
     momentum: {

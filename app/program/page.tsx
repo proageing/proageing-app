@@ -590,20 +590,14 @@ function ProgramPageInner() {
         </div>
       )}
 
-      {content.isProfileReveal && (
+      {content.isProfileReveal && completedChecksCount === ASSESSMENT_TYPES.length && (
         <div className="mt-4 rounded-xl border border-primary bg-primary-light p-4 dark:bg-primary-light-dark">
           <p className="text-sm font-semibold text-primary-dark">
-            {completedChecksCount === ASSESSMENT_TYPES.length ? (
-              <>
-                {t.programme.day.profileReveal}{" "}
-                <Link href="/dashboard/readings" className="underline">
-                  {t.programme.day.profileRevealLink}
-                </Link>
-                .
-              </>
-            ) : (
-              t.programme.day.profileRevealPartial(completedChecksCount, ASSESSMENT_TYPES.length)
-            )}
+            {t.programme.day.profileReveal}{" "}
+            <Link href="/dashboard/readings" className="underline">
+              {t.programme.day.profileRevealLink}
+            </Link>
+            .
           </p>
         </div>
       )}
