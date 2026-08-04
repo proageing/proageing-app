@@ -569,10 +569,10 @@ export const zh: Dictionary = {
       frequency: ["没有", "一位", "两位", "三到四位", "五到八位", "九位或以上"],
       loneliness: ["几乎从不", "有时候", "经常"],
       seeResults: "查看我的结果",
-      scoreCaption: "孤独感分数（UCLA-3）· 分数越低越不孤独",
+      scoreCaption: "孤独感分数 · 分数越低越不孤独",
       bands: (total: number) =>
         `分数为 ${total} 分（满分 9 分，范围 3 至 9 分）。在本检测所依据的新加坡样本中：3 分＝不孤独，4 至 5 分＝略感孤独，6 至 9 分＝孤独。`,
-      networkHeading: "你的社交网络（LSNS-6）",
+      networkHeading: "你的社交网络",
       familyNetwork: (n: number) => `家庭网络（${n}/15）`,
       friendsNetwork: (n: number) => `朋友网络（${n}/15）`,
       isolated: "孤立",
@@ -580,6 +580,7 @@ export const zh: Dictionary = {
       nextStepsHeading: "✅ 建议的下一步",
       disclaimer:
         "这是一项基于研究的筛查工具，并非诊断结果。若持续的孤独感正在影响你的身心状态，请与医生或辅导员谈谈。",
+      sources: "资料来源：Hughes 等人，2004年（UCLA-3）· Lubben 等人，2006年（LSNS-6）。",
       result: {
         good: {
           label: "不孤独",

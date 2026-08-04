@@ -574,10 +574,10 @@ export const en = {
       frequency: ["None", "One", "Two", "Three or four", "Five to eight", "Nine or more"],
       loneliness: ["Hardly ever", "Some of the time", "Often"],
       seeResults: "See my results",
-      scoreCaption: "loneliness score (UCLA-3) · lower means less lonely",
+      scoreCaption: "loneliness score · lower means less lonely",
       bands: (total: number) =>
         `Score ${total} of 9 (range 3–9). In the Singapore sample this check is based on: 3 = not lonely, 4–5 = somewhat lonely, 6–9 = lonely.`,
-      networkHeading: "Your social network (LSNS-6)",
+      networkHeading: "Your social network",
       familyNetwork: (n: number) => `Family network (${n}/15)`,
       friendsNetwork: (n: number) => `Friend network (${n}/15)`,
       isolated: "Isolated",
@@ -585,6 +585,7 @@ export const en = {
       nextStepsHeading: "✅ Suggested next steps",
       disclaimer:
         "This is a research-based screening tool, not a diagnosis. If persistent loneliness is affecting your wellbeing, please talk to your doctor or a counsellor.",
+      sources: "Sources: Hughes et al., 2004 (UCLA-3) · Lubben et al., 2006 (LSNS-6).",
       result: {
         good: {
           label: "Not lonely",
