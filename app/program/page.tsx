@@ -43,7 +43,10 @@ const PROGRAM_LENGTH_DAYS = 21;
 
 // Gates the 21-Day Challenge behind a purchase (docs/PLAN.md §5). Was
 // temporarily disabled for preview (2026-07-29); re-enabled once the
-// no-access screen became a real showcase worth gating behind.
+// no-access screen became a real showcase worth gating behind. Only
+// enforced when arriving via the home dashboard's Challenge card
+// (?gate=1) — the bottom-nav Programme tab bypasses it for now so the
+// built programme can be reviewed directly (Isaiah, 2026-08-04).
 const PAYWALL_ENABLED = true;
 
 // The linked assessment(s) for a day, so the Act card's Done checkbox can
@@ -148,7 +151,7 @@ function ProgramPageInner() {
       // one-time purchases (docs/PLAN.md §5) — either grants access to the
       // programme content that exists today, which is the 21-day track
       // (lib/program21.ts). 90-day-specific content hasn't been built yet.
-      if (PAYWALL_ENABLED) {
+      if (PAYWALL_ENABLED && searchParams.get("gate") === "1") {
         const subscription = await getActiveSubscription(user.id);
         if (!subscription || (subscription.plan !== "21-day" && subscription.plan !== "90-day")) {
           setLoadState("no-access");

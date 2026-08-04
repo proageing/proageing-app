@@ -52,7 +52,7 @@ export function HomeCards({ completedCount, totalCount }: { completedCount: numb
       </Link>
 
       <Link
-        href="/program"
+        href="/program?gate=1"
         className="flex flex-col justify-between rounded-2xl bg-ink p-4 text-white shadow-sm transition hover:brightness-110"
         style={{ minHeight: "128px" }}
       >
