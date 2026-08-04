@@ -54,7 +54,7 @@ export function TabBar() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white dark:border-border-dark dark:bg-white/5"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white dark:border-border-dark dark:bg-paper-dark"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto flex max-w-2xl">

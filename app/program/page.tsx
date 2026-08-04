@@ -499,7 +499,7 @@ function ProgramPageInner() {
             onClick={() => goToDay(viewedDay - 1)}
             disabled={viewedDay <= 1 || dayLoading}
             aria-label={t.programme.day.previousDay}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary-dark/40 bg-white/70 text-primary-dark shadow-sm transition hover:border-primary hover:bg-white disabled:opacity-30 disabled:hover:border-primary-dark/40 dark:border-white/20 dark:bg-black/30 dark:hover:bg-black/45"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6" />
@@ -521,7 +521,7 @@ function ProgramPageInner() {
             onClick={() => goToDay(viewedDay + 1)}
             disabled={viewedDay >= currentDay || dayLoading}
             aria-label={t.programme.day.nextDay}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition hover:border-primary disabled:opacity-30 disabled:hover:border-primary/30"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary-dark/40 bg-white/70 text-primary-dark shadow-sm transition hover:border-primary hover:bg-white disabled:opacity-30 disabled:hover:border-primary-dark/40 dark:border-white/20 dark:bg-black/30 dark:hover:bg-black/45"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6" />
