@@ -797,7 +797,7 @@ export const en = {
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",
-      intro1Pre: "This check is based on the Ikigai-9 (Imai, Osada & Nishi, 2012), a validated Japanese scale measuring ",
+      intro1Pre: "This check is based on the Ikigai-9 (Imai, Osada & Nishimura, 2012), a validated Japanese scale measuring ",
       intro1Em: "ikigai",
       intro1Post:
         " — roughly, \u201Ca reason for being\u201D — across three themes: how you feel about your life, your attitude towards the future, and the sense that your existence matters.",

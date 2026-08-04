@@ -1,6 +1,6 @@
 // Ported from proageing-site/purpose-in-life.html — the Ikigai-9 (Imai,
-// Osada & Nishi, 2012), a validated Japanese scale across three 3-item
-// subscales. No reverse-scored items.
+// Osada & Nishimura, 2012), a validated Japanese scale across three
+// 3-item subscales. No reverse-scored items.
 
 export const IKIGAI_QUESTIONS = [
   { key: "q1", text: "I often feel that I am happy.", sub: "feelings" },

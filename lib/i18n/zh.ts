@@ -788,7 +788,7 @@ export const zh: Dictionary = {
     purpose: {
       eyebrow: "人生目标感检测 · 约 3 分钟",
       title: "人生目标感检测",
-      intro1Pre: "本检测基于 Ikigai-9 量表（Imai、Osada 与 Nishi，2012年），一项经验证的日本量表，用于测量 ",
+      intro1Pre: "本检测基于 Ikigai-9 量表（Imai、Osada 与 Nishimura，2012年），一项经验证的日本量表，用于测量 ",
       intro1Em: "ikigai",
       intro1Post:
         "——大致可理解为「存在的意义」——涵盖三大主题：你对生活的感受、你对未来的态度，以及你感受到自身存在的意义。",
