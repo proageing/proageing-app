@@ -4,6 +4,7 @@ import { contentForDay } from "@/lib/program21";
 import { formatEntryData } from "@/lib/formatResult";
 import { readingsTierFor, type ReadingsTier } from "@/lib/assessments/readingsTier";
 import type { AssessmentType } from "@/lib/importHistory";
+import type { Dictionary } from "@/lib/i18n/en";
 
 // Which direction a check moved between the user's first ever result and
 // their day-21 retake. Deliberately derived from the interpreted tier, not
@@ -75,7 +76,8 @@ export function movementFor(
   type: AssessmentType,
   title: string,
   rows: { entry_data: Record<string, unknown>; created_at: string }[],
-  startMs: number
+  startMs: number,
+  t: Dictionary
 ): CheckMovement | null {
   if (rows.length === 0) return null;
 
@@ -96,7 +98,7 @@ export function movementFor(
       type,
       title,
       firstLabel: null,
-      latestLabel: formatEntryData(type, rows[rows.length - 1].entry_data),
+      latestLabel: formatEntryData(type, rows[rows.length - 1].entry_data, t),
       direction: "not-retaken",
     };
   }
@@ -109,8 +111,8 @@ export function movementFor(
   return {
     type,
     title,
-    firstLabel: isFirstEver ? null : formatEntryData(type, baseline.entry_data),
-    latestLabel: formatEntryData(type, retake.entry_data),
+    firstLabel: isFirstEver ? null : formatEntryData(type, baseline.entry_data, t),
+    latestLabel: formatEntryData(type, retake.entry_data, t),
     direction: isFirstEver
       ? "first-time"
       : directionFor(readingsTierFor(type, baseline.entry_data), readingsTierFor(type, retake.entry_data)),
@@ -121,7 +123,8 @@ export async function getCompletionSummary(
   userId: string,
   enrollmentId: string,
   programLengthDays: number,
-  startedAt: string
+  startedAt: string,
+  t: Dictionary
 ): Promise<CompletionSummary> {
   const [progressRes, resultsRes] = await Promise.all([
     supabase
@@ -157,7 +160,7 @@ export async function getCompletionSummary(
   const movements: CheckMovement[] = [];
   for (const type of retakeTypes(programLengthDays)) {
     const rows = byType.get(type);
-    const movement = movementFor(type, titleByType.get(type) ?? type, rows ?? [], startMs);
+    const movement = movementFor(type, titleByType.get(type) ?? type, rows ?? [], startMs, t);
     if (movement) movements.push(movement);
   }
 

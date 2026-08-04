@@ -92,15 +92,15 @@ export const zh: Dictionary = {
   readings: {
     title: "你的长寿检测记录",
     blurb: "你做过的每一项检测，以及各项的最新结果。",
-    yourChecks: "你的 9 项检测",
     notStarted: "尚未开始",
     step: (n: number) => `第 ${n} 步`,
+    areasFlagged: (n: number) => `${n} 项已标记`,
+    rhrSuffix: "静息心率",
     legend: {
       typical: "正常范围",
       worthALook: "值得留意",
       seeDoctor: "请咨询医生",
     },
-    missingHistory: "找不到 proageing.org 上的记录？",
   },
 
   account: {

@@ -84,15 +84,15 @@ export const en = {
   readings: {
     title: "Your Longevity Readings",
     blurb: "Every check you've taken, and your latest result for each.",
-    yourChecks: "Your 9 checks",
     notStarted: "Not started",
     step: (n: number) => `Step ${n}`,
+    areasFlagged: (n: number) => `${n} area${n === 1 ? "" : "s"} flagged`,
+    rhrSuffix: "RHR",
     legend: {
       typical: "Typical",
       worthALook: "Worth a look",
       seeDoctor: "Discuss with your doctor",
     },
-    missingHistory: "Missing history from proageing.org?",
   },
 
   account: {

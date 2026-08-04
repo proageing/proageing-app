@@ -134,7 +134,7 @@ export default function TrendsPage() {
                     >
                       <span>{formatDate(row.created_at)}</span>
                       <span className="font-medium text-ink dark:text-ink-dark">
-                        {formatEntryData(type, row.entry_data)}
+                        {formatEntryData(type, row.entry_data, t)}
                         {i === 0 && history.length > 1 && (
                           <span className="ml-2 text-xs font-normal text-ink-faint dark:text-ink-dark-faint">latest</span>
                         )}

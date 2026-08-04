@@ -94,7 +94,9 @@ export default function ReadingsPage() {
         <p className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">{t.readings.title}</p>
       <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.readings.blurb}</p>
 
-      <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">{t.readings.yourChecks}</p>
+      <p className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-faint dark:text-ink-dark-faint">
+        {t.dashboard.cards.checksProgress(completedCount, ASSESSMENT_TYPES.length)}
+      </p>
       <div className="mt-2 h-2 w-full rounded-full bg-border/60 dark:bg-border-dark">
         <div
           className="h-2 rounded-full bg-primary transition-all"
@@ -147,7 +149,7 @@ export default function ReadingsPage() {
               </div>
               <div>
                 <div className={`mt-2 text-lg font-bold ${row ? "text-ink dark:text-ink-dark" : "text-primary-dark"}`}>
-                  {row ? formatEntryData(type, row.entry_data) : t.readings.notStarted}
+                  {row ? formatEntryData(type, row.entry_data, t) : t.readings.notStarted}
                 </div>
                 {insight && <div className={`mt-0.5 text-xs font-bold ${TIER_COLOR[tier ?? "unrated"]}`}>{insight}</div>}
               </div>
@@ -155,10 +157,6 @@ export default function ReadingsPage() {
           );
         })}
       </div>
-
-        <Link href="/import" className="mt-6 inline-block text-sm text-primary-dark underline">
-          {t.readings.missingHistory}
-        </Link>
       </div>
 
       <TabBar />

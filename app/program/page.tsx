@@ -150,7 +150,7 @@ function ProgramPageInner() {
       // user back onto the last day with nothing left to do.
       if (active.status === "completed") {
         setViewedDay(active.program_length_days);
-        setSummary(await getCompletionSummary(user.id, active.id, active.program_length_days, active.started_at));
+        setSummary(await getCompletionSummary(user.id, active.id, active.program_length_days, active.started_at, t));
         setLoadState("completed");
         return;
       }
@@ -254,7 +254,7 @@ function ProgramPageInner() {
       const { error: completeError } = await completeEnrollment(enrollment.id);
       if (!completeError) {
         setEnrollment({ ...enrollment, status: "completed" });
-        setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at));
+        setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at, t));
         setSaving(false);
         setLoadState("completed");
         return;
@@ -278,7 +278,7 @@ function ProgramPageInner() {
 
   async function backToSummary() {
     if (!enrollment || !userId) return;
-    setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at));
+    setSummary(await getCompletionSummary(userId, enrollment.id, enrollment.program_length_days, enrollment.started_at, t));
     setLoadState("completed");
   }
 
