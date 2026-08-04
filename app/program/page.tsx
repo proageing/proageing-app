@@ -9,6 +9,7 @@ import {
   completeEnrollment,
   computeCurrentDay,
   computeHabitStreak,
+  countCompletedAssessments,
   getDayProgress,
   getLatestEnrollment,
   hasCompletedAssessments,
@@ -18,6 +19,7 @@ import {
 } from "@/lib/program";
 import { getCompletionSummary, type CompletionSummary, type MovementDirection } from "@/lib/programCompletion";
 import { contentForDay } from "@/lib/program21";
+import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { getActiveSubscription } from "@/lib/subscription";
 import {
   emptyTestimonial,
@@ -110,6 +112,7 @@ function ProgramPageInner() {
   const [justSaved, setJustSaved] = useState(false);
   const [starting, setStarting] = useState(false);
   const [summary, setSummary] = useState<CompletionSummary | null>(null);
+  const [completedChecksCount, setCompletedChecksCount] = useState(0);
   const { locale, t } = useLocale();
 
   useEffect(() => {
@@ -171,6 +174,7 @@ function ProgramPageInner() {
       } else {
         setActionDone(await hasCompletedAssessments(user.id, assessmentTypesForDay(day)));
       }
+      setCompletedChecksCount(await countCompletedAssessments(user.id, ASSESSMENT_TYPES.map((a) => a.type)));
       if (progress) {
         setLearned(progress.video_watched);
         setReflection(progress.checkin_note ?? "");
@@ -199,6 +203,7 @@ function ProgramPageInner() {
     } else {
       setActionDone(await hasCompletedAssessments(userId, assessmentTypesForDay(day)));
     }
+    setCompletedChecksCount(await countCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
     setReflection(progress?.checkin_note ?? "");
     if (contentForDay(day).isClose) {
       setTestimonial((await getTestimonial(enrollment.id, day)) ?? emptyTestimonial());
@@ -527,11 +532,17 @@ function ProgramPageInner() {
       {content.isProfileReveal && (
         <div className="mt-4 rounded-xl border border-primary bg-primary-light p-4 dark:bg-primary-light-dark">
           <p className="text-sm font-semibold text-primary-dark">
-            {t.programme.day.profileReveal}{" "}
-            <Link href="/dashboard" className="underline">
-              {t.programme.day.profileRevealLink}
-            </Link>
-            .
+            {completedChecksCount === ASSESSMENT_TYPES.length ? (
+              <>
+                {t.programme.day.profileReveal}{" "}
+                <Link href="/dashboard/readings" className="underline">
+                  {t.programme.day.profileRevealLink}
+                </Link>
+                .
+              </>
+            ) : (
+              t.programme.day.profileRevealPartial(completedChecksCount, ASSESSMENT_TYPES.length)
+            )}
           </p>
         </div>
       )}

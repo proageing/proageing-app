@@ -90,7 +90,7 @@ export const zh: Dictionary = {
   },
 
   readings: {
-    title: "你的长寿检测记录",
+    title: "你的长寿档案",
     blurb: "你做过的每一项检测，以及各项的最新结果。",
     notStarted: "尚未开始",
     step: (n: number) => `第 ${n} 步`,
@@ -191,6 +191,8 @@ export const zh: Dictionary = {
       saveDay: (day: number) => `保存第 ${day} 天的进度`,
       profileReveal: "ProAgeing 七大步骤已全部检测完成 — 在你的",
       profileRevealLink: "首页",
+      profileRevealPartial: (done: number, total: number) =>
+        `已完成 ${done} / ${total} 项检测 — 完成其余检测即可解锁你的完整长寿档案。`,
       backToSummary: "← 返回我的总结",
     },
     testimonial: {

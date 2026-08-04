@@ -82,7 +82,7 @@ export const en = {
   },
 
   readings: {
-    title: "Your Longevity Readings",
+    title: "Your Longevity Profile",
     blurb: "Every check you've taken, and your latest result for each.",
     notStarted: "Not started",
     step: (n: number) => `Step ${n}`,
@@ -185,6 +185,8 @@ export const en = {
       saveDay: (day: number) => `Save Day ${day}'s progress`,
       profileReveal: "All 7 ProAgeing Steps checked — see your full Healthy Longevity Profile on your",
       profileRevealLink: "dashboard",
+      profileRevealPartial: (done: number, total: number) =>
+        `${done} of ${total} checks done — finish the rest to unlock your full longevity profile.`,
       backToSummary: "← Back to my summary",
     },
     testimonial: {

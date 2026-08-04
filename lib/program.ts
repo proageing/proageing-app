@@ -152,6 +152,17 @@ export async function hasCompletedAssessments(userId: string, types: string[]): 
   return types.every((t) => completedTypes.has(t));
 }
 
+// How many of the given assessment types have at least one saved result
+// for this user — used by the Day-7 profile-reveal banner to show real
+// progress instead of assuming the day number means every check was taken.
+export async function countCompletedAssessments(userId: string, types: string[]): Promise<number> {
+  if (types.length === 0) return 0;
+  const { data, error } = await supabase.from("assessment_results").select("assessment_type").eq("user_id", userId).in("assessment_type", types);
+
+  if (error || !data) return 0;
+  return new Set(data.map((row) => row.assessment_type)).size;
+}
+
 // Consecutive days of habit_completed=true, walking backward from
 // (currentDay - 1) plus today if already completed. A simple, honest
 // streak definition — no partial-day or grace-period rules yet.
