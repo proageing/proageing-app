@@ -44,6 +44,7 @@ export const SEVEN_STEPS_ZH: SevenStep[] = [
     title: "坚持日常运动",
     tagline: "经常活动，而非只求强度",
     photo: "/steps/step-3.jpg",
+    photoPosition: "top",
     why: "你的身体，本来就是要一整天都动的。每天动一动，心脏、肺、大脑、关节和情绪都会跟着受益。",
     science:
       "研究显示，有规律走路、做中等强度活动的人，心血管疾病、糖尿病、抑郁症与认知衰退的风险都比较低。就算只是把长时间的久坐打断一下，健康指标也会跟着改善。",

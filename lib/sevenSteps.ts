@@ -11,6 +11,11 @@ export interface SevenStep {
   title: string;
   tagline: string;
   photo: string;
+  // CSS object-position for the home card's 16:9 crop (the step-detail
+  // page shows the photo at its native aspect, uncropped). Only needed
+  // when the subject sits close to the top of the frame, so a centered
+  // crop would clip heads — defaults to center via the ?? fallback.
+  photoPosition?: string;
   why: string;
   science: string;
   // Optional: the site dropped this list from Step 2's layout, so it's
@@ -64,6 +69,7 @@ export const SEVEN_STEPS: SevenStep[] = [
     title: "Invest in Daily Movement",
     tagline: "Intensity matters",
     photo: "/steps/step-3.jpg",
+    photoPosition: "top",
     why: "Physical exercise is the one thing that will yield health benefits that will sustain your function and well-being throughout life. Your body was designed for movement throughout the day — and raising the intensity is what pushes your fitness and improves your health.",
     science:
       "Brisk walking and other moderate intensity activities are associated with lowering the risk of health conditions that plague our longevity namely cardiovascular disease, diabetes, dementia, depression and cancer.",

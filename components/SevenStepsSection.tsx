@@ -24,7 +24,13 @@ export function SevenStepsSection() {
             className="overflow-hidden rounded-[14px] border-[1.5px] border-border bg-white shadow-sm transition hover:border-primary dark:border-border-dark dark:bg-white/5"
           >
             <div className="relative aspect-[16/9] w-full">
-              <Image src={step.photo} alt="" fill className="object-cover" />
+              <Image
+                src={step.photo}
+                alt=""
+                fill
+                className="object-cover"
+                style={{ objectPosition: step.photoPosition ?? "center" }}
+              />
             </div>
             <div className="p-4">
               <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">
