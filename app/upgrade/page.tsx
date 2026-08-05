@@ -102,6 +102,24 @@ export default function UpgradePage() {
       )}
 
       <div className="mt-6 flex flex-col gap-4">
+        <div className="rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
+          <p className="text-xs font-bold uppercase tracking-wide text-cognitive dark:text-junebud">{t.upgrade.free.included}</p>
+          <h2 className="mt-1 font-serif text-lg font-semibold text-ink dark:text-ink-dark">{t.upgrade.free.title}</h2>
+          <p className="mt-1 text-sm text-ink-soft dark:text-ink-dark-soft">{t.upgrade.free.priceLabel}</p>
+          <ul className="mt-3 flex flex-col gap-1.5">
+            {t.upgrade.free.features.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
+                <span className="mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-junebud">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 13l4.5 4.5L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {PLANS.map((plan) => {
           const highlighted = plan.id === requestedPlan && !plan.comingSoon;
           return (

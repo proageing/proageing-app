@@ -111,8 +111,13 @@ export const en = {
 
   upgrade: {
     title: "Plans & pricing",
-    blurb:
-      "Your 9 free assessment checks are always free, and your account keeps a free history of every check you take over time. These are the guided programmes that turn your results into a daily plan.",
+    blurb: "Every account includes the free plan below. Add a guided programme if you want a daily plan built from your results.",
+    free: {
+      title: "Free",
+      priceLabel: "Forever",
+      included: "Included with every account",
+      features: ["All 9 longevity checks", "Your results & trend history", "The 7 ProAgeing Steps library"],
+    },
     currentlyOn: (plan: string) => `You're currently on ${plan}.`,
     notOpenYet: (plan: string) => `The ${plan} isn't open yet — here's what's available today.`,
     yourSelection: "Your selection",

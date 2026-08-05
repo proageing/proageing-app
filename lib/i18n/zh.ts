@@ -119,8 +119,13 @@ export const zh: Dictionary = {
 
   upgrade: {
     title: "方案与价格",
-    blurb:
-      "9 项检测始终免费，你的账户也会免费保存每一次检测的历史记录。以下是把检测结果转化为每日计划的引导式方案。",
+    blurb: "每个账户都包含以下免费方案。如果想要根据检测结果生成每日计划，可以加购引导式方案。",
+    free: {
+      title: "免费方案",
+      priceLabel: "永久免费",
+      included: "每个账户都已包含",
+      features: ["全部 9 项长寿检测", "你的检测结果与趋势记录", "7 个 ProAgeing 步骤资料库"],
+    },
     currentlyOn: (plan: string) => `你目前使用的是${plan}。`,
     notOpenYet: (plan: string) => `${plan}尚未开放 — 以下是目前可选的方案。`,
     yourSelection: "你的选择",
