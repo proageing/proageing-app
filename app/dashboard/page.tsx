@@ -41,7 +41,8 @@ export default function DashboardPage() {
         return;
       }
 
-      setGreetingName(greetingNameFromEmail(user.email));
+      const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+      setGreetingName(profile?.full_name || greetingNameFromEmail(user.email));
 
       const { data, error } = await supabase
         .from("assessment_results")
