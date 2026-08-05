@@ -85,9 +85,6 @@ export default function UpgradePage() {
         <h1 className="mt-3 font-serif text-2xl font-semibold text-ink dark:text-ink-dark">
           {t.upgrade.title}
         </h1>
-        <p className="mt-2 text-ink-soft dark:text-ink-dark-soft">
-          {t.upgrade.blurb}
-        </p>
 
       {active && (
         <p className="mt-6 rounded-xl border border-primary bg-primary-light px-4 py-3 text-sm font-semibold text-primary-dark dark:bg-primary-light-dark">

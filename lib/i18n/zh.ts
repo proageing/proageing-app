@@ -119,7 +119,6 @@ export const zh: Dictionary = {
 
   upgrade: {
     title: "方案与价格",
-    blurb: "每个账户都包含以下免费方案。如果想要根据检测结果生成每日计划，可以加购引导式方案。",
     free: {
       title: "免费方案",
       priceLabel: "永久免费",

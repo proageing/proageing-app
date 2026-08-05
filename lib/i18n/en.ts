@@ -111,7 +111,6 @@ export const en = {
 
   upgrade: {
     title: "Plans & pricing",
-    blurb: "Every account includes the free plan below. Add a guided programme if you want a daily plan built from your results.",
     free: {
       title: "Free",
       priceLabel: "Forever",
