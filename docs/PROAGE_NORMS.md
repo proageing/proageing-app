@@ -282,31 +282,33 @@ Nothing here is inferred. Where the code doesn't state a value, it says
 
 **Source files:** `lib/assessments/familyHistory.ts`, `lib/i18n/en.ts` (`assess.familyHistory`)
 
-**This check does not produce a single score.** It produces one categorical flag per category (`cvd`, `cancer`, `neuro`, `metabolic`), each independently `none` / `present` / `elevated`, plus a summary count of how many of the 4 categories are flagged and how many are early-onset (`elevated`).
+**This check does not produce a single score.** It produces one categorical flag per category (`cvd`, `cancer`, `neuro`, `metabolic`), each independently `none` / `present` / `elevated`, plus a summary count of how many of the 4 categories are flagged and how many are `elevated`.
 
-1. **Raw measure:** Per category — whether a first-degree relative was diagnosed (`has: boolean`), and at what age (`age: number | null`), plus cancer type (`breast | colorectal | ovarian | other`) and the respondent's own sex (used only for the CVD threshold).
+1. **Raw measure:** Per category — whether a first-degree relative was diagnosed (`has: boolean`), and at what age (`age: number | null`), plus the respondent's own sex (used only for the CVD threshold). Cancer additionally captures cancer type (`breast | colorectal | ovarian | other`), how many relatives were diagnosed (`relativeCount: "one" | "twoOrMore"`), and — only asked when `relativeCount` is `"twoOrMore"` — whether they're on the same side of the family (`sameSide: boolean`).
 
 2. **Cut-off table (as coded, one threshold per category):**
 
    | Category | Threshold for `elevated` | Note |
    |---|---|---|
    | Cardiovascular disease | Age < 50 (male) / Age < 60 (female) | Defaults to the stricter (male, <50) threshold if sex is unanswered |
-   | Cancer — colorectal | Age ≤ 60 | Screening start age if elevated: `min(40, age − 10)`, interval 5 years; if not elevated: start 50, interval 10 years |
-   | Cancer — breast | Age ≤ 60 | |
-   | Cancer — ovarian/other | Age ≤ 60 | |
+   | Cancer — colorectal | Age ≤ 60, **or** 2+ relatives with the same cancer on one side of the family | Screening start age if age-elevated: `min(40, age − 10)`, interval 5 years; if not elevated: start 50, interval 10 years. The same-side cluster route bypasses this age-based schedule entirely — see cluster note below |
+   | Cancer — breast | Age ≤ 60, **or** 2+ relatives with the same cancer on one side of the family | |
+   | Cancer — ovarian/other | Age ≤ 60, **or** 2+ relatives with the same cancer on one side of the family | |
    | Neurological (Alzheimer's/dementia/Parkinson's) | Age < 65 | |
    | Metabolic (diabetes/obesity/metabolic syndrome) | Age < 35 | Note: this is the only category where the non-`elevated` positive case is still `present`, not `none` — *any* family history of diabetes is flagged as `present` regardless of age, per MOH guidance treating it as a risk factor "regardless of the age they were diagnosed" |
 
    No age/sex split beyond the CVD category's own male/female threshold — age/sex are not used as a demographic lens on the results the way they are in Sit-to-Stand, Balance, or VO2max; age here is compared directly against a fixed per-category number, and sex only selects which fixed CVD number to use.
 
+   **Same-side cluster (cancer only, added 2026-08-05):** 2 or more relatives with the *same* cancer, both on the *same side* of the family (both maternal or both paternal), is treated as `elevated` independent of age at diagnosis — this is a separate, age-independent trigger, not a modifier of the age threshold above. It only fires when age alone doesn't already qualify (`computeCancer`'s `cluster` check is gated on `!early`), so the existing per-type early/late copy always stays accurate to what it claims. One relative on each side does **not** count as a cluster — CDC, NCCN, and Singapore's NCCS all frame their genetic-counselling referral criteria around same-side clustering specifically, because these cancers are common enough to appear in unrelated relatives by chance, and a single-gene mutation (BRCA1/2, Lynch/MMR) is inherited from one parent, not both. This distinction did not exist before 2026-08-05 — the check only ever asked "has a first-degree relative been diagnosed", with no side-of-family or relative-count captured, so a real cluster and two unrelated diagnoses looked identical on paper. Cardiovascular, neurological, and metabolic disease do **not** get an equivalent same-side field: they're polygenic/multifactorial conditions, and their own source guidelines (NCEP ATP III for CVD; standard T2D and Alzheimer's risk literature) score by relative count alone, regardless of side — see the sources doc for the research supporting this (maternal transmission shows a measurably stronger association for both diabetes and Alzheimer's, but neither has been formalized into a same-side screening rule the way hereditary cancer syndromes have).
+
 3. **Result labels (verbatim, `en.ts` `assess.familyHistory.flags`):**
    - `none` → "No flag"
    - `present` → "Family history"
-   - `elevated` → "Elevated — early onset"
+   - `elevated` → "Elevated" (changed from "Elevated — early onset" on 2026-08-05 — the label can no longer claim age, since the cancer category's same-side cluster route reaches `elevated` without an early-onset age)
 
-4. **Scoring direction:** Not applicable — categorical flags, not a directional score. `none` is the favourable state; `present`/`elevated` are risk flags, with `elevated` specifically meaning early-onset.
+4. **Scoring direction:** Not applicable — categorical flags, not a directional score. `none` is the favourable state; `present`/`elevated` are risk flags.
 
-5. **Citation string:** **No academic citation string exists for this check** — by design. Each category result carries a `source` tag instead of an author/year citation: `"🇸🇬 Singapore MOH"` (CVD, colorectal cancer, metabolic), `"🌐 International (mixed evidence)"` (breast cancer), `"🌐 International (NCCN)"` (other cancer), `"🌐 International"` (neuro). One next-step string for early breast cancer does cite a study inline: "recent research (BCSC, 2022) questions applying this uniformly, especially for relatives diagnosed 35–45" — but this is advisory copy, not the basis for the elevated/present cutoff itself.
+5. **Citation string:** **No academic citation string exists for this check** — by design. Each category result carries a `source` tag instead of an author/year citation: `"🇸🇬 Singapore MOH"` (CVD, colorectal cancer, metabolic), `"🌐 International (mixed evidence)"` (breast cancer), `"🌐 International (NCCN)"` (other cancer), `"🌐 International"` (neuro), `"🇺🇸 CDC · 🌐 NCCN · 🇸🇬 NCCS Singapore"` (cancer same-side cluster). One next-step string for early breast cancer does cite a study inline: "recent research (BCSC, 2022) questions applying this uniformly, especially for relatives diagnosed 35–45" — but this is advisory copy, not the basis for the elevated/present cutoff itself.
 
 6. **Disclaimer (verbatim):** "This is an informational screening tool, not a diagnosis. Only a doctor can properly assess your personal and family risk — please share these answers with them, especially for any category flagged above."
 

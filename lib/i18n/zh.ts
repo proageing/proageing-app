@@ -739,10 +739,18 @@ export const zh: Dictionary = {
       ageLabel: "确诊时最年轻那位亲属的年龄（估个大概就好）",
       cancerTypeLabel: "主要是哪一种？（选你最清楚的那一种）",
       cancerTypes: { breast: "乳腺癌", colorectal: "大肠癌", ovarian: "卵巢癌", other: "其他" },
+      relativeCountLabel: "有多少位亲属确诊了这种癌症？",
+      relativeCountOne: "一位",
+      relativeCountTwoPlus: "两位或以上",
+      sameSideLabel: "他们是否在家族的同一边？",
+      sameSideHelp:
+        "两位亲属在同一边（都是母亲那边，或都是父亲那边）比分别在两边的信号更强——这些癌症本身就常见到，即使纯属巧合，也可能分别出现在两边。",
+      sameSideYes: "同一边",
+      sameSideNo: "不同边",
       seeResults: "查看我的结果",
       flaggedCaption: (elevated: number) =>
-        `个类别（共 4 个）有家族病史${elevated > 0 ? `（其中 ${elevated} 个为早发性）` : ""}`,
-      flags: { none: "无标记", present: "有家族病史", elevated: "偏高 — 早发性" },
+        `个类别（共 4 个）有家族病史${elevated > 0 ? `（其中 ${elevated} 个偏高）` : ""}`,
+      flags: { none: "无标记", present: "有家族病史", elevated: "偏高" },
       disclaimer:
         "这是一项资讯性的筛查工具，并非诊断结果。只有医生才能正确评估你的个人与家族风险——请把这些答案分享给医生，尤其是上面被标记的类别。",
       categories: {
@@ -792,6 +800,12 @@ export const zh: Dictionary = {
           "告知具体是哪位亲属、患有哪种癌症，以及确诊时的年龄——这些细节会影响建议内容。",
         ],
         otherLateSteps: ["在下次体检时提出这一点。", "按适合年龄的建议，持续进行癌症筛查。"],
+        clusterText:
+          "家族同一边（都是母亲那边，或都是父亲那边）有两位或以上亲属患有相同癌症，这本身就是遗传性风险的公认标志——与确诊年龄无关。",
+        clusterSteps: [
+          "考虑请医生转介你进行遗传咨询。",
+          "告知具体是哪些亲属、患有哪种癌症，以及他们在家族的哪一边——这些细节会影响建议内容。",
+        ],
       },
       neuro: {
         earlyText:

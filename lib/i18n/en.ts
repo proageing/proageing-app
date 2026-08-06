@@ -747,10 +747,21 @@ export const en = {
       ageLabel: "Age of the youngest relative when diagnosed (your best estimate is fine)",
       cancerTypeLabel: "Which type, mainly? (pick the one you know best)",
       cancerTypes: { breast: "Breast", colorectal: "Colorectal", ovarian: "Ovarian", other: "Other" },
+      relativeCountLabel: "How many relatives were diagnosed with this?",
+      relativeCountOne: "One",
+      relativeCountTwoPlus: "Two or more",
+      sameSideLabel: "Are they on the same side of the family?",
+      sameSideHelp:
+        "Two relatives on the same side (both your mother's side, or both your father's) is a stronger signal than one on each side — these cancers are common enough that one on each side is usually just chance.",
+      sameSideYes: "Same side",
+      sameSideNo: "Different sides",
       seeResults: "See my results",
       flaggedCaption: (elevated: number) =>
-        `of 4 categories show family history${elevated > 0 ? ` (${elevated} early-onset)` : ""}`,
-      flags: { none: "No flag", present: "Family history", elevated: "Elevated — early onset" },
+        `of 4 categories show family history${elevated > 0 ? ` (${elevated} elevated)` : ""}`,
+      // Not always early-onset any more — the cancer category can also
+      // reach "elevated" via a same-side cluster at any age (see
+      // cancer.clusterText), so this label can't claim age on its own.
+      flags: { none: "No flag", present: "Family history", elevated: "Elevated" },
       disclaimer:
         "This is an informational screening tool, not a diagnosis. Only a doctor can properly assess your personal and family risk — please share these answers with them, especially for any category flagged above.",
       categories: {
@@ -803,6 +814,12 @@ export const en = {
           "Share exactly which relative, which cancer, and their age at diagnosis — these details change the recommendation.",
         ],
         otherLateSteps: ["Mention it at your next check-up.", "Keep up with age-appropriate cancer screening."],
+        clusterText:
+          "Two or more relatives with the same cancer on one side of your family (both maternal or both paternal) is itself a recognised marker of inherited risk — independent of age at diagnosis.",
+        clusterSteps: [
+          "Consider asking your doctor for a referral to genetic counselling.",
+          "Share exactly which relatives were affected and which side of the family they're on — this detail changes the recommendation.",
+        ],
       },
       neuro: {
         earlyText:

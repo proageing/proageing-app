@@ -8,16 +8,33 @@ import type { Dictionary } from "@/lib/i18n/en";
 export type Sex = "male" | "female";
 export type CancerType = "breast" | "colorectal" | "ovarian" | "other";
 export type FlagLevel = "none" | "present" | "elevated";
+// How many relatives were diagnosed with the same cancer. Only meaningful
+// alongside sameSide: 2+ relatives on one side of the family (both
+// maternal or both paternal) is itself a recognised marker of inherited
+// risk, independent of age at diagnosis — CDC, NCCN, and Singapore's own
+// NCCS all frame their genetic-counselling referral criteria this way
+// (docs/PROAGE_ASSESSMENT_SOURCES.docx §8). One relative on each side is
+// usually two unrelated events, since these cancers are common enough to
+// appear in most families by chance — without the side recorded, that
+// case is indistinguishable on paper from a real cluster.
+export type RelativeCount = "one" | "twoOrMore";
 
 export interface CategoryAnswer {
   has: boolean | null;
   age: number | null;
 }
 
+export interface CancerAnswer extends CategoryAnswer {
+  type: CancerType | null;
+  relativeCount: RelativeCount | null;
+  // Only asked (and only meaningful) when relativeCount is "twoOrMore".
+  sameSide: boolean | null;
+}
+
 export interface FamilyHistoryAnswers {
   sex: Sex | null;
   cvd: CategoryAnswer;
-  cancer: CategoryAnswer & { type: CancerType | null };
+  cancer: CancerAnswer;
   neuro: CategoryAnswer;
   metabolic: CategoryAnswer;
 }
@@ -26,7 +43,7 @@ export function emptyFamilyHistoryAnswers(): FamilyHistoryAnswers {
   return {
     sex: null,
     cvd: { has: null, age: null },
-    cancer: { has: null, age: null, type: null },
+    cancer: { has: null, age: null, type: null, relativeCount: null, sameSide: null },
     neuro: { has: null, age: null },
     metabolic: { has: null, age: null },
   };
@@ -86,7 +103,7 @@ function computeCvd(d: CategoryAnswer, sex: Sex | null, c: FamilyHistoryCopy): C
   };
 }
 
-function computeCancer(d: CategoryAnswer & { type: CancerType | null }, c: FamilyHistoryCopy): CategoryResult {
+function computeCancer(d: CancerAnswer, c: FamilyHistoryCopy): CategoryResult {
   if (!d.has) {
     return {
       level: "none",
@@ -96,7 +113,21 @@ function computeCancer(d: CategoryAnswer & { type: CancerType | null }, c: Famil
     };
   }
   const early = d.age != null && d.age <= 60;
-  const level: FlagLevel = early ? "elevated" : "present";
+  // A same-side cluster is a separate, age-independent route to "elevated"
+  // (see the RelativeCount comment above) — only takes over when age alone
+  // doesn't already qualify, so the existing early/late copy below stays
+  // accurate to what it claims (age at diagnosis) in every other case.
+  const cluster = !early && d.relativeCount === "twoOrMore" && d.sameSide === true;
+  const level: FlagLevel = early || cluster ? "elevated" : "present";
+
+  if (cluster) {
+    return {
+      level,
+      source: "🇺🇸 CDC · 🌐 NCCN · 🇸🇬 NCCS Singapore",
+      text: c.cancer.clusterText,
+      steps: c.cancer.clusterSteps,
+    };
+  }
 
   if (d.type === "colorectal") {
     const startAge = early ? (d.age != null ? Math.min(40, d.age - 10) : 40) : 50;

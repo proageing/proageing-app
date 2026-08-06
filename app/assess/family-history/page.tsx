@@ -18,6 +18,7 @@ import {
   summarizeFamilyHistory,
   type CancerType,
   type FamilyHistoryAnswers,
+  type RelativeCount,
   type Sex,
 } from "@/lib/assessments/familyHistory";
 
@@ -81,7 +82,12 @@ function FamilyHistoryPageInner() {
   function setHas(key: "cvd" | "cancer" | "neuro" | "metabolic", has: boolean) {
     setAnswers((prev) => ({
       ...prev,
-      [key]: { ...prev[key], has, age: has ? prev[key].age : null, ...(key === "cancer" && !has ? { type: null } : {}) },
+      [key]: {
+        ...prev[key],
+        has,
+        age: has ? prev[key].age : null,
+        ...(key === "cancer" && !has ? { type: null, relativeCount: null, sameSide: null } : {}),
+      },
     }));
   }
 
@@ -91,6 +97,17 @@ function FamilyHistoryPageInner() {
 
   function setCancerType(type: CancerType) {
     setAnswers((prev) => ({ ...prev, cancer: { ...prev.cancer, type } }));
+  }
+
+  function setCancerRelativeCount(relativeCount: RelativeCount) {
+    setAnswers((prev) => ({
+      ...prev,
+      cancer: { ...prev.cancer, relativeCount, sameSide: relativeCount === "one" ? null : prev.cancer.sameSide },
+    }));
+  }
+
+  function setCancerSameSide(sameSide: boolean) {
+    setAnswers((prev) => ({ ...prev, cancer: { ...prev.cancer, sameSide } }));
   }
 
   const summary = summarizeFamilyHistory(answers, c);
@@ -227,6 +244,56 @@ function FamilyHistoryPageInner() {
                           {c.cancerTypes[typeKey]}
                         </button>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {key === "cancer" && d.has && (
+                  <div className="mt-3 border-t border-border dark:border-border-dark pt-3">
+                    <label className="text-xs text-ink-soft dark:text-ink-dark-soft">{c.relativeCountLabel}</label>
+                    <div className="mt-2 flex gap-2">
+                      {(["one", "twoOrMore"] as RelativeCount[]).map((rc) => (
+                        <button
+                          key={rc}
+                          onClick={() => setCancerRelativeCount(rc)}
+                          className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
+                            answers.cancer.relativeCount === rc
+                              ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark"
+                              : "border-border text-ink-soft"
+                          }`}
+                        >
+                          {rc === "one" ? c.relativeCountOne : c.relativeCountTwoPlus}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {key === "cancer" && d.has && answers.cancer.relativeCount === "twoOrMore" && (
+                  <div className="mt-3 border-t border-border dark:border-border-dark pt-3">
+                    <label className="text-xs text-ink-soft dark:text-ink-dark-soft">{c.sameSideLabel}</label>
+                    <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">{c.sameSideHelp}</p>
+                    <div className="mt-2 flex gap-2">
+                      <button
+                        onClick={() => setCancerSameSide(true)}
+                        className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
+                          answers.cancer.sameSide === true
+                            ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark"
+                            : "border-border text-ink-soft"
+                        }`}
+                      >
+                        {c.sameSideYes}
+                      </button>
+                      <button
+                        onClick={() => setCancerSameSide(false)}
+                        className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold ${
+                          answers.cancer.sameSide === false
+                            ? "border-healthrisk bg-healthrisk-tint text-healthrisk-dark"
+                            : "border-border text-ink-soft"
+                        }`}
+                      >
+                        {c.sameSideNo}
+                      </button>
                     </div>
                   </div>
                 )}
