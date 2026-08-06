@@ -578,9 +578,9 @@ export const en = {
       eyebrow: "Connection Check · ~3 minutes",
       title: "Connection Check",
       intro1:
-        "This check combines two validated instruments: the Lubben Social Network Scale (LSNS-6; Lubben et al., The Gerontologist, 2006), which maps the size of your family and friend networks, and the UCLA-3 Loneliness Scale (Hughes et al., Research on Aging, 2004), which asks how connected you actually feel.",
+        "This check looks at two sides of connection: how big your family and friend network is, and how connected you actually feel day to day.",
       intro2:
-        "In a 2022 Singapore study of 606 older adults, feeling lonely — not network size alone — was the one linked to higher frailty risk (Ge, Yap & Heng, BMC Geriatrics). So this check tracks both, but pays closest attention to how you feel.",
+        "Combines two validated instruments: the Lubben Social Network Scale (LSNS-6; Lubben et al., The Gerontologist, 2006) for network size, and the UCLA-3 Loneliness Scale (Hughes et al., Research on Aging, 2004) for how connected you feel. A 2022 Singapore study of 606 older adults found that feeling lonely — not network size alone — was the one linked to higher frailty risk (Ge, Yap & Heng, BMC Geriatrics), so this check pays closest attention to how you feel.",
       begin: "Let's begin",
       questionsHeading: "Your family, friends, and feelings",
       questionsBlurb: "There are no right or wrong answers — just answer as accurately as you can.",
