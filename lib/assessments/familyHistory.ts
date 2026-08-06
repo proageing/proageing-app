@@ -123,7 +123,7 @@ function computeCancer(d: CancerAnswer, c: FamilyHistoryCopy): CategoryResult {
   if (cluster) {
     return {
       level,
-      source: "🇺🇸 CDC · 🌐 NCCN · 🇸🇬 NCCS Singapore",
+      source: "🌐 International (CDC, NCCN) · 🇸🇬 NCCS Singapore",
       text: c.cancer.clusterText,
       steps: c.cancer.clusterSteps,
     };
