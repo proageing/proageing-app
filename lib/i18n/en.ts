@@ -437,9 +437,9 @@ export const en = {
       eyebrow: "Nutrition & Protein · ~3 minutes",
       title: "Nutrition & Protein Check",
       intro1:
-        "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. This check screens how often you're eating protein-rich foods across a typical week.",
+        "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. In a meta-analysis of over 50,000 older adults, higher protein intake was linked to a third lower odds of frailty (Coelho-Júnior et al., Nutrients, 2018).",
       intro2:
-        "Adapted from the Protein Screener 55+ (Wijnhoven et al., PLOS ONE, 2018), a validated Dutch tool, using food items confirmed relevant to Singapore's multi-ethnic diet (Whitton, Ho, Rebello & van Dam, Public Health Nutrition, 2018). It's a directional guide, not a lab-grade measurement.",
+        "This check screens how often you're eating protein-rich foods across a typical week. Adapted from the Protein Screener 55+ (Wijnhoven et al., PLOS ONE, 2018), a validated Dutch tool, using food items confirmed relevant to Singapore's multi-ethnic diet (Whitton, Ho, Rebello & van Dam, Public Health Nutrition, 2018). It's a directional guide, not a lab-grade measurement.",
       begin: "Let's begin",
       questionsHeading: "How often do you eat these?",
       questionsBlurb: "Think about a normal week for you — no right or wrong answers.",
@@ -496,9 +496,9 @@ export const en = {
       eyebrow: "Sleep Check · ~5 minutes",
       title: "Sleep Quality Check",
       intro1:
-        "This check is based on the Pittsburgh Sleep Quality Index (PSQI), one of the most widely used sleep questionnaires in research and clinical care.",
+        "Poor sleep is linked to a wide range of health problems as we age — including heart disease, diabetes, depression, and cognitive decline. In a meta-analysis of 74 studies covering over 3 million people, poor sleep quality specifically was linked to a 44% higher risk of coronary heart disease (Kwok et al., Journal of the American Heart Association, 2018).",
       intro2:
-        "You'll answer a few questions about your sleep over the past month — when you go to bed, how long you sleep, and how often certain things disturb your rest.",
+        "You'll answer a few questions about your sleep over the past month — when you go to bed, how long you sleep, and how often certain things disturb your rest. Based on the Pittsburgh Sleep Quality Index (PSQI), one of the most widely used sleep questionnaires in research and clinical care.",
       begin: "Let's begin",
       seeResults: "See my results",
       timesHeading: "Thinking back over the past month…",
@@ -550,7 +550,7 @@ export const en = {
       nextStepsHeading: "✅ Suggested next steps",
       disclaimer:
         "This is a wellness screening tool based on a published research questionnaire, not a medical diagnosis. If sleep problems are affecting your daily life, it's worth discussing with your doctor.",
-      sources: "Sources: Pittsburgh Sleep Quality Index (PSQI); Buysse et al., 1989.",
+      sources: "Sources: Pittsburgh Sleep Quality Index (PSQI); Buysse et al., 1989 (scoring) · Kwok et al., 2018 (mortality link).",
       result: {
         good: {
           label: "Good sleep quality",
@@ -578,9 +578,9 @@ export const en = {
       eyebrow: "Connection Check · ~3 minutes",
       title: "Connection Check",
       intro1:
-        "This check looks at two sides of connection: how big your family and friend network is, and how connected you actually feel day to day.",
+        "Feeling lonely — not just having a small social circle — is one of the biggest modifiable risk factors for early death we know of. Research puts its effect on mortality on par with smoking 15 cigarettes a day, and greater than obesity or physical inactivity (Holt-Lunstad et al., 2010; 2015).",
       intro2:
-        "Combines two validated instruments: the Lubben Social Network Scale (LSNS-6; Lubben et al., The Gerontologist, 2006) for network size, and the UCLA-3 Loneliness Scale (Hughes et al., Research on Aging, 2004) for how connected you feel. A 2022 Singapore study of 606 older adults found that feeling lonely — not network size alone — was the one linked to higher frailty risk (Ge, Yap & Heng, BMC Geriatrics).",
+        "This check maps how big your family and friend network is, and how connected you actually feel day to day, combining two validated instruments — the Lubben Social Network Scale (LSNS-6) for network size, and the UCLA-3 Loneliness Scale for how connected you feel (Lubben et al., The Gerontologist, 2006; Hughes et al., Research on Aging, 2004).",
       begin: "Let's begin",
       questionsHeading: "Your family, friends, and feelings",
       questionsBlurb: "There are no right or wrong answers — just answer as accurately as you can.",
@@ -848,12 +848,12 @@ export const en = {
     purpose: {
       eyebrow: "Purpose Check · ~3 minutes",
       title: "Sense of Purpose Check",
-      intro1Pre: "This check is based on the Ikigai-9 (Imai, Osada & Nishimura, 2012), a validated Japanese scale measuring ",
+      intro1Pre: "A sense of ",
       intro1Em: "ikigai",
       intro1Post:
-        " — roughly, \u201Ca reason for being\u201D — across three themes: how you feel about your life, your attitude towards the future, and the sense that your existence matters.",
+        " — roughly, \u201Ca reason for being\u201D — is what this check measures, across three themes: how you feel about your life, your attitude towards the future, and the sense that your existence matters. A 7-year study of 43,391 Japanese adults found those with no sense of ikigai had a 50% higher risk of death (Sone et al., Psychosomatic Medicine, 2008).",
       intro2:
-        "The concept of ikigai has been linked in Japanese cohort research (e.g. the Ohsaki study, Sone et al., 2008) to a lower risk of death over time — one of several strands of evidence connecting a sense of purpose to healthy ageing.",
+        "Measured here using the Ikigai-9, a validated Japanese scale (Imai, Osada & Nishimura, 2012) — one of several strands of evidence connecting a sense of purpose to healthy ageing.",
       begin: "Let's begin",
       seeResults: "See my results",
       questionsEyebrow: "Your own honest reaction",
@@ -920,7 +920,7 @@ export const en = {
       eyebrow: "Physical Function Check · ~4 minutes",
       title: "Sit-to-Stand Check",
       intro1:
-        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance.",
+        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance. In a meta-analysis pooling multiple studies of older adults, people in the slowest quarter on this exact test had roughly double the mortality risk of the fastest quarter (Cooper et al., BMJ, 2010).",
       intro2:
         "You'll stand up and sit down from a chair as many times as you can in 30 seconds. No equipment needed beyond a sturdy chair.",
       begin: "Let's begin",
@@ -967,7 +967,7 @@ export const en = {
       typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (illustrative reference).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
-      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999.",
+      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range) · Cooper et al., BMJ, 2010 (mortality link).",
       result: {
         below: {
           label: "Below typical range for your age group",
