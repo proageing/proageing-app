@@ -63,6 +63,39 @@ export async function POST(request: NextRequest) {
         console.error("Stripe webhook: subscription insert failed", session.id, insertError.message);
         return NextResponse.json({ error: "Could not record purchase" }, { status: 500 });
       }
+
+      // Enrol them, so day 1 is the day they paid.
+      //
+      // Enrolment used to happen only when someone opened the programme
+      // page, which left two holes: buy and never visit, and you had a plan
+      // with no programme; buy having tried it months ago, and you resumed
+      // mid-way through a stale enrolment instead of starting over.
+      //
+      // Skipped when an active enrolment already exists — that covers both
+      // the webhook retrying and someone who is genuinely mid-programme,
+      // whose progress must not be reset by a second purchase.
+      const { data: existing, error: lookupError } = await supabaseAdmin
+        .from("program_enrollments")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("status", "active")
+        .limit(1)
+        .maybeSingle();
+
+      if (lookupError) {
+        // Non-fatal: the purchase itself is recorded, and the programme page
+        // can still enrol them. Worth knowing about, not worth a retry that
+        // would re-run everything above.
+        console.error("Stripe webhook: enrolment lookup failed", session.id, lookupError.message);
+      } else if (!existing) {
+        const { error: enrolError } = await supabaseAdmin.from("program_enrollments").insert({
+          user_id: userId,
+          program_length_days: plan.lengthDays,
+        });
+        if (enrolError) {
+          console.error("Stripe webhook: enrolment insert failed", session.id, enrolError.message);
+        }
+      }
       break;
     }
 

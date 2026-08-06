@@ -15,6 +15,9 @@ export interface Plan {
   priceLabel: string;
   mode: "payment" | "subscription";
   priceEnvVar: string;
+  // How long the programme runs. The Stripe webhook enrols the buyer with
+  // this length so day 1 is the day they paid.
+  lengthDays: number;
   // 90-day programme content doesn't exist yet (lib/program21.ts only
   // covers the 21-day track) — greyed out on /upgrade so nobody can pay
   // for something that isn't there to deliver.
@@ -28,6 +31,7 @@ export const PLANS: Plan[] = [
     priceLabel: "S$39 one-time",
     mode: "payment",
     priceEnvVar: "STRIPE_PRICE_21DAY",
+    lengthDays: 21,
   },
   {
     id: "90-day",
@@ -35,6 +39,7 @@ export const PLANS: Plan[] = [
     priceLabel: "S$129 one-time",
     mode: "payment",
     priceEnvVar: "STRIPE_PRICE_90DAY",
+    lengthDays: 90,
     comingSoon: true,
   },
 ];
