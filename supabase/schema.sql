@@ -118,6 +118,10 @@ create table public.subscriptions (
   -- a plan value here.
   status text not null default 'active',  -- mirrors Stripe subscription status values
   current_period_end timestamptz,
+  -- Idempotency key for the Stripe webhook. Stripe delivers at least once,
+  -- and one-time purchases (mode: 'payment') have no stripe_subscription_id
+  -- to dedupe on, so a retry would otherwise insert the same purchase twice.
+  stripe_checkout_session_id text unique,
   created_at timestamptz not null default now()
 );
 

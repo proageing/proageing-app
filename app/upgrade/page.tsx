@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { PLANS, planById, type PlanId } from "@/lib/plans";
 import { getActiveSubscription, type ActiveSubscription } from "@/lib/subscription";
-import { signInHrefFor } from "@/lib/nextPath";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { WatermarkSwirl } from "@/components/BrandSwirl";
@@ -28,42 +27,63 @@ export default function UpgradePage() {
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) {
-        // Keep the plan they picked on the way through sign-in, so they
-        // come back to the same choice rather than a bare plan list.
-        router.push(signInHrefFor(`/upgrade${window.location.search}`));
+        // Guest arriving from proageing.org with a purchasable plan already
+        // chosen: send them to Stripe without ever rendering this page. They
+        // have read the price and picked — a plan list (built for signed-in
+        // people, with "current plan" state) only adds a step. Stripe
+        // collects their email; the account is created after payment.
+        //
+        // comingSoon plans are excluded deliberately: they have no Stripe
+        // price configured, so checkout would throw. Those fall through and
+        // get the page, which says the plan isn't open yet.
+        if (matched && !planById(matched.id)?.comingSoon) {
+          void startCheckout(matched.id);
+          return;
+        }
+        // Any other guest still gets the plan list rather than a sign-in
+        // wall — there is nothing here that needs an account to read.
+        setLoading(false);
         return;
       }
       setActive(await getActiveSubscription(user.id));
       setLoading(false);
     });
+    // startCheckout is stable for this page's lifetime and depending on it
+    // would re-run this effect on every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  async function handleUpgrade(planId: PlanId) {
+  // Sends the browser to Stripe. Works with or without a session: the
+  // checkout route treats a missing Bearer header as a guest purchase.
+  async function startCheckout(planId: PlanId) {
     setBusyPlan(planId);
     setError(null);
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (!session) {
-      router.push(signInHrefFor(`/upgrade?plan=${planId}`));
-      return;
-    }
 
     const res = await fetch("/api/stripe/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
+        ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
       },
       body: JSON.stringify({ planId }),
     });
-    const body = await res.json();
-    setBusyPlan(null);
-    if (!res.ok) {
-      setError(body.error ?? t.upgrade.couldntStart);
+    const body = await res.json().catch(() => null);
+    if (!res.ok || !body?.url) {
+      setBusyPlan(null);
+      // A guest whose checkout failed would otherwise be stuck on a blank
+      // loading screen, since this page never renders for them.
+      setLoading(false);
+      setError(body?.error ?? t.upgrade.couldntStart);
       return;
     }
     window.location.href = body.url;
+  }
+
+  async function handleUpgrade(planId: PlanId) {
+    await startCheckout(planId);
   }
 
   if (loading) {

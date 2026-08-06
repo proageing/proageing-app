@@ -1016,6 +1016,12 @@ export const en = {
     title: "You're all set",
     body: "Your payment went through. It may take a few seconds for your plan to show as active.",
     backToDashboard: "Back to dashboard",
+    checking: "Confirming your payment…",
+    linkSent: (email: string) =>
+      `Your payment went through. We've emailed a sign-in link to ${email} — tap it to open your programme.`,
+    linkFailed:
+      "Your payment went through, but we couldn't send your sign-in link automatically. Enter the email you paid with and we'll send it now.",
+    goToSignIn: "Send my sign-in link",
   },
 
   consent: {

@@ -992,6 +992,12 @@ export const zh: Dictionary = {
     title: "一切就绪",
     body: "你的付款已完成。方案状态可能需要几秒钟才会显示为已启用。",
     backToDashboard: "返回首页",
+    checking: "正在确认你的付款……",
+    linkSent: (email: string) =>
+      `付款已完成。我们已把登录链接发到 ${email}，点开它就能进入你的课程。`,
+    linkFailed:
+      "付款已完成，但登录链接没能自动发出。请输入你付款时用的邮箱，我们马上再发一次。",
+    goToSignIn: "把登录链接发给我",
   },
 
   consent: {
