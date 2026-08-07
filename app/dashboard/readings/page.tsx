@@ -6,6 +6,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { signInHrefFor } from "@/lib/nextPath";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
+import { TOOLS } from "@/lib/tools";
+import { PILLAR_STYLES } from "@/lib/pillarStyles";
 import { formatEntryData } from "@/lib/formatResult";
 import { readingsTierFor } from "@/lib/assessments/readingsTier";
 import { insightFor } from "@/lib/assessments/insightFor";
@@ -155,6 +157,30 @@ export default function ReadingsPage() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Calculators sit below the checks and outside the "9 of 9" count:
+          they work a number out rather than measuring the person, so they
+          have no reading and no place in the profile. */}
+      <h2 className="mt-8 font-serif text-xl font-semibold text-ink dark:text-ink-dark">{t.tools.heading}</h2>
+      <p className="mt-1 text-base text-ink-soft dark:text-ink-dark-soft">{t.tools.blurb}</p>
+      <div className="mt-3 space-y-3">
+        {TOOLS.map((tool) => (
+          <Link
+            key={tool.key}
+            href={`${tool.href}?from=readings`}
+            className="flex min-h-[56px] items-center gap-3 rounded-2xl border border-border bg-white px-4 py-3 shadow-sm transition hover:border-primary dark:border-border-dark dark:bg-white/5"
+          >
+            <span className={`h-3 w-3 shrink-0 rounded-full ${PILLAR_STYLES[tool.color].dot}`} aria-hidden="true" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-base font-bold text-ink dark:text-ink-dark">{t.tools[tool.key as "training-zone"].name}</span>
+              <span className="block text-sm text-ink-soft dark:text-ink-dark-soft">
+                {t.tools[tool.key as "training-zone"].blurb}
+              </span>
+            </span>
+            <span aria-hidden className="text-xl text-ink-faint">→</span>
+          </Link>
+        ))}
       </div>
       </div>
 

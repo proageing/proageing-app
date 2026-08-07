@@ -31,7 +31,7 @@ export function AssessmentTopBar({
       <div className="flex items-center justify-between">
         <button
           onClick={onExit}
-          className="text-sm font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
+          className="-ml-2 flex min-h-[56px] items-center px-2 text-base font-semibold text-ink-faint hover:text-ink-soft dark:text-ink-dark-faint dark:hover:text-ink-dark-soft"
         >
           {t.assess.common.exit}
         </button>
@@ -49,7 +49,7 @@ export function AssessmentTopBar({
         )}
         <button
           onClick={onToggleAudio}
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold text-white ${pillar.solidButton}`}
+          className={`inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white ${pillar.solidButton}`}
         >
           {audioOn ? `🔊 ${t.assess.common.audio}` : `🔇 ${t.assess.common.audio}`}
         </button>
