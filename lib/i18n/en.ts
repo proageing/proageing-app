@@ -192,6 +192,9 @@ export const en = {
       backToToday: (day: number) => `Back to today (Day ${day})`,
       previousDay: "Previous day",
       nextDay: "Next day",
+      previewBanner:
+        "Preview — every day is unlocked so the programme can be read straight through. Ticking or writing still saves to whichever day you're on.",
+      previewExit: "Leave preview",
       streak: (days: number) => `🔥 ${days} day${days === 1 ? "" : "s"} streak`,
       learn: "Learn",
       act: "Act",

@@ -198,6 +198,9 @@ export const zh: Dictionary = {
       backToToday: (day: number) => `回到今天（第 ${day} 天）`,
       previousDay: "前一天",
       nextDay: "后一天",
+      previewBanner:
+        "预览模式——所有天数都已解锁，方便你一次读完整个课程。你在这里勾选或写下的内容，仍会存到当前所在的那一天。",
+      previewExit: "退出预览",
       streak: (days: number) => `🔥 连续 ${days} 天`,
       learn: "学习",
       act: "行动",

@@ -133,6 +133,13 @@ function ProgramPageInner() {
   const [enrollment, setEnrollment] = useState<ProgramEnrollment | null>(null);
   const [currentDay, setCurrentDay] = useState(1);
   const [viewedDay, setViewedDay] = useState(1);
+  // ?preview=1 lifts the day-by-day pacing so an admin can read the whole
+  // programme in one sitting instead of waiting for each day to unlock.
+  // Deliberately inert for everyone else: without the flag no lookup runs
+  // at all, and with it a non-admin still gets the normal pacing, so a
+  // regular session behaves and queries exactly as it did before.
+  const previewRequested = searchParams.get("preview") === "1";
+  const [previewAll, setPreviewAll] = useState(false);
   const [dayLoading, setDayLoading] = useState(false);
   const [streak, setStreak] = useState(0);
   const [learned, setLearned] = useState(false);
@@ -231,8 +238,27 @@ function ProgramPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
+  // Only asks the question when ?preview=1 is present, so the normal path
+  // makes no extra request. RLS already limits a profile read to your own
+  // row, so this cannot report someone else's admin flag.
+  useEffect(() => {
+    if (!previewRequested || !userId) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("profiles").select("is_admin").eq("id", userId).maybeSingle();
+      if (!cancelled) setPreviewAll(Boolean(data?.is_admin));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [previewRequested, userId]);
+
+  const maxViewableDay = previewAll
+    ? (enrollment?.program_length_days ?? PROGRAM_LENGTH_DAYS)
+    : currentDay;
+
   async function goToDay(day: number) {
-    if (!enrollment || !userId || day < 1 || day > currentDay) return;
+    if (!enrollment || !userId || day < 1 || day > maxViewableDay) return;
     setViewedDay(day);
     setJustSaved(false);
     setSaveStatus(null);
@@ -544,7 +570,17 @@ function ProgramPageInner() {
 
   return (
     <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-4">
-      <div className="relative -mx-6 -mt-4 overflow-hidden border-b border-primary/25 bg-primary-light px-6 pb-6 pt-6 dark:bg-primary-light-dark">
+      {previewAll && (
+        <div className="-mx-6 -mt-4 border-b border-amber-500/40 bg-amber-100/70 px-6 py-3 text-xs leading-relaxed text-amber-900 dark:bg-amber-900/25 dark:text-amber-200">
+          <p>{t.programme.day.previewBanner}</p>
+          <button onClick={() => router.replace("/program")} className="mt-1 font-semibold underline underline-offset-2">
+            {t.programme.day.previewExit}
+          </button>
+        </div>
+      )}
+      <div
+        className={`relative -mx-6 ${previewAll ? "" : "-mt-4"} overflow-hidden border-b border-primary/25 bg-primary-light px-6 pb-6 pt-6 dark:bg-primary-light-dark`}
+      >
         <HeroSwirl className="pointer-events-none absolute -top-3 right-2 w-32 text-primary opacity-25" />
 
         <div className="relative flex items-center justify-between">
@@ -572,7 +608,7 @@ function ProgramPageInner() {
 
           <button
             onClick={() => goToDay(viewedDay + 1)}
-            disabled={viewedDay >= currentDay || dayLoading}
+            disabled={viewedDay >= maxViewableDay || dayLoading}
             aria-label={t.programme.day.nextDay}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-primary-dark/40 bg-white/70 text-primary-dark shadow-sm transition hover:border-primary hover:bg-white disabled:opacity-30 disabled:hover:border-primary-dark/40 dark:border-white/20 dark:bg-black/30 dark:hover:bg-black/45"
           >
