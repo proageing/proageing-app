@@ -20,12 +20,19 @@ export type HowToSlug =
   | "one-leg-stand"
   | "longevity-plate"
   | "finger-breathing"
-  | "sunday-afternoon-test";
+  | "sunday-afternoon-test"
+  | "protein-breakfast"
+  | "hawker-protein";
 
 export interface HowTo {
   name: string;
   whatIs: string;
   steps: string[];
+  // A food-and-grams list, for the days where the useful instruction is
+  // "here is what to order and what it gets you" rather than a procedure.
+  // "Add 25-40g of protein" is a number, not something a person can act on
+  // standing in a hawker centre.
+  portions?: { food: string; protein: string }[];
   easier?: string;
   stopIf?: string;
 }
@@ -36,16 +43,18 @@ export interface HowTo {
 export const HOW_TO_BY_DAY: Record<number, HowToSlug[]> = {
   3: ["brisk-walk"],
   4: ["chair-squat", "wall-push-up", "band-row"],
+  5: ["protein-breakfast", "hawker-protein"],
   8: ["brisk-walk"],
   9: ["one-leg-stand"],
   10: ["brisk-walk"],
   11: ["chair-squat", "band-row"],
-  12: ["longevity-plate"],
+  12: ["longevity-plate", "hawker-protein"],
   14: ["chair-squat"],
   15: ["finger-breathing"],
   16: ["brisk-walk"],
   17: ["chair-squat"],
   19: ["sunday-afternoon-test"],
+  20: ["hawker-protein"],
 };
 
 export function howToSlugsForDay(day: number): HowToSlug[] {

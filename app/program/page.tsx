@@ -711,7 +711,7 @@ function ProgramPageInner() {
 
       <div className="mt-4 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.learn}</p>
-        <p className="mt-2 text-sm text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
+        <p className="mt-2 text-base leading-relaxed text-ink-soft dark:text-ink-dark-soft">{content.learn}</p>
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
           <input
             type="checkbox"
@@ -741,7 +741,7 @@ function ProgramPageInner() {
             ))}
           </div>
         )}
-        <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">{content.action}</p>
+        <p className="mt-3 text-base leading-relaxed text-ink-soft dark:text-ink-dark-soft">{content.action}</p>
         {howToSlugsForDay(viewedDay).map((slug, i) => (
           <HowToPanel key={slug} slug={slug} defaultOpen={i === 0 && isFirstAppearance(slug, viewedDay)} />
         ))}
@@ -761,7 +761,7 @@ function ProgramPageInner() {
 
       <div className="mt-3 rounded-xl border border-border bg-white p-4 shadow-sm dark:border-border-dark dark:bg-white/5">
         <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">{t.programme.day.reflect}</p>
-        <p className="mt-2 text-sm font-medium text-ink dark:text-ink-dark">{content.reflect}</p>
+        <p className="mt-2 text-base font-medium leading-relaxed text-ink dark:text-ink-dark">{content.reflect}</p>
         {content.reflectExamples && (
           <p className="mt-1 text-xs text-ink-faint dark:text-ink-dark-faint">
             {t.programme.day.examples(content.reflectExamples.map((ex) => `"${ex}"`).join(" · "))}

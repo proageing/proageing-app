@@ -217,6 +217,20 @@ function LongevityPlate() {
   );
 }
 
+function PalmPortion() {
+  // The hand as a ruler: a palm-sized piece of fish or meat is roughly 25g of
+  // protein, and everyone carries the measuring device with them. Far more
+  // use standing at a stall than a number in grams.
+  const palm =
+    "M52 106 L52 66 Q52 54 62 54 Q72 54 72 66 L72 40 Q72 28 82 28 Q92 28 92 40 L92 36 Q92 24 102 24 Q112 24 112 36 L112 48 Q112 36 122 36 Q132 36 132 48 L132 96 Q132 106 122 106 Z";
+  return (
+    <g>
+      <path d={palm} className={`${STROKE} fill-none`} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="62" y="66" width="58" height="30" rx="9" className="fill-nutrition/40 stroke-nutrition" strokeWidth={2.5} />
+    </g>
+  );
+}
+
 function FingerBreathing() {
   // A hand with a dot travelling up and down the thumb and fingers — the
   // movement is the instruction, so this one is genuinely animated rather
@@ -241,6 +255,7 @@ const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; label: string 
   "one-leg-stand": { node: <OneLegStand />, label: "A figure standing on one leg beside a counter" },
   "longevity-plate": { node: <LongevityPlate />, label: "A plate half vegetables, a quarter protein, a quarter wholegrain" },
   "finger-breathing": { node: <FingerBreathing />, label: "A hand with a fingertip tracing up and down each finger" },
+  "protein-breakfast": { node: <PalmPortion />, label: "A palm with a palm-sized portion marked on it" },
 };
 
 export function Illustration({ slug }: { slug: HowToSlug }) {
