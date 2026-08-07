@@ -14,7 +14,7 @@
 
 export type HowToSlug =
   | "brisk-walk"
-  | "chair-squat"
+  | "sit-to-stand-exercise"
   | "wall-push-up"
   | "band-row"
   | "one-leg-stand"
@@ -42,17 +42,17 @@ export interface HowTo {
 // nothing to teach (day 13's "take the stairs").
 export const HOW_TO_BY_DAY: Record<number, HowToSlug[]> = {
   3: ["brisk-walk"],
-  4: ["chair-squat", "wall-push-up", "band-row"],
+  4: ["sit-to-stand-exercise", "wall-push-up", "band-row"],
   5: ["protein-breakfast", "hawker-protein"],
   8: ["brisk-walk"],
   9: ["one-leg-stand"],
   10: ["brisk-walk"],
-  11: ["chair-squat", "band-row"],
+  11: ["sit-to-stand-exercise", "band-row"],
   12: ["longevity-plate", "hawker-protein"],
-  14: ["chair-squat"],
+  14: ["sit-to-stand-exercise"],
   15: ["finger-breathing"],
   16: ["brisk-walk"],
-  17: ["chair-squat"],
+  17: ["sit-to-stand-exercise"],
   19: ["sunday-afternoon-test"],
   20: ["hawker-protein"],
 };

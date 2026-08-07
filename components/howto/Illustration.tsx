@@ -16,6 +16,33 @@ import type { HowToSlug } from "@/lib/howTo";
 const STROKE = "stroke-ink-soft dark:stroke-ink-dark-soft";
 const ACCENT = "stroke-movement dark:stroke-movement";
 
+// Some movements have a filmed demonstration, which beats anything drawn.
+// Muted, looping and inline so it behaves like the animated figures it sits
+// among — no controls to find, no sound to startle anyone. Under
+// prefers-reduced-motion the poster frame shows instead of the loop.
+// WebM first so browsers that take VP9 get it, MP4 second because iOS Safari
+// needs H.264 — between them every phone this app targets is covered.
+function VideoFigure({ src, poster, label }: { src: string; poster: string; label: string }) {
+  return (
+    <div className="mb-3 overflow-hidden rounded-lg bg-paper dark:bg-black/20">
+      <video
+        className="howto-video mx-auto block max-h-[260px] w-auto"
+        poster={poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        aria-label={label}
+      >
+        <source src={`${src}.webm`} type="video/webm" />
+        <source src={`${src}.mp4`} type="video/mp4" />
+      </video>
+      <img className="howto-video-poster mx-auto block max-h-[260px] w-auto" src={poster} alt={label} />
+    </div>
+  );
+}
+
 function Figure({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="mb-3 flex justify-center rounded-lg bg-paper py-3 dark:bg-black/20">
@@ -249,7 +276,7 @@ function FingerBreathing() {
 
 const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; label: string }>> = {
   "brisk-walk": { node: <BriskWalk />, label: "A figure walking briskly" },
-  "chair-squat": { node: <ChairSquat />, label: "A figure standing up from a chair and sitting back down" },
+  "sit-to-stand-exercise": { node: <ChairSquat />, label: "A figure standing up from a chair and sitting back down" },
   "wall-push-up": { node: <WallPushUp />, label: "A figure doing a push-up against a wall" },
   "band-row": { node: <BandRow />, label: "A figure pulling a resistance band towards the ribs" },
   "one-leg-stand": { node: <OneLegStand />, label: "A figure standing on one leg beside a counter" },
@@ -258,7 +285,17 @@ const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; label: string 
   "protein-breakfast": { node: <PalmPortion />, label: "A palm with a palm-sized portion marked on it" },
 };
 
+const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; label: string }>> = {
+  "sit-to-stand-exercise": {
+    src: "/howto/sit-to-stand",
+    poster: "/howto/sit-to-stand.jpg",
+    label: "An older woman standing up from an armchair with her arms crossed, then sitting back down",
+  },
+};
+
 export function Illustration({ slug }: { slug: HowToSlug }) {
+  const video = VIDEOS[slug];
+  if (video) return <VideoFigure {...video} />;
   const figure = FIGURES[slug];
   if (!figure) return null;
   return <Figure label={figure.label}>{figure.node}</Figure>;

@@ -87,3 +87,11 @@ input[type="number"].no-spinner {
   .howto-tracer animateMotion { display: none; }
   .howto-tracer { display: none; }
 }
+
+/* A filmed how-to loops by default; with reduced motion the poster frame
+   stands in, so the demonstration is still there, just not moving. */
+.howto-video-poster { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .howto-video { display: none; }
+  .howto-video-poster { display: block; }
+}

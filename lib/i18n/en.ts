@@ -164,9 +164,9 @@ export const en = {
       easier: "Three 4-minute walks spread across the day count the same as one longer walk.",
       stopIf: "you get chest pain or tightness, feel dizzy, or your breathlessness doesn't settle when you slow down.",
     },
-    "chair-squat": {
-      name: "Chair squat",
-      whatIs: "Standing up and sitting down slowly and with control — the same movement as your Sit-to-Stand check.",
+    "sit-to-stand-exercise": {
+      name: "Sit-to-stand",
+      whatIs: "Standing up and sitting down slowly and with control — the exercise version of your Sit-to-Stand check.",
       steps: [
         "Sit near the front of a sturdy chair, feet flat and shoulder-width apart.",
         "Cross your arms over your chest.",
