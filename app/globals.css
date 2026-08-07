@@ -61,3 +61,29 @@ input[type="number"].no-spinner::-webkit-outer-spin-button {
 input[type="number"].no-spinner {
   -moz-appearance: textfield;
 }
+
+/* How-to figures: two poses crossfading to show a movement's start and end.
+   Under reduced motion the fade stops and both poses stay visible, which
+   still reads as "here are the two positions" rather than losing the
+   instruction entirely. */
+@keyframes howtoPoseA {
+  0%, 42% { opacity: 1; }
+  58%, 100% { opacity: 0; }
+}
+@keyframes howtoPoseB {
+  0%, 42% { opacity: 0; }
+  58%, 100% { opacity: 1; }
+}
+.howto-pose-a { animation: howtoPoseA 3.2s ease-in-out infinite; }
+.howto-pose-b { animation: howtoPoseB 3.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .howto-pose-a,
+  .howto-pose-b {
+    animation: none;
+    opacity: 1;
+  }
+  .howto-pose-b { opacity: 0.4; }
+  .howto-tracer animateMotion { display: none; }
+  .howto-tracer { display: none; }
+}

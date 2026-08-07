@@ -144,6 +144,108 @@ export const en = {
     tryAgain: "Try again",
   },
 
+  howTo: {
+    show: "How to do it",
+    hide: "Hide",
+    whatIsLabel: "What it is",
+    easierLabel: "Make it easier",
+    stopIfLabel: "Stop if",
+    listen: "Listen",
+    stopListening: "Stop",
+    "brisk-walk": {
+      name: "Brisk walking",
+      whatIs: "Brisk means fast enough that your breathing deepens, slow enough that you can still talk.",
+      steps: [
+        "Walk for 2 minutes at your normal pace to warm up.",
+        "Pick up the pace until you notice your breathing get deeper.",
+        "Check it: you should be able to say a full sentence — but not sing one.",
+        "Hold that pace for 10 minutes, then ease off for the last minute.",
+      ],
+      easier: "Three 4-minute walks spread across the day count the same as one longer walk.",
+      stopIf: "you get chest pain or tightness, feel dizzy, or your breathlessness doesn't settle when you slow down.",
+    },
+    "chair-squat": {
+      name: "Chair squat",
+      whatIs: "Standing up and sitting down slowly and with control — the same movement as your Sit-to-Stand check.",
+      steps: [
+        "Sit near the front of a sturdy chair, feet flat and shoulder-width apart.",
+        "Cross your arms over your chest.",
+        "Lean forward slightly, push through your heels, and stand all the way up.",
+        "Sit back down slowly — count to three on the way down. Aim for 8 to 10.",
+      ],
+      easier: "Push off the chair arms with your hands, or start with a higher chair. Both make it easier without changing the movement.",
+      stopIf: "your knees hurt, or you find yourself dropping into the chair instead of lowering yourself.",
+    },
+    "wall-push-up": {
+      name: "Wall push-up",
+      whatIs: "A push-up done standing against a wall — far gentler on wrists and shoulders than one on the floor.",
+      steps: [
+        "Stand about an arm's length from a wall.",
+        "Put your palms flat on the wall, shoulder height and shoulder-width apart.",
+        "Keeping a straight line from head to heels, bend your elbows to bring your chest towards the wall.",
+        "Push yourself back to the start. Aim for 8 to 10.",
+      ],
+      easier: "Stand closer to the wall. The further back your feet, the harder it gets — so move them in, not out.",
+      stopIf: "you feel pain in your shoulders or wrists, or your back starts to sag.",
+    },
+    "band-row": {
+      name: "Band row",
+      whatIs: "Pulling a resistance band towards you — this works the muscles across your upper back that hold your posture up.",
+      steps: [
+        "Sit with your legs out in front and loop the band around your feet, or anchor it to something sturdy at chest height.",
+        "Hold one end in each hand with your arms straight out, so there's already a little tension in the band.",
+        "Pull your elbows back past your ribs, squeezing your shoulder blades together.",
+        "Return slowly to the start. Aim for 8 to 10.",
+      ],
+      easier: "Hold your hands further apart on the band for less resistance. No band? Pull against a rolled towel held in both hands.",
+      stopIf: "you feel a pinch in your shoulder or neck rather than effort across your back.",
+    },
+    "one-leg-stand": {
+      name: "Standing on one leg",
+      whatIs: "The same movement as your Balance check, practised in short bursts to build it up.",
+      steps: [
+        "Stand beside a counter or sturdy chair — close enough to grab it without reaching.",
+        "Put your hands on your hips and fix your eyes on a point ahead of you.",
+        "Lift either foot a few centimetres off the floor.",
+        "Hold for 10 to 20 seconds, then swap legs. A few times through the day is plenty.",
+      ],
+      easier: "Rest one or two fingers on the counter, and lift them off as you steady. That's progress, not cheating.",
+      stopIf: "you feel unsteady — put your foot straight down. This is one to stop early on, not push through.",
+    },
+    "longevity-plate": {
+      name: "The Singapore Longevity Plate",
+      whatIs: "A way of filling your plate rather than a recipe, built around food you already eat — whether you cook or buy your meals.",
+      steps: [
+        "Half the plate: vegetables — kailan, chye sim, long beans, tomato, cucumber.",
+        "A quarter: protein — fish, tofu, egg, chicken, dhal, or lean pork.",
+        "A quarter: wholegrain — brown rice, wholemeal bread or thosai, or simply a smaller portion of white rice.",
+        "Add a thumb-sized amount of healthy fat — nuts, sesame, peanut or olive oil.",
+      ],
+      easier: "Eating out? Ask for less rice, add a side of vegetables, and pick steamed or soup over fried. That gets you most of the way there.",
+    },
+    "finger-breathing": {
+      name: "Finger breathing",
+      whatIs: "A way of pacing your breathing using your own hand, so there's nothing to count and nothing to remember.",
+      steps: [
+        "Spread the fingers of one hand.",
+        "With the index finger of your other hand, trace slowly up the outside of your thumb as you breathe in.",
+        "Trace down the other side of your thumb as you breathe out.",
+        "Carry on across all five fingers, then back again. About 90 seconds in all.",
+      ],
+      easier: "If tracing feels fiddly, just breathe in for a count of 4 and out for a count of 6 instead.",
+    },
+    "sunday-afternoon-test": {
+      name: "The Sunday Afternoon Test",
+      whatIs: "A quiet check on purpose: what you drift towards when nothing at all is being asked of you.",
+      steps: [
+        "Find an hour today with nothing scheduled in it.",
+        "Notice what you reach for first, and how you feel a few minutes in.",
+        "Ask yourself honestly: does this leave me more alive, or just fill the time?",
+        "Write down one thing you'd like more of.",
+      ],
+    },
+  },
+
   programme: {
     notStarted: {
       eyebrow: "21-Day Challenge",

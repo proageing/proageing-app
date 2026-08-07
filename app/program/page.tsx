@@ -20,6 +20,8 @@ import {
 } from "@/lib/program";
 import { getCompletionSummary, type CompletionSummary, type MovementDirection } from "@/lib/programCompletion";
 import { contentForDay } from "@/lib/program21";
+import { howToSlugsForDay, isFirstAppearance } from "@/lib/howTo";
+import { HowToPanel } from "@/components/howto/HowToPanel";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { computeWeeklyMomentum, getDayCompletions, type WeeklyMomentum } from "@/lib/momentum";
 import { getActiveSubscription } from "@/lib/subscription";
@@ -740,6 +742,9 @@ function ProgramPageInner() {
           </div>
         )}
         <p className="mt-3 text-sm text-ink-soft dark:text-ink-dark-soft">{content.action}</p>
+        {howToSlugsForDay(viewedDay).map((slug, i) => (
+          <HowToPanel key={slug} slug={slug} defaultOpen={i === 0 && isFirstAppearance(slug, viewedDay)} />
+        ))}
         <label className="mt-3 flex items-center gap-2 text-sm text-ink-soft dark:text-ink-dark-soft">
           <input
             type="checkbox"
