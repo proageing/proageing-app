@@ -18,11 +18,16 @@ const ACCENT = "stroke-movement dark:stroke-movement";
 
 // Some movements have a filmed demonstration, which beats anything drawn.
 // Muted, looping and inline so it behaves like the animated figures it sits
-// among — no controls to find, no sound to startle anyone. Under
-// prefers-reduced-motion the poster frame shows instead of the loop.
+// among — no controls to find, no sound to startle anyone.
 // WebM first so browsers that take VP9 get it, MP4 second because iOS Safari
 // needs H.264 — between them every phone this app targets is covered.
-function VideoFigure({ src, poster, label }: { src: string; poster: string; label: string }) {
+//
+// Two different stills, for two different jobs. `poster` is a single frame in
+// the video's own framing, so nothing shifts as the loop starts. `still` is
+// the two-pose version shown under prefers-reduced-motion, where a single
+// frame would show a position but not the movement — the same start-and-end
+// convention the drawn figures use.
+function VideoFigure({ src, poster, still, label }: { src: string; poster: string; still: string; label: string }) {
   return (
     <div className="mb-3 overflow-hidden rounded-lg bg-paper dark:bg-black/20">
       <video
@@ -38,7 +43,7 @@ function VideoFigure({ src, poster, label }: { src: string; poster: string; labe
         <source src={`${src}.webm`} type="video/webm" />
         <source src={`${src}.mp4`} type="video/mp4" />
       </video>
-      <img className="howto-video-poster mx-auto block max-h-[260px] w-auto" src={poster} alt={label} />
+      <img className="howto-video-poster mx-auto block max-h-[260px] w-auto" src={still} alt={label} />
     </div>
   );
 }
@@ -285,11 +290,19 @@ const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; label: string 
   "protein-breakfast": { node: <PalmPortion />, label: "A palm with a palm-sized portion marked on it" },
 };
 
-const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; label: string }>> = {
+const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; still: string; label: string }>> = {
   "sit-to-stand-exercise": {
     src: "/howto/sit-to-stand",
     poster: "/howto/sit-to-stand.jpg",
+    still: "/howto/sit-to-stand-still.jpg",
     label: "An older woman standing up from an armchair with her arms crossed, then sitting back down",
+  },
+  "wall-push-up": {
+    src: "/howto/wall-push-up",
+    poster: "/howto/wall-push-up.jpg",
+    still: "/howto/wall-push-up-still.jpg",
+    label:
+      "An older woman an arm's length from a wall with her palms flat on it, bending her elbows to bring her chest towards the wall and pushing back out, her body straight from head to heels",
   },
 };
 
