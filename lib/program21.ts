@@ -51,8 +51,8 @@ export const PROGRAM21_DAYS: Program21Day[] = [
   {
     day: 3,
     pillar: "Step 3 — Invest in Daily Movement",
-    learn: "In a study of over 122,000 adults, the fittest group had an 80% lower risk of death than the least fit — VO2 max is one of the strongest predictors of healthy longevity.",
-    assessments: [{ label: "Take your VO2 Max & Resting HR check", href: "/assess/vo2max" }],
+    learn: "Moderate intensity — Zone 2 — is where most of the heart and lung benefit of walking is won, and it is easier than people expect: brisk enough to breathe harder, easy enough to still hold a conversation.",
+    assessments: [{ label: "Find your training zone", href: "/assess/training-zone" }],
     action: "Start today: a 10-minute brisk walk. Aim for a pace where you can talk but not sing (Zone 2).",
     reflect: "How did the walk feel? Could you hold a conversation the whole way?",
   },
@@ -152,8 +152,9 @@ export const PROGRAM21_DAYS: Program21Day[] = [
   {
     day: 16,
     pillar: "Movement",
-    learn: "Adults 60-80 can improve VO2 max by 15-25% with 3-6 months of consistent training — the walking you're doing now is building toward that.",
-    action: "Keep the walking streak going today.",
+    learn: "Adults 60-80 can improve VO2 max by 15-25% with 3-6 months of consistent training — the walking you're doing now is building toward that. Two weeks in is a fair point to take your baseline.",
+    assessments: [{ label: "Take your VO2 Max & Resting HR check", href: "/assess/vo2max" }],
+    action: "Keep the walking streak going today, and take your VO2 max baseline.",
     reflect: "How many days in a row have you walked now?",
   },
   {

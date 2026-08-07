@@ -10,7 +10,7 @@ import {
   completeEnrollment,
   computeCurrentDay,
   computeHabitStreak,
-  countCompletedAssessments,
+  listCompletedAssessments,
   getDayProgress,
   getLatestEnrollment,
   hasCompletedAssessments,
@@ -53,6 +53,21 @@ const PAYWALL_ENABLED = true;
 // default to checked when someone returns having taken them. Excludes the
 // closing day, which asks for a retake of 5 checks plus a Keystone Habit
 // declaration — one check being done there doesn't mean the day is done.
+// The checks the programme has introduced up to and including `day`. The
+// day-7 profile reveal keys off this rather than the full ASSESSMENT_TYPES
+// list, because not every check is introduced in week 1 — VO2 max is asked
+// for on day 16, once there is a fortnight of walking behind it, and the
+// reveal must not sit waiting on a check nobody has been sent to yet.
+function assessmentTypesIntroducedBy(day: number): string[] {
+  const types = new Set<string>();
+  for (let d = 1; d <= day; d++) {
+    for (const a of contentForDay(d).assessments ?? []) {
+      types.add(a.href.split("/").pop()!);
+    }
+  }
+  return [...types].filter((type) => ASSESSMENT_TYPES.some((a) => a.type === type));
+}
+
 function assessmentTypesForDay(day: number): string[] {
   const content = contentForDay(day);
   if (content.isClose || !content.assessments) return [];
@@ -151,7 +166,7 @@ function ProgramPageInner() {
   const [justSaved, setJustSaved] = useState(false);
   const [starting, setStarting] = useState(false);
   const [summary, setSummary] = useState<CompletionSummary | null>(null);
-  const [completedChecksCount, setCompletedChecksCount] = useState(0);
+  const [completedChecks, setCompletedChecks] = useState<string[]>([]);
   const [weeklyMomentum, setWeeklyMomentum] = useState<WeeklyMomentum | null>(null);
   const { locale, t } = useLocale();
 
@@ -219,7 +234,7 @@ function ProgramPageInner() {
 
       const { progress, actionDone } = await loadDayState(active.id, day, user.id);
       setActionDone(actionDone);
-      setCompletedChecksCount(await countCompletedAssessments(user.id, ASSESSMENT_TYPES.map((a) => a.type)));
+      setCompletedChecks(await listCompletedAssessments(user.id, ASSESSMENT_TYPES.map((a) => a.type)));
       if (progress) {
         setLearned(progress.video_watched);
         setReflection(progress.checkin_note ?? "");
@@ -266,7 +281,7 @@ function ProgramPageInner() {
     const { progress, actionDone } = await loadDayState(enrollment.id, day, userId);
     setLearned(progress?.video_watched ?? false);
     setActionDone(actionDone);
-    setCompletedChecksCount(await countCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
+    setCompletedChecks(await listCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
     setReflection(progress?.checkin_note ?? "");
     await refreshMomentum(enrollment.id, day, currentDay);
     if (contentForDay(day).isClose) {
@@ -680,7 +695,7 @@ function ProgramPageInner() {
         </div>
       )}
 
-      {content.isProfileReveal && completedChecksCount === ASSESSMENT_TYPES.length && (
+      {content.isProfileReveal && assessmentTypesIntroducedBy(viewedDay).every((type) => completedChecks.includes(type)) && (
         <div className="mt-4 rounded-xl border border-primary bg-primary-light p-4 dark:bg-primary-light-dark">
           <p className="text-sm font-semibold text-primary-dark">
             {t.programme.day.profileReveal}{" "}

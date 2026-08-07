@@ -155,6 +155,17 @@ export async function hasCompletedAssessments(userId: string, types: string[]): 
 // How many of the given assessment types have at least one saved result
 // for this user — used by the Day-7 profile-reveal banner to show real
 // progress instead of assuming the day number means every check was taken.
+// Which of `types` the user has a saved result for. countCompletedAssessments
+// answers "how many", which is enough for a progress figure but not for
+// "have they done this particular set" — the day-7 reveal needs the latter.
+export async function listCompletedAssessments(userId: string, types: string[]): Promise<string[]> {
+  if (types.length === 0) return [];
+  const { data, error } = await supabase.from("assessment_results").select("assessment_type").eq("user_id", userId).in("assessment_type", types);
+
+  if (error || !data) return [];
+  return [...new Set(data.map((row) => row.assessment_type))];
+}
+
 export async function countCompletedAssessments(userId: string, types: string[]): Promise<number> {
   if (types.length === 0) return 0;
   const { data, error } = await supabase.from("assessment_results").select("assessment_type").eq("user_id", userId).in("assessment_type", types);

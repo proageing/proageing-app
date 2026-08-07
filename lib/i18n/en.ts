@@ -364,6 +364,35 @@ export const en = {
         },
       },
     },
+    trainingZone: {
+      eyebrow: "Training Zone Finder · ~1 minute",
+      title: "Find Your Training Zone",
+      intro1:
+        "This quick calculator finds your Zone 2 heart rate range — a moderate-intensity effort shown to improve how efficiently your body uses oxygen, using the age-predicted heart rate formula from Tanaka, Monahan & Seals (2001).",
+      intro2:
+        "Zone 2 is easier to reach than you'd think: the Talk Test is usually enough to find it, and this gives you the numbers to check against.",
+      begin: "Let's begin",
+      justOneNumber: "Just one number",
+      howOld: "How old are you?",
+      howOldBlurb: "We use this to estimate your maximum heart rate.",
+      yourAge: "Your age",
+      yearsUnit: "years",
+      medicationNote:
+        "If you take a heart-rate-affecting medication (such as a beta blocker), these estimates won't apply to you — ask your doctor for your target range instead.",
+      findMyZone: "Find my zone",
+      zonesHeading: "Your training zones",
+      whatThisMeans: "What this means",
+      maxHr: "Max heart rate (bpm)",
+      zoneRange: "Zone 2 range (bpm)",
+      talkTest:
+        "You should be able to hold a full conversation comfortably, while still feeling like you're exercising and breathing slightly harder than usual. If you can't talk at all, ease off; if you can sing, pick up the pace.",
+      sources:
+        "Max heart rate estimated using the Tanaka formula — Tanaka H, Monahan KD, Seals DR. J Am Coll Cardiol, 2001.",
+      disclaimer:
+        "This is an educational estimate, not a diagnosis. Always check with your doctor before starting a new exercise programme, especially if you have a heart condition or take medication that affects your heart rate.",
+      done: "Done",
+      recalculate: "Change my age",
+    },
     vo2max: {
       eyebrow: "Cardiorespiratory Fitness · ~3 minutes",
       title: "VO2 Max & Resting Heart Rate",

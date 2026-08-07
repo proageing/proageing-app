@@ -365,6 +365,35 @@ export const zh: Dictionary = {
         },
       },
     },
+    trainingZone: {
+      eyebrow: "训练心率区间 · 约1分钟",
+      title: "找出你的训练心率区间",
+      intro1:
+        "这个快速计算工具，会使用 Tanaka、Monahan 与 Seals（2001年）的年龄预测心率公式，找出你的第二心率区间（Zone 2）——这是一种中等强度的运动区间，已证实能提升身体运用氧气的效率。",
+      intro2:
+        "第二心率区间比你想象的更容易达到：靠「说话测试」通常就能找到它，而这里会给你可以对照的具体数字。",
+      begin: "开始吧",
+      justOneNumber: "只需一个数字",
+      howOld: "你今年几岁？",
+      howOldBlurb: "我们会用这个数字，来估算你的最大心率。",
+      yourAge: "你的年龄",
+      yearsUnit: "岁",
+      medicationNote:
+        "如果你正在服用会影响心率的药物（例如乙型阻断剂），这些估算结果并不适用于你——请向医生询问你的目标心率范围。",
+      findMyZone: "找出我的心率区间",
+      zonesHeading: "你的训练心率区间",
+      whatThisMeans: "这代表什么",
+      maxHr: "最大心率（bpm）",
+      zoneRange: "第二区间范围（bpm）",
+      talkTest:
+        "你应该能够轻松地进行完整对话，同时仍能感觉到自己在运动、呼吸比平常稍微急促。如果你完全无法说话，请放慢速度；如果你还能唱歌，可以加快速度。",
+      sources:
+        "最大心率使用 Tanaka 公式估算——Tanaka H, Monahan KD, Seals DR.《美国心脏病学会杂志》，2001年。",
+      disclaimer:
+        "这是一项教育性质的估算，并非诊断结果。在开始任何新的运动计划之前，请务必先咨询医生，尤其是当你有心脏疾病，或正在服用会影响心率的药物时。",
+      done: "完成",
+      recalculate: "修改年龄",
+    },
     vo2max: {
       eyebrow: "心肺功能 · 约 3 分钟",
       title: "最大摄氧量与静息心率",
