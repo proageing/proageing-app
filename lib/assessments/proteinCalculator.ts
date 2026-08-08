@@ -61,10 +61,31 @@ export const PROTEIN_FOODS: ProteinFood[] = [
   { key: "wantonMee", grams: 22, group: "hawker" },
 ];
 
+// Whatever the list above misses, someone can add themselves: a protein shake,
+// a brand of yoghurt, their own cooking. Unlike PROTEIN_FOODS these carry a
+// label the person typed, so the grams cannot live in code -- they supply both.
+export interface CustomFood {
+  key: string;
+  label: string;
+  grams: number;
+}
+
+export const CUSTOM_NAME_MAX = 40;
+export const CUSTOM_GRAMS_MAX = 100;
+
+export function makeCustomFood(label: string, grams: number): CustomFood {
+  return {
+    key: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+    label: label.trim().slice(0, CUSTOM_NAME_MAX),
+    grams: Math.max(1, Math.min(CUSTOM_GRAMS_MAX, Math.round(grams))),
+  };
+}
+
 export type TallyCounts = Record<string, number>;
 
-export function tallyTotal(counts: TallyCounts): number {
-  return PROTEIN_FOODS.reduce((sum, f) => sum + (counts[f.key] ?? 0) * f.grams, 0);
+export function tallyTotal(counts: TallyCounts, customFoods: CustomFood[] = []): number {
+  const all = [...PROTEIN_FOODS, ...customFoods];
+  return all.reduce((sum, f) => sum + (counts[f.key] ?? 0) * f.grams, 0);
 }
 
 // --- persistence -----------------------------------------------------------
@@ -79,6 +100,9 @@ const TALLY_KEY = "proage-protein-tally";
 export interface ProteinSettings {
   weightKg: number;
   doesStrengthWork: boolean;
+  // Kept with the settings rather than the tally, so an item added once is
+  // still on the list tomorrow. Only the counts reset overnight.
+  customFoods?: CustomFood[];
 }
 
 export function loadSettings(): ProteinSettings | null {
@@ -88,7 +112,13 @@ export function loadSettings(): ProteinSettings | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as ProteinSettings;
     if (typeof parsed.weightKg !== "number") return null;
-    return parsed;
+    // Anything hand-edited or written by an older version has to be filtered,
+    // not trusted: a bad grams value would silently corrupt every total.
+    const customFoods = (Array.isArray(parsed.customFoods) ? parsed.customFoods : []).filter(
+      (f): f is CustomFood =>
+        !!f && typeof f.key === "string" && typeof f.label === "string" && Number.isFinite(f.grams),
+    );
+    return { ...parsed, customFoods };
   } catch {
     return null;
   }
