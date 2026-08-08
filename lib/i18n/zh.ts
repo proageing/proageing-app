@@ -152,9 +152,8 @@ export const zh: Dictionary = {
   },
 
   tools: {
-    heading: "两个明确的数字",
-    blurb:
-      "不用再猜自己做得够不够。走路该走到什么心率、蛋白质该吃多少，大约两分钟就帮你算好。",
+    heading: "实用工具",
+    blurb: "快速计算器，帮你掌握这一路上最关键的几个数字。",
     "training-zone": { name: "训练心率区间", blurb: "你的第二心率区间范围" },
     "protein-calculator": { name: "蛋白质计算器", blurb: "你的每日目标，以及今天的总量" },
   },

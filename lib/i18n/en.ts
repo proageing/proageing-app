@@ -145,9 +145,8 @@ export const en = {
   },
 
   tools: {
-    heading: "Two numbers to aim for",
-    blurb:
-      "Stop guessing whether you're doing enough. How hard to walk, how much protein to eat — worked out for you in about two minutes.",
+    heading: "Tools",
+    blurb: "Quick calculators for essential information to support your journey.",
     "training-zone": { name: "Training Zone Finder", blurb: "Your Zone 2 heart-rate range" },
     "protein-calculator": { name: "Protein Calculator", blurb: "Your daily target, and today's total" },
   },
