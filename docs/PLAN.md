@@ -257,11 +257,20 @@ data-model addition now vs. a retrofit later if ever reviewed.
 
 **Phase 0 — Foundations (1–2 weeks)**
 
-Manual (needs your account/billing access — not something I can do from here):
-- [ ] Create the Vercel project — import `proageing/proageing-app`, add the
+Manual (needs your account/billing access — not something I can do from here).
+**These boxes lag reality**: they get done outside Claude sessions and nobody
+comes back to tick them, so an unticked box here is not evidence that
+something is outstanding. Tick with the evidence, as below, or leave a note
+saying it cannot be checked from this environment.
+- [x] Create the Vercel project — import `proageing/proageing-app`, add the
       env vars from `.env.example` (Supabase + shared-project values),
       deploy. Replaces the old "create/confirm the GCP project" step now
       that Hosting is Vercel (§6, changed 2026-07-29).
+      **Ticked 2026-08-08 from evidence, not from doing it:**
+      `app.proageing.org` resolves through `vercel-dns-017.com`, so a Vercel
+      project is serving the domain. That says nothing about whether every
+      env var is set there — unverifiable from a sandbox that blocks
+      `api.stripe.com` and `*.supabase.co`.
 - [x] Stripe Singapore account created. 21-Day Challenge product/price
       done, set locally as `STRIPE_PRICE_21DAY` in `.env.local` (not
       committed — see `.env.example`) — checkout for that plan is
@@ -274,7 +283,11 @@ Manual (needs your account/billing access — not something I can do from here):
       network policy that blocks supabase.co), so an actual Checkout
       Session can only be tested from a real deploy or a local run
       outside this sandbox.
-- [ ] Point `app.proageing.org` DNS at the Vercel deployment once live
+- [x] Point `app.proageing.org` DNS at the Vercel deployment once live —
+      **ticked 2026-08-08 from the same DNS evidence as the box above.**
+      `app.proageing.org` → `vercel-dns-017.com` → `64.29.17.65`,
+      `216.198.79.65`. (For contrast, `proageing.org` → `199.36.158.100`,
+      Firebase Hosting.)
 
 Prepared and ready:
 - [x] `proageing_results` RLS policy pulled and documented — PLAN.md §Open
