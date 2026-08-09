@@ -48,6 +48,23 @@ function VideoFigure({ src, poster, still, label }: { src: string; poster: strin
   );
 }
 
+// A drawn illustration rather than a video, for a movement that holds still.
+// The towel row is an isometric pull — one position held for 20-30 seconds —
+// so a single picture shows the whole exercise, and there is nothing for a
+// loop or a two-pose crossfade to add. WebP first for size, JPEG second
+// because a phone old enough to lack WebP is exactly the phone this audience
+// might still be carrying.
+function ImageFigure({ src, label }: { src: string; label: string }) {
+  return (
+    <div className="mb-3 overflow-hidden rounded-lg bg-paper dark:bg-black/20">
+      <picture>
+        <source srcSet={`${src}.webp`} type="image/webp" />
+        <img className="mx-auto block max-h-[260px] w-auto" src={`${src}.jpg`} alt={label} />
+      </picture>
+    </div>
+  );
+}
+
 function Figure({ children, label }: { children: React.ReactNode; label: string }) {
   return (
     <div className="mb-3 flex justify-center rounded-lg bg-paper py-3 dark:bg-black/20">
@@ -306,9 +323,22 @@ const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; still: st
   },
 };
 
+// Slug kept as "band-row" for historical reasons — the exercise moved from a
+// resistance band to a bath towel, which nobody has to own. The slug is
+// internal and appears in HOW_TO_BY_DAY, so renaming it buys nothing.
+const IMAGES: Partial<Record<HowToSlug, { src: string; label: string }>> = {
+  "band-row": {
+    src: "/howto/towel-row",
+    label:
+      "An older woman sitting on the floor with her legs out in front, a bath towel looped around her feet, pulling both ends towards her with her elbows drawn back close to her body",
+  },
+};
+
 export function Illustration({ slug }: { slug: HowToSlug }) {
   const video = VIDEOS[slug];
   if (video) return <VideoFigure {...video} />;
+  const image = IMAGES[slug];
+  if (image) return <ImageFigure {...image} />;
   const figure = FIGURES[slug];
   if (!figure) return null;
   return <Figure label={figure.label}>{figure.node}</Figure>;

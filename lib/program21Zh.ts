@@ -52,7 +52,7 @@ export const PROGRAM21_DAYS_ZH: Program21Day[] = [
       { label: "做你的坐立测试", href: "/assess/sit-to-stand" },
       { label: "做你的平衡检测", href: "/assess/balance" },
     ],
-    action: "今天就开始：5 分钟的力量小练习——扶椅深蹲、弹力带划船，或靠墙俯卧撑。",
+    action: "今天就开始：5 分钟的力量小练习——坐立起身、毛巾划船，或靠墙俯卧撑。",
     reflect: "哪个动作最吃力？通常那一个，就是最值得继续练的。",
   },
   {
@@ -109,7 +109,7 @@ export const PROGRAM21_DAYS_ZH: Program21Day[] = [
     day: 11,
     pillar: "力量与平衡",
     learn: "每周做 2 次力量训练，每个大肌群 2 组、每组 10 下，就足以开始看到真正的变化。",
-    action: "今天的力量小练习，多做一下，或试试加上弹力带。",
+    action: "今天的坐立起身多做一次，或者毛巾划船多撑几秒。",
     reflect: "和第 4 天比起来，是变难了还是变容易了？",
   },
   {

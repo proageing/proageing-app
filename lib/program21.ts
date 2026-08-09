@@ -64,7 +64,7 @@ export const PROGRAM21_DAYS: Program21Day[] = [
       { label: "Take your Sit-to-Stand check", href: "/assess/sit-to-stand" },
       { label: "Take your Balance check", href: "/assess/balance" },
     ],
-    action: "Start today: a 5-minute strength snack — chair squats, band rows, or wall push-ups.",
+    action: "Start today: a 5-minute strength snack — sit-to-stands, towel rows, or wall push-ups.",
     reflect: "Which exercise felt hardest? That's usually the most useful one to keep doing.",
   },
   {
@@ -118,7 +118,7 @@ export const PROGRAM21_DAYS: Program21Day[] = [
     day: 11,
     pillar: "Strength & Balance",
     learn: "Strength training 2x/week, 2 sets of 10 reps per major muscle group, is enough to start seeing real change.",
-    action: "Add a rep or try a resistance band during today's strength snack.",
+    action: "Add a rep to your sit-to-stands today, or hold the towel row a little longer.",
     reflect: "Did it feel harder or easier than Day 4?",
   },
   {
