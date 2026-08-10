@@ -159,6 +159,24 @@ export const en = {
     stopIfLabel: "Stop if",
     listen: "Listen",
     stopListening: "Stop",
+    // Alt text for the figure at the top of each panel. It lives here rather
+    // than beside the drawing so a Chinese session describes the picture in
+    // Chinese; the Dictionary type makes a missing translation a build error.
+    // One entry per slug, worded to fit whichever asset renders for it.
+    figureAlt: {
+      "brisk-walk": "A person walking briskly, arms swinging, one leg mid-stride",
+      "sit-to-stand-exercise":
+        "An older woman standing up from an armchair with her arms crossed, then sitting back down",
+      "wall-push-up":
+        "An older woman an arm's length from a wall with her palms flat on it, bending her elbows to bring her chest towards the wall and pushing back out, her body straight from head to heels",
+      "band-row":
+        "An older woman sitting on the floor with her legs out in front, a bath towel looped around her feet, pulling both ends towards her with her elbows drawn back close to her body",
+      "one-leg-stand": "A person standing on one leg beside a kitchen counter, the other foot lifted",
+      "longevity-plate":
+        "A plate divided into portions: half vegetables, a quarter protein, a quarter wholegrains",
+      "finger-breathing": "A hand held open with a fingertip tracing up and down each finger in turn",
+      "protein-breakfast": "A hand held open with the palm shaded, showing the size of a palm-sized portion",
+    },
     "brisk-walk": {
       name: "Brisk walking",
       whatIs: "Brisk means fast enough that your breathing deepens, slow enough that you can still talk.",

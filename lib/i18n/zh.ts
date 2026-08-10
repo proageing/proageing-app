@@ -166,6 +166,18 @@ export const zh: Dictionary = {
     stopIfLabel: "出现这些情况就停下",
     listen: "朗读",
     stopListening: "停止",
+    figureAlt: {
+      "brisk-walk": "一个人快步走着，手臂前后摆动，一只脚正跨在半空",
+      "sit-to-stand-exercise": "一位年长女士双手交叉在胸前，从扶手椅上站起来，再坐回去",
+      "wall-push-up":
+        "一位年长女士站在离墙一臂远的地方，双掌平贴墙面，屈肘让胸口靠向墙，再推回来，身体从头到脚跟保持一条直线",
+      "band-row":
+        "一位年长女士坐在地上，双腿向前伸直，一条浴巾绕过双脚，两手拉住两端往身体方向拉，手肘往后贴近身体两侧",
+      "one-leg-stand": "一个人在厨房台面旁单脚站立，另一只脚离地抬起",
+      "longevity-plate": "一个分好比例的盘子：一半蔬菜，四分之一蛋白质，四分之一全谷类",
+      "finger-breathing": "一只张开的手，指尖沿着每根手指依次上下描画",
+      "protein-breakfast": "一只张开的手，掌心部分被标上颜色，显示一份「手掌大小」有多大",
+    },
     "brisk-walk": {
       name: "快走",
       whatIs: "「快」的意思是：走到呼吸变深，但还能说话。",

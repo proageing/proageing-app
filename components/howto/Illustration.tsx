@@ -1,6 +1,14 @@
 "use client";
 
 import type { HowToSlug } from "@/lib/howTo";
+import type { Dictionary } from "@/lib/i18n/en";
+import { useT } from "@/lib/i18n/context";
+
+// Alt text is looked up by this key rather than written beside the drawing, so
+// a Chinese session describes the picture in Chinese. Typing the key against
+// the dictionary means a map entry pointing at a missing string is a build
+// error, not a silently empty alt.
+type FigureAltKey = keyof Dictionary["howTo"]["figureAlt"];
 
 // Animated figures for the how-to panels. Drawn rather than photographed or
 // filmed: an SVG is a couple of kB, stays crisp on any screen, needs no
@@ -300,59 +308,57 @@ function FingerBreathing() {
   );
 }
 
-const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; label: string }>> = {
-  "brisk-walk": { node: <BriskWalk />, label: "A figure walking briskly" },
-  "sit-to-stand-exercise": { node: <ChairSquat />, label: "A figure standing up from a chair and sitting back down" },
-  "wall-push-up": { node: <WallPushUp />, label: "A figure doing a push-up against a wall" },
-  "band-row": { node: <BandRow />, label: "A figure pulling a resistance band towards the ribs" },
-  "one-leg-stand": { node: <OneLegStand />, label: "A figure standing on one leg beside a counter" },
-  "longevity-plate": { node: <LongevityPlate />, label: "A plate half vegetables, a quarter protein, a quarter wholegrain" },
-  "finger-breathing": { node: <FingerBreathing />, label: "A hand with a fingertip tracing up and down each finger" },
-  "protein-breakfast": { node: <PalmPortion />, label: "A palm with a palm-sized portion marked on it" },
+const FIGURES: Partial<Record<HowToSlug, { node: React.ReactNode; altKey: FigureAltKey }>> = {
+  "brisk-walk": { node: <BriskWalk />, altKey: "brisk-walk" },
+  "sit-to-stand-exercise": { node: <ChairSquat />, altKey: "sit-to-stand-exercise" },
+  "wall-push-up": { node: <WallPushUp />, altKey: "wall-push-up" },
+  "band-row": { node: <BandRow />, altKey: "band-row" },
+  "one-leg-stand": { node: <OneLegStand />, altKey: "one-leg-stand" },
+  "longevity-plate": { node: <LongevityPlate />, altKey: "longevity-plate" },
+  "finger-breathing": { node: <FingerBreathing />, altKey: "finger-breathing" },
+  "protein-breakfast": { node: <PalmPortion />, altKey: "protein-breakfast" },
 };
 
-const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; still: string; label: string }>> = {
+const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; still: string; altKey: FigureAltKey }>> = {
   "sit-to-stand-exercise": {
     src: "/howto/sit-to-stand",
     poster: "/howto/sit-to-stand.jpg",
     still: "/howto/sit-to-stand-still.jpg",
-    label: "An older woman standing up from an armchair with her arms crossed, then sitting back down",
+    altKey: "sit-to-stand-exercise",
   },
   "wall-push-up": {
     src: "/howto/wall-push-up",
     poster: "/howto/wall-push-up.jpg",
     still: "/howto/wall-push-up-still.jpg",
-    label:
-      "An older woman an arm's length from a wall with her palms flat on it, bending her elbows to bring her chest towards the wall and pushing back out, her body straight from head to heels",
+    altKey: "wall-push-up",
   },
 };
 
 // Slug kept as "band-row" for historical reasons — the exercise moved from a
 // resistance band to a bath towel, which nobody has to own. The slug is
 // internal and appears in HOW_TO_BY_DAY, so renaming it buys nothing.
-const IMAGES: Partial<Record<HowToSlug, { src: string; label: string; onWhite?: boolean }>> = {
-  "band-row": {
-    src: "/howto/towel-row",
-    label:
-      "An older woman sitting on the floor with her legs out in front, a bath towel looped around her feet, pulling both ends towards her with her elbows drawn back close to her body",
-  },
-  "protein-breakfast": {
-    src: "/howto/palm-portion",
-    // No baked-in words: the diagram's own "Size of the palm" caption is
-    // cropped off, because text inside a picture cannot be translated and
-    // this app runs in two languages. The panel's first line already says
-    // what the picture means.
-    label: "A hand held open with the palm shaded, showing the size of a palm-sized portion",
-    onWhite: true,
-  },
+const IMAGES: Partial<Record<HowToSlug, { src: string; altKey: FigureAltKey; onWhite?: boolean }>> = {
+  "band-row": { src: "/howto/towel-row", altKey: "band-row" },
+  // No baked-in words: the diagram's own "Size of the palm" caption is
+  // cropped off, because text inside a picture cannot be translated.
+  "protein-breakfast": { src: "/howto/palm-portion", altKey: "protein-breakfast", onWhite: true },
 };
 
 export function Illustration({ slug }: { slug: HowToSlug }) {
+  const t = useT();
+  const alt = (key: FigureAltKey) => t.howTo.figureAlt[key];
+
   const video = VIDEOS[slug];
-  if (video) return <VideoFigure {...video} />;
+  if (video) {
+    const { altKey, ...rest } = video;
+    return <VideoFigure {...rest} label={alt(altKey)} />;
+  }
   const image = IMAGES[slug];
-  if (image) return <ImageFigure {...image} />;
+  if (image) {
+    const { altKey, ...rest } = image;
+    return <ImageFigure {...rest} label={alt(altKey)} />;
+  }
   const figure = FIGURES[slug];
   if (!figure) return null;
-  return <Figure label={figure.label}>{figure.node}</Figure>;
+  return <Figure label={alt(figure.altKey)}>{figure.node}</Figure>;
 }
