@@ -338,8 +338,11 @@ const IMAGES: Partial<Record<HowToSlug, { src: string; label: string; onWhite?: 
   },
   "protein-breakfast": {
     src: "/howto/palm-portion",
-    label:
-      "A hand held open with the palm shaded yellow, showing the size of a palm-sized portion — about a quarter of the plate",
+    // No baked-in words: the diagram's own "Size of the palm" caption is
+    // cropped off, because text inside a picture cannot be translated and
+    // this app runs in two languages. The panel's first line already says
+    // what the picture means.
+    label: "A hand held open with the palm shaded, showing the size of a palm-sized portion",
     onWhite: true,
   },
 };
