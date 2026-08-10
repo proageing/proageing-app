@@ -54,9 +54,13 @@ function VideoFigure({ src, poster, still, label }: { src: string; poster: strin
 // loop or a two-pose crossfade to add. WebP first for size, JPEG second
 // because a phone old enough to lack WebP is exactly the phone this audience
 // might still be carrying.
-function ImageFigure({ src, label }: { src: string; label: string }) {
+// `onWhite` is for line art drawn on a white background. Without it the
+// picture becomes a bright card floating on the panel's dark surface in dark
+// mode; with it the whole figure block is white in both themes, so it reads
+// as a printed diagram rather than as a rendering fault.
+function ImageFigure({ src, label, onWhite }: { src: string; label: string; onWhite?: boolean }) {
   return (
-    <div className="mb-3 overflow-hidden rounded-lg bg-paper dark:bg-black/20">
+    <div className={`mb-3 overflow-hidden rounded-lg ${onWhite ? "bg-white" : "bg-paper dark:bg-black/20"}`}>
       <picture>
         <source srcSet={`${src}.webp`} type="image/webp" />
         <img className="mx-auto block max-h-[260px] w-auto" src={`${src}.jpg`} alt={label} />
@@ -326,11 +330,17 @@ const VIDEOS: Partial<Record<HowToSlug, { src: string; poster: string; still: st
 // Slug kept as "band-row" for historical reasons — the exercise moved from a
 // resistance band to a bath towel, which nobody has to own. The slug is
 // internal and appears in HOW_TO_BY_DAY, so renaming it buys nothing.
-const IMAGES: Partial<Record<HowToSlug, { src: string; label: string }>> = {
+const IMAGES: Partial<Record<HowToSlug, { src: string; label: string; onWhite?: boolean }>> = {
   "band-row": {
     src: "/howto/towel-row",
     label:
       "An older woman sitting on the floor with her legs out in front, a bath towel looped around her feet, pulling both ends towards her with her elbows drawn back close to her body",
+  },
+  "protein-breakfast": {
+    src: "/howto/palm-portion",
+    label:
+      "A hand held open with the palm shaded yellow, showing the size of a palm-sized portion — about a quarter of the plate",
+    onWhite: true,
   },
 };
 
