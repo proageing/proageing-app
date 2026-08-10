@@ -182,7 +182,7 @@ export const en = {
       whatIs: "Brisk means fast enough that your breathing deepens, slow enough that you can still talk.",
       steps: [
         "Walk for 2 minutes at your normal pace to warm up.",
-        "Pick up the pace until you notice your breathing get deeper.",
+        "Pick up the pace preferably to 90-100 steps per minute.",
         "Check it: you should be able to say a full sentence — but not sing one.",
         "Hold that pace for 10 minutes, then ease off for the last minute.",
       ],
