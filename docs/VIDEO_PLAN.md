@@ -152,11 +152,16 @@ were made in; those are now legacy and are being migrated.
 What carries over from those four unchanged, because it was never about the
 rendering style:
 
-- **The same woman throughout.** She is the programme's face; a viewer should
-  recognise her by day 3. Attributes in §3a.
-- **Plain rooms.** Wood-panelled wall, wood floor, nothing else. An earlier
-  take with a sofa, side table and window was replaced precisely because the
-  furniture competed with the body at the size these render.
+- **An anchor plus a cast.** Higa appears often enough to be recognised by day
+  3 and holds the days where progression depends on it being the same person;
+  other characters hold the days where their presence is the point. The registry
+  in §3a says who is on which day, and is the source of truth for casting.
+- **One room, always.** Wood-panelled wall with the dado rail, plain light wood
+  floor, nothing else. An earlier take with a sofa, side table and window was
+  replaced because the furniture competed with the body at the size these
+  render — and the set matters more than that now: with several characters, the
+  room is what makes different people read as one series. Wardrobe may vary per
+  character; the room may not.
 - **No text in frame, ever.** One supplied diagram had "Size of the palm"
   baked in and the caption band was cropped off for the reason in §2.
 - **Full body in frame, head not clipped**, including at the tallest point of
@@ -292,15 +297,82 @@ models. So the reference decides the model, not the other way round.
 
 ### What the written attributes are now for
 
-Since prompts are reference-led, the table below is no longer the primary
-input. It is the **acceptance checklist** — what to hold a returned generation
-against to see whether it came back on-model — and the fallback description if
-a reference is ever unavailable.
+Since prompts are reference-led, the attribute tables are no longer the primary
+input. They are the **acceptance checklist** — what to hold a returned
+generation against to see whether it came back on-model — and the fallback
+description if a reference is ever unavailable.
 
-### Margaret — the primary subject
+### Why the cast is more than one person
 
-Appears in every movement, strength, nutrition and sleep video. She is the
-programme's face; a viewer should recognise her by day 3.
+An earlier draft of this document said "the same woman throughout", and that
+was doing real work: a viewer should recognise the demonstrator by day 3, and
+recognition is what makes a series feel like a series rather than a folder of
+clips.
+
+But one woman cannot carry twenty-two videos for **this** audience. The app
+serves adults 45–70 in Singapore. That is Chinese, Malay and Indian, and it is
+both sexes. A programme where every single demonstration is one East Asian
+woman quietly tells a 62-year-old Malay man that it was not built for him — and
+he is exactly who the strength and balance days most need to reach.
+
+So the cast grows, but not into a random rotation. The structure that keeps
+both properties:
+
+- **One anchor.** Higa appears often enough to be recognised, and holds the
+  days that build across the programme — the strength snack and the walking
+  streak, where "harder than day 4" only means something if it is the same
+  person.
+- **A supporting cast with reasons**, each appearing on days where their
+  presence is the point rather than decoration. Connection days genuinely need
+  more than one person. Hawker and nutrition days are where Singapore's
+  diversity is most visible in real life.
+- **Nobody appears once.** A face seen a single time reads as stock footage. If
+  a character is worth adding, they are worth two or three days.
+
+### Cast registry
+
+The live record. Add rows as characters are trained, with IDs read from the API
+rather than retyped, and fill the Days column at the same time — a character
+with no days is a character nobody has decided how to use.
+
+| Character | Role | Soul ID | Element ID | Days |
+|---|---|---|---|---|
+| **Higa** | Anchor demonstrator | `7dcf177e-4f4b-4d68-9751-3cfe6282b786` | `Higa-1` `e6711f2f-9b56-4c48-81d4-07c88f6b6ffc` | 3, 4, 8, 9, 10, 11, 14, 16, 17 |
+| **Isaiah** | Presenter | `c6b276ad-f699-4317-a95f-758bf09ab536` | `b373d660-93a7-4c68-8c14-51fb589169d5` | intro, 1, 7, 14, 21 |
+| *(to add)* | | | | |
+
+**A proposal for who the additions should be**, for the user to confirm or
+replace — the point is that each has a job, not that these particular people
+are right:
+
+| Suggested | Why | Natural days |
+|---|---|---|
+| A man, 55–70 | There is currently no man in a programme sold to both sexes, and strength work is where a male demonstrator matters most | 11, 13, 17 |
+| A Malay or Indian woman, 50–65 | Nutrition and hawker days are where Singapore's diversity is most visible, and this is the audience segment the food content speaks to most directly | 5, 12, 20 |
+| A small group, mixed, 50–70 | Days 7 and 18 are *about* other people — one person cannot depict a *moai* | 7, 18 |
+
+### Adding a character — the checklist
+
+Each new character costs more than one generation, and skipping any of these is
+how a cast drifts:
+
+1. **Train a Soul** for solo shots, so the identity holds across days.
+2. **Create an Element** as well. Souls take **one person per generation**, so
+   any shot with two or more people needs Elements — and a character who will
+   ever appear beside another needs both.
+3. **Record both IDs in the registry above**, read from the API.
+4. **Assign days**, and check the character appears on at least two.
+5. **Write an attribute block** below, in the same shape as Higa's, so there is
+   an acceptance checklist for them too.
+6. **Keep the set identical.** Wardrobe may differ per character; the room must
+   not. The wood panelling, dado rail, floor and flat lighting are what make
+   different people read as one series.
+7. **Generate one still and check it** before any video.
+
+### Higa — the anchor demonstrator
+
+Appears on the movement and strength days that build across the programme,
+where progression only means something if it is visibly the same person.
 
 **Canonical values are what the Soul actually produces**, verified against job
 `a1ee7c2a` on 2026-08-10 — not what the retired illustration looked like. Where
@@ -339,32 +411,34 @@ Photorealistic, generated from the Higa Soul on `text2image_soul_v2` /
 `soul_cinema_studio`. Flat even lighting, no dramatic shadow, one soft contact
 shadow under the subject. Muted palette. No text anywhere in frame.
 
-### Supporting cast and objects
+### Objects, which need pinning too
 
-Not every day is Margaret exercising. These recur and should be as pinned as
-she is:
+Not every day is a person exercising:
 
-- **A friend or small group** — days 7 and 18 (connection, the Okinawan
-  *moai*). Same age range, same photoreal register, same room or an equally
-  plain exterior. These two days cannot use the Soul — one person per
-  generation — so they need the `Higa-1` Element.
 - **A plate** — day 12, the Singapore Longevity Plate. Half vegetables, a
-  quarter protein, a quarter wholegrains, read from directly above.
+  quarter protein, a quarter wholegrains, read from directly above. Stays a
+  diagram.
 - **Hawker dishes** — days 5, 12 and 20, and the missing `hawker-protein`
-  figure. Fish soup, chicken rice, yong tau foo, economy rice. Recognisably
-  Singaporean, plainly lit, no branding, no text.
-- **A hand** — day 15 finger breathing, and the palm-portion diagram.
-  Margaret's hand, same skin tone.
+  figure. Fish soup, chicken rice, yong tau foo, economy rice, thosai.
+  Recognisably Singaporean, plainly lit, no branding, no text.
+- **A hand** — day 15 finger breathing, and the palm-portion diagram. Match it
+  to whichever character holds that day.
 
 ### Prompt hygiene
 
-- Drive **every** prompt from the reference character. Do not rely on a previous
-  generation carrying it forward, and do not fall back to describing her in
-  words unless the reference is unavailable.
-- Generate a still frame first and check it against the table above before
-  committing to video — video generations are slower and more expensive to redo.
-- Check the trainers specifically. They are the attribute the existing assets
-  already disagree about, so they are the one most likely to drift.
+- Drive **every** prompt from that day's reference character. Do not rely on a
+  previous generation carrying it forward, and do not fall back to describing
+  them in words unless the reference is unavailable.
+- **Check the registry for who is on this day** before writing the prompt. With
+  more than one character in the cast, "the woman" is no longer unambiguous.
+- Generate a still frame first and check it against that character's attribute
+  block before committing to video — video generations are slower and more
+  expensive to redo.
+- **Multi-character shots must use Elements, never a Soul.** One person per Soul
+  generation is a hard limit, not a preference.
+- Check the trainers and the set specifically. Trainers are the attribute the
+  legacy assets already disagree about; the set is what holds a multi-character
+  cast together, so a wrong room is worse than a wrong shirt.
 - Every clip needs its first and last half-second inspected for drifting text
   or signage before it is accepted (§4).
 - Ask for the full body in frame with headroom at the tallest point of the
@@ -496,6 +570,10 @@ breaks a promise the product already made.
 | 20 | Nutrition | Ultra-processed food and biological ageing | One swap. Avoid moralising about food. |
 | 21 | **Close** | Identity-level commitments persist | **PRESENTER.** **Graduation.** Retake five checks, then declare a Keystone Habit to someone else. |
 
+**Who is in each day is in §3a's cast registry, not this table** — one place, so
+the two cannot drift. Days 7 and 18 need more than one person in frame and
+therefore the Element path rather than a Soul.
+
 **Beyond the 21:** an intro that plays before day 1 (the "not started" screen
 already has a `previewCaption` slot: *"What a day inside the Challenge looks
 like"*), and optionally three weekly openers at days 1, 8 and 15.
@@ -556,12 +634,13 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 | Decided | Answer |
 |---|---|
 | Presenter or generated | Presenter on intro, 1, 7, 14, 21. AI-generated for the other 17. |
-| Character consistency | A reference character exists and drives every prompt. §3a is the acceptance checklist. |
+| Character consistency | References drive every prompt; the attribute blocks are the acceptance checklist. §3a. |
 | Footwear | White low-profile trainers, always, including floor exercises. |
 | Language | English primary, Mandarin generated on demand. Ship English first, per-locale resolution with a fallback to the translated text. |
 | Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
 | How many | All seventeen. Every day gets its own video. |
 | Visual register | **Photoreal**, via the Higa Soul. The three human demonstrations migrate; diagrams stay diagrams. |
+| Cast | Growing. Higa anchors; more characters are being added so the cast reflects a multi-ethnic audience of both sexes. Registry and casting rules in §3a. |
 
 Reference character locations are recorded in §3a, and the canonical one is
 settled: the Soul `Higa` for her, Element `Higa-1` where an Element is needed.
@@ -595,10 +674,13 @@ player is wrong.
    renders nothing at all today), then `sit-to-stand` — the one legacy asset
    that shares a screen with a daily video, on days 4 and 11 — then the rest of
    §3b's migration. All silent, language-free and reused across days.
-5. **Batch the remaining sixteen illustrated videos.** By now the format,
-   voice, player and character are all fixed, so this is production rather
-   than design.
-6. **The five presenter pieces, in parallel from step 3 onwards.** They need a
+5. **Train the rest of the cast before batching anything that needs them.**
+   Each new character wants a Soul *and* an Element, IDs in the registry, and
+   days assigned. A day whose character does not exist yet cannot be generated,
+   so this gates part of step 6 rather than running alongside it.
+6. **Batch the remaining sixteen videos.** By now the format, voice, player and
+   cast are all fixed, so this is production rather than design.
+7. **The five presenter pieces, in parallel from step 3 onwards.** They need a
    human and a diary, so they are the long-lead item — start scheduling early
    even though they ship last.
 
