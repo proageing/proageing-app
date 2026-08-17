@@ -70,7 +70,7 @@ different component — it needs real controls, and those controls are subject t
 
 ---
 
-## 2. The decision that shapes every other decision: two languages
+## 2. Two languages, and the rule that lets English go first
 
 The app ships English and Simplified Chinese, and the Chinese dictionary is
 typed against the English one, so a missing translation is a **build error**,
@@ -94,20 +94,29 @@ produced twice. That turns "make 21 videos twice" into "make 21 videos, write
 one visual master serves both languages and only the voice-over is produced
 twice.
 
-**It is not settled for the five presenter pieces**, and it cannot be dodged —
-a face on camera speaks a language. Three ways, in the order I would rank them:
+**English is the production language; Mandarin is generated on demand.**
+Settled by the user, 2026-08-10. English leads, and a Mandarin cut of any piece
+can be produced whenever it is wanted rather than being a gate on shipping.
 
-| Option | Cost | Honest downside |
-|---|---|---|
-| **Shoot each piece twice, once per language** | 2 shoots of 5 | Doubles the smallest part of the job — 5 pieces, not 21 |
-| Shoot English, dub the audio | 1 shoot, 2 audio | Lip sync visibly wrong in the second language |
-| Shoot English, subtitle Chinese | 1 shoot, 1 subtitle pass | Subtitles are small text, which this audience reads worst |
+That removes the schedule problem but **not** the product problem, and the
+difference matters:
 
-The decision in §0 is what makes the first row affordable. Five pieces shot
-twice is a manageable ask; twenty-one would not have been. If the presenter is
-not comfortable presenting in Mandarin, the honest fallback is a different
-presenter for the Chinese cut rather than a dub — same script, same set, same
-shot list, different person. Viewers of each language only ever see one.
+> Producing Mandarin on demand means the Mandarin video may not exist *yet* on
+> the day English ships. What must never happen is a Chinese session playing the
+> English one.
+
+So this is an engineering requirement, not just a production note:
+
+- **Resolve the video per locale**, e.g. `/program/day-03.en.mp4` and
+  `-zh.mp4`, exactly as every other string in the app resolves.
+- **When a locale's video is missing, fall back to the translated Learn text** —
+  which already exists in `lib/program21Zh.ts` and is already correct. Never
+  fall back to the other language's audio.
+- That fallback is what lets English ship the day it is ready without shipping
+  a bug, and it means each Mandarin video can be dropped in later with no code
+  change.
+
+Ship English first. Backfill Mandarin at whatever pace suits.
 
 ---
 
@@ -152,10 +161,19 @@ pinned in writing and re-stated in every prompt. This section is that pin.
 It is derived from the four assets already approved, not invented — so
 anything generated against it matches what is live today.
 
-**Produce a character reference sheet before any of the 17.** One subject,
-multiple angles and expressions, generated once and then used as the reference
-image for every subsequent clip. Generating each video from a text description
-alone is how a series ends up with seventeen different women.
+**A reference character already exists** — held by the user in the generation
+tool, 2026-08-10. Every one of the seventeen prompts must be driven from that
+reference rather than from a written description. Text alone will not hold a
+character across seventeen generations; that is the failure this avoids.
+
+> **Next session: record where the reference lives, here, before generating.**
+> A hand-off that says "a reference exists" without saying where is a hand-off
+> that gets ignored.
+
+The written attributes below therefore serve two purposes rather than one:
+they are the **acceptance checklist** for judging whether a generation came
+back on-model, and the fallback description if the reference is ever
+unavailable. They are not the primary input any more.
 
 ### Margaret — the primary subject
 
@@ -170,7 +188,7 @@ programme's face; a viewer should recognise her by day 3.
 | Build | Average, soft, not athletic. Not a fitness model. |
 | Top | Sage-green short-sleeve crew-neck t-shirt |
 | Bottom | Navy cropped leggings, mid-calf |
-| Feet | **Decide and lock**: white low-profile trainers with grey accents in the sit-to-stand and wall push-up clips, but barefoot in the towel row still. Inconsistent today. Trainers are the safer default; barefoot only where a floor exercise genuinely calls for it. |
+| Feet | **White low-profile trainers with grey accents. Locked 2026-08-10.** Always, including floor exercises. The towel row still is barefoot and is the odd one out — regenerate it with trainers when convenient, or accept it as the single exception and never repeat it. |
 | Expression | Calm, warm, faint smile. Capable and unhurried — never strained, never grinning. |
 | Skin | Light-medium |
 
@@ -208,10 +226,13 @@ she is:
 
 ### Prompt hygiene
 
-- Restate the full character block in **every** prompt. Do not rely on a
-  previous generation carrying it.
-- Generate a still frame first and approve the character before committing to
-  video — video generations are slower and more expensive to redo.
+- Drive **every** prompt from the reference character. Do not rely on a previous
+  generation carrying it forward, and do not fall back to describing her in
+  words unless the reference is unavailable.
+- Generate a still frame first and check it against the table above before
+  committing to video — video generations are slower and more expensive to redo.
+- Check the trainers specifically. They are the attribute the existing assets
+  already disagree about, so they are the one most likely to drift.
 - Every clip needs its first and last half-second inspected for drifting text
   or signage before it is accepted (§4).
 - Ask for the full body in frame with headroom at the tallest point of the
@@ -357,17 +378,17 @@ Cheaper per unit and reusable, so they are the better first spend.
 
 ## 8. Decisions I did not make
 
-For the user, not the next session. The first has been answered; three remain.
+For the user, not the next session. Three are answered; two remain.
 
 1. ~~**Presenter or illustration?**~~ **Answered 2026-08-10** — presenter on
    the milestone days, AI-generated illustration for the other seventeen. See
    §0.
-2. **Which language approach for the five presenter pieces?** §2 ranks them.
-   Shooting each twice is now affordable because the decision in §0 cut the
-   presenter count from twenty-one to five.
-3. **Does Chinese launch with the videos, or later?** Shipping English-only
-   video to a bilingual product is a visible gap, but a deliberate one is
-   better than an accidental one.
+2. ~~**Trainers or barefoot?**~~ **Answered 2026-08-10** — trainers, always.
+   A reference character now exists too, so §3a is reference-led rather than
+   description-led.
+3. ~~**Language approach, and does Chinese launch with the videos?**~~
+   **Answered 2026-08-10** — English is primary, Mandarin generated on demand.
+   Ship English first; see §2 for the per-locale fallback this requires.
 4. **Does the video replace the Learn text or sit above it?** Replacing is
    cleaner; keeping the text serves people on poor connections, in quiet
    places, and anyone who would rather read. Recommend keeping it, collapsed.
