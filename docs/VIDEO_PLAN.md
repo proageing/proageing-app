@@ -8,6 +8,33 @@ reverse-engineer the app. Read this, then `lib/program21.ts` for verbatim copy.
 demonstration clips exist already (below) and set the house style; the daily
 videos do not exist and neither does the player that would show them.
 
+---
+
+## 0. Decided
+
+**Presenter on the milestone days, AI-generated illustration everywhere else.**
+Settled by the user, 2026-08-10. It resolves §2's central question and fixes
+the shape of everything downstream.
+
+| | Days | Treatment |
+|---|---|---|
+| **Presenter** | intro, 1, 7, 14, 21 | A real person to camera. Trust, welcome, milestone, close. |
+| **Illustration** | 2–6, 8–13, 15–20 | AI-generated, language-free visuals + voice-over. 17 videos. |
+
+Assumption to correct if wrong: "milestone" is read as the pre-programme
+intro plus days 1, 7, 14 and 21 — the welcome, the week-1 close that doubles
+as the Longevity Profile reveal, the two-week mark, and graduation. If that is
+one too many, the intro and day 1 are the pair to merge; they cover
+overlapping ground.
+
+**What this decision buys.** The 17 illustrated videos carry no language in the
+picture, so Chinese costs a second voice track and nothing else. The bilingual
+exposure is now confined to five presenter pieces — see §2.
+
+**What it now demands.** Seventeen separately generated videos have to look like
+one series, which makes character consistency the main production risk rather
+than a detail. §3a is the cast bible that exists to prevent that.
+
 **Source of truth.** Day copy is `lib/program21.ts` (English) and
 `lib/program21Zh.ts` (Chinese). If this document and those files disagree,
 the files win — quote from them, don't retype from here.
@@ -63,20 +90,24 @@ Then the same visual master serves both locales and only the audio track is
 produced twice. That turns "make 21 videos twice" into "make 21 videos, write
 42 scripts, record 42 voice tracks", which is a materially smaller job.
 
-If a talking-head presenter is wanted instead — and there is a real argument
-for it, since a face builds trust that an illustration cannot — then accept
-one of these and say which:
+**That is settled for the 17 illustrated videos** (§0): no words in frame, so
+one visual master serves both languages and only the voice-over is produced
+twice.
+
+**It is not settled for the five presenter pieces**, and it cannot be dodged —
+a face on camera speaks a language. Three ways, in the order I would rank them:
 
 | Option | Cost | Honest downside |
 |---|---|---|
-| Shoot once, dub audio only | 1 shoot, 2 audio | Lip sync visibly wrong in the second language |
-| Shoot twice, once per language | 2 shoots | Doubles the most expensive part |
+| **Shoot each piece twice, once per language** | 2 shoots of 5 | Doubles the smallest part of the job — 5 pieces, not 21 |
+| Shoot English, dub the audio | 1 shoot, 2 audio | Lip sync visibly wrong in the second language |
 | Shoot English, subtitle Chinese | 1 shoot, 1 subtitle pass | Subtitles are small text, which this audience reads worst |
-| Presenter for weekly framing only, illustrated for daily | 3–4 shoots | Two visual registers in one product |
 
-The last row is the pragmatic middle and is what I would plan for unless told
-otherwise: a human face at the three or four moments that carry emotional
-weight, language-free illustration for the twenty-one daily explainers.
+The decision in §0 is what makes the first row affordable. Five pieces shot
+twice is a manageable ask; twenty-one would not have been. If the presenter is
+not comfortable presenting in Mandarin, the honest fallback is a different
+presenter for the Chinese cut rather than a dub — same script, same set, same
+shot list, different person. Viewers of each language only ever see one.
 
 ---
 
@@ -111,6 +142,80 @@ The other six how-to slugs are hand-drawn animated SVGs in
 plainly weaker than the illustrated clips. Two slugs —
 **`sunday-afternoon-test`** and **`hawker-protein`** — have no figure at all
 and render nothing.
+
+---
+
+## 3a. The cast bible
+
+Seventeen videos generated separately will drift unless the cast and set are
+pinned in writing and re-stated in every prompt. This section is that pin.
+It is derived from the four assets already approved, not invented — so
+anything generated against it matches what is live today.
+
+**Produce a character reference sheet before any of the 17.** One subject,
+multiple angles and expressions, generated once and then used as the reference
+image for every subsequent clip. Generating each video from a text description
+alone is how a series ends up with seventeen different women.
+
+### Margaret — the primary subject
+
+Appears in every movement, strength, nutrition and sleep video. She is the
+programme's face; a viewer should recognise her by day 3.
+
+| Attribute | Locked value |
+|---|---|
+| Age read | 60–75 |
+| Hair | Short cropped pixie, fully white/silver, soft texture |
+| Glasses | Round, thin tortoiseshell/brown frames — always on |
+| Build | Average, soft, not athletic. Not a fitness model. |
+| Top | Sage-green short-sleeve crew-neck t-shirt |
+| Bottom | Navy cropped leggings, mid-calf |
+| Feet | **Decide and lock**: white low-profile trainers with grey accents in the sit-to-stand and wall push-up clips, but barefoot in the towel row still. Inconsistent today. Trainers are the safer default; barefoot only where a floor exercise genuinely calls for it. |
+| Expression | Calm, warm, faint smile. Capable and unhurried — never strained, never grinning. |
+| Skin | Light-medium |
+
+### The set
+
+| Attribute | Locked value |
+|---|---|
+| Wall | Vertical wood panelling, warm honey/amber tone |
+| Floor | Warm wood or terracotta, plain |
+| Skirting | Darker wood band where wall meets floor |
+| Lighting | Flat, even, no dramatic shadow. A soft contact shadow under the subject only. |
+| Props | Only what the exercise needs — armchair, wall, bath towel. Nothing decorative. |
+| Rejected | A furnished living room with brown sofa, side table, window and cushions. It was generated, shipped, and replaced: at the size these render, furniture competes with the body, and the body is the instruction. |
+
+### Style
+
+Flat vector illustration with confident dark outlines, muted palette, no
+gradients beyond simple shading, no photorealism, no text anywhere in frame.
+
+### Supporting cast and objects
+
+Not every day is Margaret exercising. These recur and should be as pinned as
+she is:
+
+- **A friend or small group** — days 7 and 18 (connection, the Okinawan
+  *moai*). Same age range, same illustration style, same room or an equally
+  plain exterior.
+- **A plate** — day 12, the Singapore Longevity Plate. Half vegetables, a
+  quarter protein, a quarter wholegrains, read from directly above.
+- **Hawker dishes** — days 5, 12 and 20, and the missing `hawker-protein`
+  figure. Fish soup, chicken rice, yong tau foo, economy rice. Recognisably
+  Singaporean, plainly lit, no branding, no text.
+- **A hand** — day 15 finger breathing, and the palm-portion diagram.
+  Margaret's hand, same skin tone.
+
+### Prompt hygiene
+
+- Restate the full character block in **every** prompt. Do not rely on a
+  previous generation carrying it.
+- Generate a still frame first and approve the character before committing to
+  video — video generations are slower and more expensive to redo.
+- Every clip needs its first and last half-second inspected for drifting text
+  or signage before it is accepted (§4).
+- Ask for the full body in frame with headroom at the tallest point of the
+  movement.
 
 ---
 
@@ -175,27 +280,27 @@ breaks a promise the product already made.
 
 | Day | Pillar | The idea in one line | Video note |
 |---|---|---|---|
-| 1 | Purpose | Purpose lowers all-cause mortality 20% | Opener. Also carries "what these 21 days are". Longest allowance, ~90s. |
+| 1 | Purpose | Purpose lowers all-cause mortality 20% | **PRESENTER.** Opener. Also carries "what these 21 days are". Longest allowance, ~90s. |
 | 2 | Healthspan risks | Early-onset family history multiplies your risk | Sensitive: family illness. Warm, non-alarming. Ends on the one biomarker to ask about. |
 | 3 | Movement | Zone 2 is easier than people expect | First physical day. Must show the walking pace, not describe it. Pairs with `brisk-walk`. |
 | 4 | Strength | Strength and balance are trainable at any age | Introduces the strength snack. Three exercises exist as panels; the video sells the habit, the panels teach form. |
 | 5 | Nutrition | After 50 you need more protein, not less | The 25–40g target. Pairs with the palm diagram. |
 | 6 | Sleep | Quantity and quality matter equally | Calm register. Bedtime, screens away. |
-| 7 | Connection + **reveal** | Isolation is as harmful as 15 cigarettes a day | **Week 1 close.** Doubles as the Longevity Profile reveal. Emotional peak — presenter candidate. |
+| 7 | Connection + **reveal** | Isolation is as harmful as 15 cigarettes a day | **PRESENTER.** **Week 1 close.** Doubles as the Longevity Profile reveal, and closes week one. |
 | 8 | Movement | Zone 2 is the base for VO2 max | The Talk Test, demonstrated out loud. |
 | 9 | Balance | Balance improves within weeks | Pairs with `one-leg-stand`. Show the counter for safety. |
 | 10 | Movement | Sitting less matters as much as exercising | Extending the walk by 5 minutes. |
 | 11 | Strength | 2×/week, 2 sets of 10 is enough | Progression, not novelty. |
 | 12 | Nutrition | The Singapore Longevity Plate | Half veg, quarter protein, quarter grain. Strongly visual. |
 | 13 | Movement | Lifestyle activity counts alongside exercise | Stairs, housework, commuting. |
-| 14 | Strength | Consistency beats intensity | **Two-week mark** — acknowledge it. |
+| 14 | Strength | Consistency beats intensity | **PRESENTER.** **Two-week mark** — acknowledge it. |
 | 15 | Sleep & stress | Breathing pattern changes stress directly | Pairs with `finger-breathing`. Do the 90 seconds with them, in real time. |
 | 16 | Movement | 60–80 year olds gain 15–25% VO2 max | Baseline VO2 max is taken today. |
 | 17 | Strength | Muscle grows at 90+ | The most quietly encouraging fact in the programme. |
 | 18 | Connection | The Okinawan *moai* | Five friends for life. Cultural, warm. |
 | 19 | Purpose | The Sunday Afternoon Test | No figure exists for this — needs one. Reflective. |
 | 20 | Nutrition | Ultra-processed food and biological ageing | One swap. Avoid moralising about food. |
-| 21 | **Close** | Identity-level commitments persist | **Graduation.** Retake five checks, declare a Keystone Habit to someone. Presenter candidate. |
+| 21 | **Close** | Identity-level commitments persist | **PRESENTER.** **Graduation.** Retake five checks, then declare a Keystone Habit to someone else. |
 
 **Beyond the 21:** an intro that plays before day 1 (the "not started" screen
 already has a `previewCaption` slot: *"What a day inside the Challenge looks
@@ -252,16 +357,21 @@ Cheaper per unit and reusable, so they are the better first spend.
 
 ## 8. Decisions I did not make
 
-For the user, not the next session:
+For the user, not the next session. The first has been answered; three remain.
 
-1. **Presenter or illustration for the daily videos?** §2 lays out the cost of
-   each. This determines almost everything downstream.
-2. **Does Chinese launch with the videos, or later?** Shipping English-only
+1. ~~**Presenter or illustration?**~~ **Answered 2026-08-10** — presenter on
+   the milestone days, AI-generated illustration for the other seventeen. See
+   §0.
+2. **Which language approach for the five presenter pieces?** §2 ranks them.
+   Shooting each twice is now affordable because the decision in §0 cut the
+   presenter count from twenty-one to five.
+3. **Does Chinese launch with the videos, or later?** Shipping English-only
    video to a bilingual product is a visible gap, but a deliberate one is
    better than an accidental one.
-3. **Does the video replace the Learn text or sit above it?** Replacing is
+4. **Does the video replace the Learn text or sit above it?** Replacing is
    cleaner; keeping the text serves people on poor connections, in quiet
    places, and anyone who would rather read. Recommend keeping it, collapsed.
-4. **21 videos or fewer?** Days 8–20 are reinforcement, and several are near
-   neighbours. A tighter set — 7 pillar videos plus short weekly check-ins —
-   would cost a third as much and might not feel thinner.
+5. **Seventeen illustrated videos, or fewer?** Days 8–20 are reinforcement, and
+   several are near neighbours. A tighter set would cost proportionally less
+   and might not feel thinner. Worth settling before generation starts, since
+   this is the count that drives the bill.
