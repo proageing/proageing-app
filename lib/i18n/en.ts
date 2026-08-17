@@ -1188,7 +1188,7 @@ export const en = {
       eyebrow: "Physical Function Check · ~4 minutes",
       title: "Sit-to-Stand Check",
       intro1:
-        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance. In a meta-analysis pooling multiple studies of older adults, people in the slowest quarter on this exact test had roughly double the mortality risk of the fastest quarter (Cooper et al., BMJ, 2010).",
+        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance.",
       intro2:
         "You'll stand up and sit down from a chair as many times as you can in 30 seconds. No equipment needed beyond a sturdy chair.",
       begin: "Let's begin",
@@ -1235,7 +1235,7 @@ export const en = {
       typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (Rikli & Jones, 1999).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
-      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range) · Cooper et al., BMJ, 2010 (mortality link).",
+      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range).",
       result: {
         below: {
           label: "Below typical range for your age group",

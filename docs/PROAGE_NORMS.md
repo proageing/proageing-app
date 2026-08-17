@@ -493,6 +493,17 @@ Four records, transcribed as supplied. Note that HPB publishes its own provenanc
 
 8. **Storage:** `localStorage` only, never Supabase. `proage-protein-target` holds `weightKg`, `doesStrengthWork` and any custom foods; `proage-protein-tally` holds `{date, counts}` and is discarded on load if `date` is not today. Both are filtered on read rather than trusted — a non-numeric `weightKg` or a custom food with a non-finite `grams` is dropped, because either would corrupt every total silently.
 
+## Citation verification pass — 2026-08-08
+
+Three citations had never been independently checked. All three were run
+against primary sources; two held, one did not.
+
+| Citation | Verdict | Detail |
+|---|---|---|
+| **Cooper et al., BMJ, 2010** (was on Sit-to-Stand, "mortality link") | ❌ **Removed** | The paper is real and the number was right — 5 studies, 28,036 participants, HR 1.96 (1.56–2.45) slowest vs fastest quarter. But it pools studies of **timed five chair rises**: *"all had asked participants to do five rises."* Our check is the Rikli & Jones **30-second repetition count**. Different test, so it does not support a mortality claim about ours, and the page called it *"this exact test"*. Claim and citation removed from `sit-to-stand.html` (en+zh) and from `intro1`/`sources` in the app's `en.ts`/`zh.ts`. Note the paper also reports high heterogeneity (I²=81.9%), which was never disclosed. **Do not reinstate** unless a meta-analysis of the 30-second count specifically is found. |
+| **Coelho-Júnior et al., Nutrients, 2018** (Nutrition, "frailty link") | ✅ **Holds** | "Low Protein Intake Is Associated with Frailty in Older Adults." Pooled **OR 0.67 (0.56–0.82), p=0.0001** — "a third lower odds" is accurate, and "was linked to" correctly signals association, which is right for pooled observational data. **One caveat:** the displayed copy says *"over 50,000 older adults"* and that figure could **not** be confirmed — MDPI returns 403 and no accessible summary states the pooled sample. Left in place, flagged here. Verify or drop the number. |
+| **Morioka et al., 2012** (Balance, "age-decline validation") | ✅ **Holds** | Morioka S, Fukumoto T, Hiyamizu M, et al., *Current Gerontology and Geriatrics Research*, 2012. 1,241 people aged 2–92, one-leg stand, eyes open and closed, 120s cap; peak around age 31 (eyes open), minimum near 88. Supports the age-decline shape as cited. **Protocol caveat:** Morioka tested with *"both upper extremities naturally to their sides"* — **arms free** — whereas our check is **hands on hips**, which yields shorter times. It validates the shape of the decline, not our absolute values. Fine as cited ("age-decline validation"); would not be fine as a source for reference ranges. |
+
 ---
 
 ## Summary of conflicts/gaps flagged

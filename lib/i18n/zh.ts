@@ -1163,7 +1163,7 @@ export const zh: Dictionary = {
     sitToStand: {
       eyebrow: "身体功能检测 · 约 4 分钟",
       title: "坐立测试",
-      intro1: "本测试评估你腿部与髋部的力量——这些肌肉是你每天从椅子上站起、爬楼梯或保持平衡时所使用的。一项汇总多项年长者研究的统合分析发现，这项测试成绩最慢的四分之一人群，死亡风险约为最快四分之一人群的两倍（Cooper 等人，《英国医学期刊》，2010年）。",
+      intro1: "本测试评估你腿部与髋部的力量——这些肌肉是你每天从椅子上站起、爬楼梯或保持平衡时所使用的。",
       intro2: "你将在 30 秒内尽可能多次地从椅子上站起再坐下。除了一把稳固的椅子外，无需其他器材。",
       begin: "开始吧",
       safetyHeading: "两个简短的安全问题",
@@ -1206,7 +1206,7 @@ export const zh: Dictionary = {
       standsIn30: "30 秒内完整站立次数",
       typicalRange: (lo: number, hi: number) => `你所在组别的典型范围：${lo}–${hi} 次（Rikli & Jones，1999年）。`,
       disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
-      sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年（参考范围）· Cooper 等人，《英国医学期刊》，2010年（死亡率关联）。",
+      sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年（参考范围）。",
       result: {
         below: {
           label: "低于同年龄组的典型范围",
