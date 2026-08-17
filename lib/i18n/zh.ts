@@ -293,7 +293,7 @@ export const zh: Dictionary = {
       ],
       portions: [
         { food: "鱼片汤 + 蛋 + 豆腐", protein: "32 克" },
-        { food: "鸡饭——鸡胸肉，少饭", protein: "30 克" },
+        { food: "白鸡饭——鸡胸肉、少饭、加蛋", protein: "28 克" },
         { food: "酿豆腐——6 样，含蛋与豆干", protein: "28 克" },
         { food: "鱼片米粉汤", protein: "28 克" },
         { food: "经济饭——一荤、一蛋、一豆腐、青菜", protein: "30 克" },
@@ -586,7 +586,8 @@ export const zh: Dictionary = {
         chickenPalm: "鸡胸肉，手掌大小",
         dhal: "扁豆糊 1 碗",
         fishSoup: "鱼片汤",
-        chickenRice: "鸡饭——鸡胸肉，少饭",
+        chickenRiceSteamed: "白鸡饭",
+        chickenRiceRoasted: "烧鸡饭",
         yongTauFoo: "酿豆腐——6 样含蛋",
         fishBeeHoon: "鱼片米粉汤",
         economyRice: "经济饭——肉、蛋、豆腐、青菜",

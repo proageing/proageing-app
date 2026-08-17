@@ -52,7 +52,16 @@ export const PROTEIN_FOODS: ProteinFood[] = [
   { key: "chickenPalm", grams: 30, group: "everyday" },
   { key: "dhal", grams: 9, group: "everyday" },
   { key: "fishSoup", grams: 25, group: "hawker" },
-  { key: "chickenRice", grams: 30, group: "hawker" },
+  // Two rows, not one. HPB's Singapore Food Insights Database measures these as
+  // separate dishes and they differ by 38% -- steamed 5.95 g protein per 100 g,
+  // roasted 8.22 (Lab Analysis, 2025). A single row was off by ~8 g for whoever
+  // ate the other one. Both figures below are those densities on an assumed
+  // 350 g plate (edible portion); the plate weight is the remaining assumption,
+  // and HPB's own serving-size field would replace it. See docs/PROAGE_NORMS.md
+  // §11.3a. The other rows are still unsourced -- do not read this pair as
+  // meaning the whole table has been checked.
+  { key: "chickenRiceSteamed", grams: 21, group: "hawker" },
+  { key: "chickenRiceRoasted", grams: 29, group: "hawker" },
   { key: "yongTauFoo", grams: 28, group: "hawker" },
   { key: "fishBeeHoon", grams: 28, group: "hawker" },
   { key: "economyRice", grams: 30, group: "hawker" },

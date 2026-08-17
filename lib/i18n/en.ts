@@ -292,7 +292,7 @@ export const en = {
       ],
       portions: [
         { food: "Fish soup + egg + tofu", protein: "32g" },
-        { food: "Chicken rice — breast, less rice", protein: "30g" },
+        { food: "Chicken rice — steamed breast, less rice, add egg", protein: "28g" },
         { food: "Yong tau foo — 6 items incl. egg + tau kwa", protein: "28g" },
         { food: "Sliced fish bee hoon soup", protein: "28g" },
         { food: "Economy rice — 1 meat, 1 egg, 1 tofu, veg", protein: "30g" },
@@ -591,7 +591,8 @@ export const en = {
         chickenPalm: "Chicken breast, palm-sized",
         dhal: "Dhal, 1 bowl",
         fishSoup: "Fish soup",
-        chickenRice: "Chicken rice — breast, less rice",
+        chickenRiceSteamed: "Chicken rice — steamed chicken",
+        chickenRiceRoasted: "Chicken rice — roasted chicken",
         yongTauFoo: "Yong tau foo — 6 items with egg",
         fishBeeHoon: "Sliced fish bee hoon soup",
         economyRice: "Economy rice — meat, egg, tofu, veg",
