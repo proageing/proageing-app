@@ -230,17 +230,31 @@ More characters are coming: the user is generating additional ones, which the
 supporting cast below needs anyway (the friend for days 7 and 18). Add them to
 these tables as they appear, with IDs read from the API rather than retyped.
 
-> **Style still needs checking against a real generation.** Soul 2.0
-> (`text2image_soul_v2`) is described by its own catalogue entry as realistic
-> UGC / fashion / editorial, and the house style in §3 is flat vector
-> illustration. Whether the trained Soul returns illustration or photorealism
-> depends on what it was trained on, which nobody in a Claude session can see —
-> every preview and result URL sits on CloudFront hosts the sandbox's egress
-> proxy 403s. The first Soul generation was run on 2026-08-10 (job
-> `a1ee7c2a-4cb5-4787-b3c3-872ee107fedd`) precisely to answer this. **Look at
-> it before batching.** If it comes back photoreal, either the illustrated
-> house style changes or the seventeen use an Element on an illustration-capable
-> model instead — that is a fork worth taking deliberately, not by accident.
+### The Soul is photoreal — confirmed 2026-08-10
+
+Job `a1ee7c2a-4cb5-4787-b3c3-872ee107fedd` was run to answer this, and the
+answer is unambiguous: the trained Soul returns **photorealism**, not flat
+vector illustration. The prompt was otherwise followed closely — wardrobe, set,
+lighting, full body with headroom, no props, no text all came back as asked.
+
+**As the Soul actually renders her**, which differs from the illustrated
+character the attributes below were originally derived from:
+
+| | Soul (photoreal) | Illustrated character (existing assets) |
+|---|---|---|
+| Ethnicity | Reads East Asian | Ambiguous, reads Western |
+| Age | Mid 50s to 60s | 60–75 |
+| Hair | Silver-grey, cropped, side-parted | Fully white pixie |
+| Glasses | Round tortoiseshell | Round tortoiseshell — matches |
+| Wardrobe | Sage tee, navy cropped leggings, white trainers | Same — matches |
+| Set | Honey wood panelling with a **darker dado rail at waist height**, light wood floor | Honey panelling, darker skirting only |
+
+Two things worth noting from that. The wardrobe and set transfer cleanly, so
+the bible was doing its job. And the dado rail is a distinctive set feature the
+earlier assets do not have — lock it or drop it, but do not let it appear in
+half the series.
+
+**This is a real fork and it is the user's call.** See §3b.
 
 ### The constraint that changes the plan
 
@@ -327,6 +341,42 @@ she is:
   or signage before it is accepted (§4).
 - Ask for the full body in frame with headroom at the tallest point of the
   movement.
+
+---
+
+## 3b. Photoreal or illustrated? — open
+
+Raised 2026-08-10 by the first Soul generation. Everything else in this document
+is settled; this is not.
+
+**The case for going photoreal**, which is the recommendation:
+
+- **Trust.** This is health instruction for people in their sixties and
+  seventies. A real-looking person carries authority a cartoon does not.
+- **Representation.** She reads East Asian. The illustrated character did not
+  clearly read as anything, and a Singaporean audience seeing a Singaporean
+  woman is worth more than a stylistic preference.
+- **It costs nothing extra.** Photoreal AI is just as language-free as
+  illustration — she is demonstrating, not talking to camera — so §2's whole
+  argument survives intact.
+- **It unifies rather than splits.** The presenter days are a real human being.
+  Photoreal daily videos sit beside them naturally; illustrated ones are a
+  second register.
+
+**The cost, stated honestly:** the four existing assets are flat vector, so
+going photoreal makes them the odd ones out and they want regenerating —
+`sit-to-stand`, `wall-push-up` and `towel-row`. That is three generations, and
+this session has already replaced two of them twice, so it is not a large job.
+
+**A line that makes the migration smaller than it looks:** *people are
+photoreal, diagrams stay diagrams.* The palm portion and the Longevity Plate
+are not competing registers — a diagram is a different kind of object, not a
+worse-looking person. Only the human demonstrations need to move.
+
+**If illustration is preferred instead**, the seventeen must use the `Higa-1`
+Element on an illustration-capable model — Nano Banana, Seedream, Cinema Studio
+and so on — not the Soul, which cannot produce that style. That path keeps the
+existing four assets valid and loses the representation gain.
 
 ---
 
@@ -482,10 +532,9 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 Reference character locations are recorded in §3a, and the canonical one is
 settled: the Soul `Higa` for her, Element `Higa-1` where an Element is needed.
 
-One thing left, and it needs eyes rather than a decision: **does the Soul
-return flat vector illustration or photorealism?** A first generation exists to
-answer it (§3a). Nothing in a Claude session can open the result, because every
-Higgsfield media host is blocked by the sandbox's egress proxy.
+**One decision has reopened.** The Soul turned out to be photoreal, not
+illustrated (§3a), which puts the visual register of the seventeen back in play.
+§3b lays out the fork and recommends going photoreal. Nothing else is waiting.
 
 ---
 
