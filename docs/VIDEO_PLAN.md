@@ -35,6 +35,18 @@ exposure is now confined to five presenter pieces — see §2.
 one series, which makes character consistency the main production risk rather
 than a detail. §3a is the cast bible that exists to prevent that.
 
+**The full count, all decisions settled:**
+
+| | Count |
+|---|---|
+| Presenter pieces — intro, 1, 7, 14, 21 | 5 |
+| Illustrated daily videos — 2–6, 8–13, 15–20 | 17 |
+| **Total programme videos** | **22** |
+| Exercise demonstrations still missing (§6) | up to 6 |
+
+All seventeen illustrated videos are wanted — confirmed 2026-08-10. No tighter
+set; every day gets its own.
+
 **Source of truth.** Day copy is `lib/program21.ts` (English) and
 `lib/program21Zh.ts` (Chinese). If this document and those files disagree,
 the files win — quote from them, don't retype from here.
@@ -49,9 +61,20 @@ text in the Learn card (`app/program/page.tsx`, around the
 `t.programme.day.learn` block): *"I've read this today."*
 
 That is the dryness. Each day currently opens with a research statistic as
-prose and a tickbox. The video does not need a new place in the product — it
-needs to replace the paragraph as the primary way the day's idea arrives, with
-the text staying underneath as the readable fallback.
+prose and a tickbox.
+
+**Decided 2026-08-10: the video leads, and the Learn text stays underneath,
+collapsed.** So the Learn card becomes a video with a disclosure beneath it —
+open the disclosure and you get today's idea in prose. That serves people on a
+poor connection, people who cannot play sound where they are, and people who
+would simply rather read.
+
+**There is already a component that does exactly this**: `HowToPanel` is a
+collapsed disclosure with a 96px worded toggle — "How to do it" / "Hide" —
+built to the age-friendly rules after a 12px chevron was rejected. Copy that
+pattern rather than inventing a second one, and the label wants to be about
+reading, not about the video: something like *"Read it instead"* / *"Hide"*,
+in both dictionaries.
 
 Two consequences for whoever builds this:
 
@@ -376,23 +399,54 @@ Cheaper per unit and reusable, so they are the better first spend.
 
 ---
 
-## 8. Decisions I did not make
+## 8. Decision log
 
-For the user, not the next session. Three are answered; two remain.
+All settled. Nothing here is waiting on the user; the next session can execute.
 
-1. ~~**Presenter or illustration?**~~ **Answered 2026-08-10** — presenter on
-   the milestone days, AI-generated illustration for the other seventeen. See
-   §0.
-2. ~~**Trainers or barefoot?**~~ **Answered 2026-08-10** — trainers, always.
-   A reference character now exists too, so §3a is reference-led rather than
-   description-led.
-3. ~~**Language approach, and does Chinese launch with the videos?**~~
-   **Answered 2026-08-10** — English is primary, Mandarin generated on demand.
-   Ship English first; see §2 for the per-locale fallback this requires.
-4. **Does the video replace the Learn text or sit above it?** Replacing is
-   cleaner; keeping the text serves people on poor connections, in quiet
-   places, and anyone who would rather read. Recommend keeping it, collapsed.
-5. **Seventeen illustrated videos, or fewer?** Days 8–20 are reinforcement, and
-   several are near neighbours. A tighter set would cost proportionally less
-   and might not feel thinner. Worth settling before generation starts, since
-   this is the count that drives the bill.
+| Decided | Answer |
+|---|---|
+| Presenter or illustration | Presenter on intro, 1, 7, 14, 21. AI illustration for the other 17. |
+| Character consistency | A reference character exists and drives every prompt. §3a is the acceptance checklist. |
+| Footwear | White low-profile trainers, always, including floor exercises. |
+| Language | English primary, Mandarin generated on demand. Ship English first, per-locale resolution with a fallback to the translated text. |
+| Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
+| How many | All seventeen. Every day gets its own video. |
+
+Still to be recorded here by whoever picks this up: **where the reference
+character lives**.
+
+---
+
+## 9. Suggested running order
+
+Not a decision, a de-risking sequence. The expensive mistake available here is
+generating seventeen videos and then discovering the runtime, the voice or the
+player is wrong.
+
+1. **One pilot, end to end. Day 3.** It is the first physical day, its idea
+   (Zone 2 is easier than you think) is representative, and `brisk-walk` is
+   also the highest-value demonstration gap — so the work is not wasted
+   whatever the pilot teaches. Take it all the way: script, generate, voice,
+   encode, drop into the app, watch it on a phone.
+2. **Approve the pilot against four things**: does it hold to 60–75 seconds,
+   does the voice suit a 60–75 year old audience, does the character match the
+   reference, and does it actually feel less dry than the paragraph it
+   replaced. If the answer to the last one is no, the format is wrong and
+   sixteen more will not fix it.
+3. **Build the player against the pilot** — per-locale resolution, the
+   collapsed text disclosure, `video_watched` set on playback, controls at
+   ≥56px. One real asset makes this concrete in a way a placeholder does not.
+4. **The two demonstration gaps that render nothing or nearly nothing**:
+   `hawker-protein` (three days, renders nothing at all today) and the rest of
+   the `brisk-walk` reuse. Cheap, silent, no language, reused across days.
+5. **Batch the remaining sixteen illustrated videos.** By now the format,
+   voice, player and character are all fixed, so this is production rather
+   than design.
+6. **The five presenter pieces, in parallel from step 3 onwards.** They need a
+   human and a diary, so they are the long-lead item — start scheduling early
+   even though they ship last.
+
+One more thing worth doing before step 5: watch the pilot with someone in the
+actual audience. Everything in this document is reasoned from research and from
+the product's own rules, and none of that is the same as a 68-year-old telling
+you the video was too fast.
