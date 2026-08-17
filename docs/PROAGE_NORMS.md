@@ -441,13 +441,42 @@ recorded here.
 
    All 19 keys resolve to a label in `en.ts`; none is missing. `tallyTotal` is a plain sum of `count × grams` over these plus any user-added items.
 
+   > **`MISSING` — no serving weight is recorded for any of the 19 rows, and this is what blocks verification.** Every figure above is *grams of protein per typical serving*. Every food-composition database, including HPB's, publishes *grams of protein per 100 g of food*. Converting between the two needs the weight of the serving — how many grams a "palm-sized" piece of fish is, what a hawker chicken rice plate weighs, what one piece of tau kwa weighs. That number appears nowhere: not in `proteinCalculator.ts`, not in the code comments, not in `en.ts`. So even with a per-100 g source in hand, most rows still cannot be checked — the comparison has two unknowns and one equation. A handful of rows escape this because their serving weight is common knowledge (`egg`, `milk`, `wholemealBread`, `soyaMilk`); the deliberately vague ones (`fishPalm`, `chickenPalm`, `peanuts`, "small tub", "1 bowl") and every `hawker` row do not. Deciding the serving weights is a prerequisite to sourcing the table, not a follow-up to it.
+
    > **`MISSING` — and the most substantive gap in this document.** **None of these 19 gram values has a source, anywhere.** Not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The code comment says only *"Foods someone here actually eats, with protein rounded to whole grams… Figures are typical servings, not precise ones."* The displayed `sources` string cites PROT-AGE and ESPEN, but those are the source for the **target**, not for the food figures.
    >
    > This matters more than an ordinary citation gap. The target says a 70 kg person needs 70–84 g; these 19 numbers are what tells them whether they got there. An unsourced food table is the part a dietitian would question first, and the part that decides whether the tool's advice is actually followed.
    >
    > **The provenance is unknown, not merely uncited.** Nothing in the code, the comments, or `PROAGE_ASSESSMENT_SOURCES.docx` says where these figures came from, so there is no claim to verify — only a gap to fill.
    >
-   > **What has and has not been established about a candidate reference.** A first pass at this document named Singapore's Health Promotion Board as "the natural authority". That was an unverified guess and has been withdrawn. What is actually confirmed, from web search only: HPB maintains a food composition database — the **Singapore Food Insights Database**, formerly FOCOS *Energy & Nutrient Composition of Food* (ENCF) — which is described as searchable and downloadable and as including protein, and Singapore appears in FAO/INFOODS's list of national food composition tables. What is **not** confirmed: whether it covers the specific hawker dishes in the table above, whether any of the 19 values match it, and whether it was ever consulted. `hpb.gov.sg` is blocked by the Claude Code sandbox's egress proxy and `focos.hpb.gov.sg` does not resolve from here, so nobody in a Claude session has opened it. Treat it as the first place to look, not as the source.
+   > **The reference, now confirmed by use rather than by search.** A first pass at this document named Singapore's Health Promotion Board as "the natural authority", which was an unverified guess and was withdrawn (commit `60efac9`). It has since been **confirmed the ordinary way — someone opened it.** On 2026-08-17 Isaiah pulled records from HPB's **Singapore Food Insights Database** and supplied four of them; they are recorded in §3a below. The database exists, covers Singapore hawker dishes by name (not just raw ingredients), gives protein per 100 g, and stamps each record with its own provenance flag and year. It is the right reference for this table. It remains unreachable from the Claude Code sandbox — `hpb.gov.sg` is blocked by the egress proxy and `focos.hpb.gov.sg` does not resolve — so **lookups have to be done by a human with a browser** and pasted in; no Claude session can do this pass unattended.
+
+### 11.3a — First source data actually checked against the table
+
+**Singapore Food Insights Database (HPB), retrieved 2026-08-17.**
+
+Four records, transcribed as supplied. Note that HPB publishes its own provenance flag per record, which is more than most national tables do — and that the flags differ:
+
+| HPB record | kcal / 100 g | **Protein g / 100 g** | HPB's own source flag | Last updated |
+|---|---|---|---|---|
+| Chicken egg, whole, raw | 143 | **12.56** | Borrowed | 2025 |
+| Roasted chicken rice | 178 | **8.22** | Lab Analysis | 2025 |
+| Steamed chicken rice | 151 | **5.95** | Lab Analysis | 2025 |
+| Tau kwa pau | 156 | **10.5** | Lab Analysis | 2010 |
+
+"Borrowed" means HPB took the value from another country's table rather than analysing it locally, so the egg figure is the weakest-provenance of the four despite being the least controversial. "Tau kwa pau" carries a 2010 vintage against 2025 for the other three.
+
+**These are per 100 g; our table is per serving, so none of them contradicts a row on its face.** What each one does is fix one side of the equation, leaving the serving weight as the only unknown. Working that unknown out:
+
+| Our row | Our figure | HPB density used | Serving weight our figure implies | Verdict |
+|---|---|---|---|---|
+| `egg` — "Egg" | 7 g | 12.56 g/100 g | **56 g of egg** | **Confirmed.** A large hen's egg without shell is ~50–58 g. Our 7 g is right, and this is the first row in the table with a source behind it. |
+| `chickenRice` — "Chicken rice — breast, less rice" | 30 g | 5.95 (steamed) / 8.22 (roasted) | **504 g** steamed, **365 g** roasted | **Unresolved, and the label is doing the work.** Our row says *breast, less rice*, i.e. the steamed variant with the rice reduced — and removing rice raises protein density above HPB's 5.95, which is measured on a standard plate. A 350–400 g plate gives 21–24 g steamed and 29–33 g roasted. 30 g is defensible for a plate at the larger end, but it is not pinned, and it sits at the top of the plausible band rather than the middle. |
+| `tauKwa` — "Tau kwa, 1 piece" | 12 g | 10.5 g/100 g | 114 g | **Not a valid comparison — different dish.** *Tau kwa pau* is firm beancurd split and **stuffed** (pork, fishcake, yam or turnip, egg); the starchy filling dilutes protein per 100 g. Our row is plain tau kwa, which is denser. Checking it needs HPB's plain "tau kwa" / firm beancurd record, not this one. |
+
+**The one real defect these four records expose is in `chickenRice`.** HPB measures roasted and steamed chicken rice as separate dishes and they differ by **38%** (8.22 vs 5.95 g/100 g) — far wider than the whole-gram rounding the rest of the table is built on. Our table has **one** chicken rice row, so whichever variant its figure describes, it is wrong by roughly 8 g for anyone who ate the other one. `MISSING`/**design fix needed**: either split the row (roasted / steamed) or relabel it so it unambiguously covers only the variant its figure describes. This is a content change across `en.ts`, `zh.ts` and `proageing-site`, so it is flagged rather than made here.
+
+**What is still open after this pass:** 18 of 19 rows remain unsourced. The next lookups worth doing, in order of how much they move the tally: `chickenPalm` (30 g, the largest single value), `fishPalm` (22 g), `economyRice` (30 g), and plain `tauKwa` to close the row above. Each needs a serving weight decided alongside it, per the note in §3.
 
 4. **User-added items (`makeCustomFood`):** a free-text label **truncated to 40 characters** (`CUSTOM_NAME_MAX`) and grams **clamped 1–100** (`CUSTOM_GRAMS_MAX`), rounded. Falls back to a localised "Something else" label when the name is blank. These carry no source by definition — the user supplies the figure.
 
@@ -477,7 +506,9 @@ recorded here.
 | Sit-to-Stand | Disclaimer and dynamic range note both called the norms "illustrative for this prototype", hedging numbers that had already been confirmed against Rikli & Jones (1999). Understated the work rather than protecting against it. | **Fixed 2026-08-08** — removed from 4 strings on `proageing-site` (`sit-to-stand.html` + `zh/`, disclaimer *and* the `rangeNote` set in JS) and from `typicalRange` in the app's `en.ts`/`zh.ts`. Note the site carries the phrase **twice** per language, not once — the second is built in JavaScript and is easy to miss when grepping the rendered page. |
 | Balance | Same "illustrative" phrasing, but **left in place**. Unlike Sit-to-Stand these norms are not simply unhedged-and-correct: PROAGE_SCORE_SPEC.md records that the Seino mean±SD values yield negative 5th percentiles for the 80+ bands. The hedge is doing real work until that is resolved. | No change — deliberate |
 | Family History | No author/year citations by design — uses source tags (Singapore MOH / NCCN / International) instead; this is a structural difference from the other 8 checks, not a gap. | No change — not a gap |
-| **Protein Calculator** (tool) | **The 19 food gram values have no source anywhere** — not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The displayed citation covers the *target* (PROT-AGE / ESPEN), not the food figures. These are the numbers that tell someone whether they hit the target, so this is the largest open gap in this document. Provenance is unknown rather than merely uncited. | **Open** — a food-composition source has to be found and the values checked against it. HPB's Singapore Food Insights Database (formerly FOCOS ENCF) is a candidate whose *existence* is confirmed by search but whose coverage and values are unverified — the domain is blocked from the sandbox. Do not cite it until someone has actually compared the numbers. |
+| **Protein Calculator** (tool) | **The 19 food gram values have no source anywhere** — not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The displayed citation covers the *target* (PROT-AGE / ESPEN), not the food figures. These are the numbers that tell someone whether they hit the target, so this is the largest open gap in this document. Provenance is unknown rather than merely uncited. | **Open, 1 of 19 now closed (2026-08-17)** — the reference is settled: HPB's Singapore Food Insights Database, confirmed by Isaiah actually opening it, with four records recorded in §3a. `egg` = 7 g **verified** against it. The other 18 need per-item lookups, which only a human with a browser can do — the domain is blocked from the sandbox. |
+| **Protein Calculator** (tool) | **No serving weight is recorded for any of the 19 rows.** Our figures are per serving; every composition database is per 100 g. Without the serving weight the two cannot be compared, so this blocks sourcing the table rather than following it. | **Open** — serving weights have to be decided for the vague rows (`fishPalm`, `chickenPalm`, "small handful", "1 bowl") and every `hawker` row before their values can be checked at all. |
+| **Protein Calculator** (tool) | **One `chickenRice` row cannot carry both variants.** HPB measures roasted (8.22 g/100 g) and steamed (5.95) chicken rice separately — a **38%** spread, wider than the table's own rounding tolerance. Whichever figure the single row holds is wrong for half the people who tap it. | **Open** — split the row or relabel it to cover only one variant. Content change across `en.ts`, `zh.ts` and `proageing-site`, so not made unilaterally. |
 | **Protein Calculator** (tool) | "25g is roughly a palm-sized piece of fish, chicken or tofu" is displayed unsourced, and the 25–30 g per-sitting figure behind `perMeal` is code-comment-only with no citation named. | **Open** |
 | **Protein Calculator** (tool) | `perMeal` divides `low` by 3, so it under-states the per-meal figure for anyone aiming at the top of their range. Also: age is never collected, though the advice is age-motivated. | **Open** — design question, not a citation gap |
 | **Training Zone Finder** (tool) | The Tanaka formula is displayed in full journal form (fixing, for this feature, the gap §3 flagged) — but **the 64–76% Zone 2 bounds have no displayed citation**. ACSM is named in a code comment only. Same class of gap as Tanaka's was, one level down. | **Open** |
@@ -496,3 +527,13 @@ the tools were built carelessly: every figure traces to a real source in a code
 comment, and the gap is between comment and displayed copy, not between code and
 evidence. The food table is the exception and the one that genuinely needs a
 source found.
+
+**Food table addendum, same day.** The source is no longer hypothetical. Isaiah
+opened HPB's Singapore Food Insights Database and supplied four records (§3a),
+which settles the reference question, verifies `egg`, and turns up one genuine
+defect — the single `chickenRice` row straddling a 38% roasted/steamed spread.
+It also exposes the structural blocker: our figures are per serving, HPB's are
+per 100 g, and no serving weight is written down anywhere, so the remaining
+eighteen rows cannot be checked until those weights are decided. The lookups
+cannot be automated from a Claude session — `hpb.gov.sg` is blocked by the
+sandbox egress proxy.
