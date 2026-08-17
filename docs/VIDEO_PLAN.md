@@ -222,12 +222,25 @@ Read from the names, and the mapping onto §0 is almost too neat:
   presenter. Also has both a Soul and an Element.
 - **Zoid** — unidentified, oldest, and probably unrelated to this programme.
 
-> **Confirm before generating.** This mapping is inferred from names. The image
-> URLs are on a CloudFront host the Claude Code sandbox cannot reach — the
-> egress proxy 403s it — so nobody has actually looked at these four pictures
-> to check. Open them in Higgsfield and confirm which element is her before
-> committing a batch. Also settle whether `Higa` or `Higa-1` is canonical;
-> having two invites the wrong one being used halfway through.
+**Confirmed by the user, 2026-08-10.** Higa is the programme's woman, and of
+the two Elements the newest — **`Higa-1`** — is canonical. Use that one; the
+older `Higa` element is superseded and should not be picked up mid-batch.
+
+More characters are coming: the user is generating additional ones, which the
+supporting cast below needs anyway (the friend for days 7 and 18). Add them to
+these tables as they appear, with IDs read from the API rather than retyped.
+
+> **Style still needs checking against a real generation.** Soul 2.0
+> (`text2image_soul_v2`) is described by its own catalogue entry as realistic
+> UGC / fashion / editorial, and the house style in §3 is flat vector
+> illustration. Whether the trained Soul returns illustration or photorealism
+> depends on what it was trained on, which nobody in a Claude session can see —
+> every preview and result URL sits on CloudFront hosts the sandbox's egress
+> proxy 403s. The first Soul generation was run on 2026-08-10 (job
+> `a1ee7c2a-4cb5-4787-b3c3-872ee107fedd`) precisely to answer this. **Look at
+> it before batching.** If it comes back photoreal, either the illustrated
+> house style changes or the seventeen use an Element on an illustration-capable
+> model instead — that is a fork worth taking deliberately, not by accident.
 
 ### The constraint that changes the plan
 
@@ -466,10 +479,13 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 | Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
 | How many | All seventeen. Every day gets its own video. |
 
-Reference character locations are recorded in §3a. One thing left for the user,
-and it needs eyes rather than a decision: confirm which saved element is her,
-and whether `Higa` or `Higa-1` is canonical. The sandbox cannot open the
-preview images.
+Reference character locations are recorded in §3a, and the canonical one is
+settled: the Soul `Higa` for her, Element `Higa-1` where an Element is needed.
+
+One thing left, and it needs eyes rather than a decision: **does the Soul
+return flat vector illustration or photorealism?** A first generation exists to
+answer it (§3a). Nothing in a Claude session can open the result, because every
+Higgsfield media host is blocked by the sandbox's egress proxy.
 
 ---
 
