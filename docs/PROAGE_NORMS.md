@@ -500,6 +500,55 @@ Four records, transcribed as supplied. Note that HPB publishes its own provenanc
 
 8. **Storage:** `localStorage` only, never Supabase. `proage-protein-target` holds `weightKg`, `doesStrengthWork` and any custom foods; `proage-protein-tally` holds `{date, counts}` and is discarded on load if `date` is not today. Both are filtered on read rather than trusted — a non-numeric `weightKg` or a custom food with a non-finite `grams` is dropped, because either would corrupt every total silently.
 
+## Follow-up — 2026-08-08 (same day, three action items closed)
+
+**Sit-to-Stand: replacement citation found and added.** Went looking for a
+health-outcome citation that actually measures the 30-second repetition
+count (not power, not 5 timed rises). Found it:
+
+> Rikli, R.E. & Jones, C.J. (2013). "Development and Validation of
+> Criterion-Referenced Clinically Relevant Fitness Standards for Maintaining
+> Physical Independence in Later Years." *The Gerontologist*, 53(2), 255–267.
+
+Same authors, same instrument (the Senior Fitness Test battery, which is
+where our 30s chair-stand count comes from) — a direct follow-on to the 1999
+paper already cited, not a different test grafted on. It validates
+criterion-referenced standards (ages 60–94, n=2,140 "moderate-functioning"
+older adults, validity/reliability indicators .79–.97) against the fitness
+level needed to remain physically independent. **Could not obtain the exact
+numeric cut-offs or effect sizes** — abstract and secondary sources confirm
+the study's existence, method and outcome, but the full text was not
+reachable. The copy added is deliberately general (states what the paper
+validated, not a specific number) for that reason. Added to `intro1` and
+`sources` in both `en.ts`/`zh.ts`, and to `sit-to-stand.html` (en+zh) on the
+site — same wording, one citation, two repos.
+
+**Nutrition: "over 50,000 older adults" dropped, not fixed.** Went back for
+one more attempt at the primary source (PMC, MDPI, ResearchGate, PubMed) —
+all four blocked (403 or a cookie wall) or resolved to the wrong document.
+The only figure found came from a search engine's own summary, not a
+read of the paper, so it doesn't meet this document's standard. It's also
+suspect on its face: that summary described 50,284 as the total across
+**all 10 studies** in the systematic review, while only **4 cross-sectional
+studies** fed the pooled odds ratio (0.67, 0.56–0.82) actually being
+cited — attaching the big N to that specific statistic would have been the
+same category of error as the Cooper citation two entries up: a real number,
+attached to a claim it doesn't support. Removed rather than reworded, from
+`nutrition.html` (en+zh) and `intro1` in the app's `en.ts`/`zh.ts`. The
+odds ratio itself is independently confirmed (see above) and stays.
+
+**Balance: confirmed which source is actually load-bearing.** `NORMS` in the
+Balance check (site + app) is scored against **Seino et al., 2014**
+(pooled 4,683 older Japanese adults) — that's in the code comment and in
+the displayed source line. Morioka et al., 2012 is cited separately and
+only for "age-decline validation" (i.e., corroborating that balance
+declines with age generally), never as the scoring table. ActiveSG was
+never implemented anywhere — the 2026-08-07 audit's ActiveSG comparison
+was a hypothesis for a possible future swap, not something live. No code
+or copy change needed; recorded here since it came up as a live question.
+
+---
+
 ## Citation verification pass — 2026-08-08
 
 Three citations had never been independently checked. All three were run

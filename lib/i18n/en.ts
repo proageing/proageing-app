@@ -706,7 +706,7 @@ export const en = {
       eyebrow: "Nutrition & Protein · ~3 minutes",
       title: "Nutrition & Protein Check",
       intro1:
-        "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. In a meta-analysis of over 50,000 older adults, higher protein intake was linked to a third lower odds of frailty (Coelho-Júnior et al., Nutrients, 2018).",
+        "Older adults need more protein per kg of body weight than younger adults do, just to maintain the same muscle — but intake often quietly falls short. In a meta-analysis pooling several studies of older adults, higher protein intake was linked to a third lower odds of frailty (Coelho-Júnior et al., Nutrients, 2018).",
       intro2:
         "This check screens how often you're eating protein-rich foods across a typical week. Adapted from the Protein Screener 55+ (Wijnhoven et al., PLOS ONE, 2018), a validated Dutch tool, using food items confirmed relevant to Singapore's multi-ethnic diet (Whitton, Ho, Rebello & van Dam, Public Health Nutrition, 2018). It's a directional guide, not a lab-grade measurement.",
       begin: "Let's begin",
@@ -1189,7 +1189,7 @@ export const en = {
       eyebrow: "Physical Function Check · ~4 minutes",
       title: "Sit-to-Stand Check",
       intro1:
-        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance.",
+        "This test measures the strength in your legs and hips — the muscles you use every day to get up from a chair, climb stairs, or catch your balance. Chair-stand performance is one of the measures Rikli & Jones later validated against the fitness needed to stay physically independent in later life (Rikli & Jones, The Gerontologist, 2013).",
       intro2:
         "You'll stand up and sit down from a chair as many times as you can in 30 seconds. No equipment needed beyond a sturdy chair.",
       begin: "Let's begin",
@@ -1236,7 +1236,7 @@ export const en = {
       typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (Rikli & Jones, 1999).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
-      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range).",
+      sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range) · Rikli & Jones, 2013 (physical-independence standards).",
       result: {
         below: {
           label: "Below typical range for your age group",

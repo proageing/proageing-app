@@ -700,7 +700,7 @@ export const zh: Dictionary = {
       eyebrow: "营养与蛋白质 · 约 3 分钟",
       title: "营养与蛋白质检测",
       intro1:
-        "上了年纪之后，每公斤体重需要的蛋白质比年轻时更多，才守得住同样的肌肉——但实际吃进去的量，往往会悄悄不够。在一项涵盖超过 5 万名年长者的统合分析中，蛋白质摄入较高与体弱风险降低约三分之一有关（Coelho-Júnior 等人，Nutrients，2018年）。",
+        "上了年纪之后，每公斤体重需要的蛋白质比年轻时更多，才守得住同样的肌肉——但实际吃进去的量，往往会悄悄不够。在一项汇总多项年长者研究的统合分析中，蛋白质摄入较高与体弱风险降低约三分之一有关（Coelho-Júnior 等人，Nutrients，2018年）。",
       intro2:
         "这项检测评估的是你在一般的一周里，多久吃一次高蛋白食物。改编自 Protein Screener 55+（Wijnhoven 等人，PLOS ONE，2018年），一项经验证的荷兰工具，食物项目已确认符合新加坡多元族群的饮食习惯（Whitton、Ho、Rebello 与 van Dam，Public Health Nutrition，2018年）。这是一项方向性参考，而非实验室等级的测量。",
       begin: "开始吧",
@@ -1164,7 +1164,7 @@ export const zh: Dictionary = {
     sitToStand: {
       eyebrow: "身体功能检测 · 约 4 分钟",
       title: "坐立测试",
-      intro1: "本测试评估你腿部与髋部的力量——这些肌肉是你每天从椅子上站起、爬楼梯或保持平衡时所使用的。",
+      intro1: "本测试评估你腿部与髋部的力量——这些肌肉是你每天从椅子上站起、爬楼梯或保持平衡时所使用的。坐立测试的表现，是 Rikli 与 Jones 后续验证过的指标之一，用来衡量维持晚年生活自理所需要的体能水平（Rikli & Jones，《老年学家》期刊，2013年）。",
       intro2: "你将在 30 秒内尽可能多次地从椅子上站起再坐下。除了一把稳固的椅子外，无需其他器材。",
       begin: "开始吧",
       safetyHeading: "两个简短的安全问题",
@@ -1207,7 +1207,7 @@ export const zh: Dictionary = {
       standsIn30: "30 秒内完整站立次数",
       typicalRange: (lo: number, hi: number) => `你所在组别的典型范围：${lo}–${hi} 次（Rikli & Jones，1999年）。`,
       disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
-      sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年（参考范围）。",
+      sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年（参考范围）· Rikli & Jones，2013年（体能自理标准）。",
       result: {
         below: {
           label: "低于同年龄组的典型范围",
