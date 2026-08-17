@@ -1,0 +1,5 @@
+record,kcal_per_100g,protein_g_per_100g,source_flag,last_updated,retrieved,notes
+"Chicken egg, whole, raw",143,12.56,Borrowed,2025,2026-08-17,"HPB's own flag is Borrowed: taken from another country's table rather than analysed locally. Weakest provenance of the four, despite being the least contentious value."
+"Roasted chicken rice",178,8.22,Lab Analysis,2025,2026-08-17,""
+"Steamed chicken rice",151,5.95,Lab Analysis,2025,2026-08-17,"38% below the roasted figure. Splitting our single chicken rice row is what this record forced."
+"Tau kwa pau",156,10.5,Lab Analysis,2010,2026-08-17,"Deliberately unmapped: stuffed beancurd (pork, fishcake, yam or turnip, egg), a different dish from our plain 'Tau kwa, 1 piece'. Kept because knowing what was checked and rejected is worth as much as knowing what matched."

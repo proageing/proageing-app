@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify:protein": "node --experimental-strip-types scripts/verify-protein-table.mjs",
+    "verify:translations": "node --experimental-strip-types scripts/verify-translations.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

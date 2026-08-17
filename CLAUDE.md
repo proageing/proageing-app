@@ -53,11 +53,34 @@ site is `../proageing-site` when both are checked out.
   and nothing else. When adding to that path, keep spacing conditional
   (`previewAll ? ... : ...`) — a banner that shifts the page by 16px changes
   the experience for all users even though they never see the banner.
+- **The protein food table's numbers are verified arithmetic, not editable
+  copy.** `PROTEIN_FOODS` grams that have a mapping in
+  `lib/assessments/proteinSources.ts` are re-derived from
+  `data/hpb-food-insights.csv` by `npm run verify:protein`, which fails if the
+  committed figure no longer equals `round(density × serving ÷ 100)`. Run it
+  after touching any of the three. If HPB and our table disagree, **our table
+  is what's wrong** — never edit a transcribed value to get a pass. Most rows
+  (17 of 20) are still unmapped and the script reports that on every run; a
+  green result means "nothing contradicts the source data", not "the table is
+  sourced". Adding rows needs a human with a browser: `hpb.gov.sg` is blocked
+  here, as are USDA FoodData Central and OpenFoodFacts.
 - **Never interpolate a Tailwind class.** `bg-${tool.color}` passes `tsc`
   *and* `npm run build`, then renders nothing because the JIT scanner never
   saw a literal. Use the static maps in `lib/pillarStyles.ts`
   (`PILLAR_STYLES[color].dot`). This class of bug is invisible to every check
   except looking at the page.
+
+## Checks you can run
+
+Neither is wired into a hook or CI — they are manual, and worth running when
+you touch what they cover. Both run on Node's own `--experimental-strip-types`,
+so they import the real `.ts` modules with no dev dependency and work offline.
+
+| Command | Covers |
+|---|---|
+| `npx tsc --noEmit && npm run build` | The deploy gate. Always, before pushing. |
+| `npm run verify:protein` | The protein food table against vendored source data. |
+| `npm run verify:translations` | Numbers, citations and structure surviving into `zh.ts`. Has known false positives where the Chinese legitimately localises a journal name; read the output, don't just check the exit code. |
 
 ## Things that will bite you
 

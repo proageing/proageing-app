@@ -39,7 +39,12 @@ export interface ProteinFood {
   group: "everyday" | "hawker";
 }
 
-export const PROTEIN_FOODS: ProteinFood[] = [
+// `as const satisfies` rather than a plain annotation: it still type-checks
+// every row against ProteinFood, but keeps the keys as literals so
+// ProteinFoodKey below is a real union. That is what makes a typo in
+// lib/assessments/proteinSources.ts a build error instead of a mapping that
+// silently verifies nothing.
+export const PROTEIN_FOODS = [
   { key: "egg", grams: 7, group: "everyday" },
   { key: "tauKwa", grams: 12, group: "everyday" },
   { key: "softTofu", grams: 8, group: "everyday" },
@@ -68,7 +73,9 @@ export const PROTEIN_FOODS: ProteinFood[] = [
   { key: "leiCha", grams: 20, group: "hawker" },
   { key: "thosaiDhal", grams: 20, group: "hawker" },
   { key: "wantonMee", grams: 22, group: "hawker" },
-];
+] as const satisfies readonly ProteinFood[];
+
+export type ProteinFoodKey = (typeof PROTEIN_FOODS)[number]["key"];
 
 // Whatever the list above misses, someone can add themselves: a protein shake,
 // a brand of yoghurt, their own cooking. Unlike PROTEIN_FOODS these carry a

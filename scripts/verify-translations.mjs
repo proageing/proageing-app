@@ -16,7 +16,10 @@
 //      whose option list is a different length in one language would score
 //      differently, which is the worst failure available here.
 //
-// Run: npx tsx scripts/verify-translations.mjs
+// Run: npm run verify:translations
+//
+// (Was documented as `npx tsx`, which downloads a tool this repo does not have
+// as a dependency. Node's own --experimental-strip-types runs it unaided.)
 //
 // Proven against deliberately injected faults: a changed threshold, a
 // dropped citation and a study size that lost a digit were all caught.
