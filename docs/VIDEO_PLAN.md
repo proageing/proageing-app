@@ -12,14 +12,14 @@ videos do not exist and neither does the player that would show them.
 
 ## 0. Decided
 
-**Presenter on the milestone days, AI-generated illustration everywhere else.**
+**Presenter on the milestone days, AI-generated photoreal everywhere else.**
 Settled by the user, 2026-08-10. It resolves §2's central question and fixes
 the shape of everything downstream.
 
 | | Days | Treatment |
 |---|---|---|
 | **Presenter** | intro, 1, 7, 14, 21 | A real person to camera. Trust, welcome, milestone, close. |
-| **Illustration** | 2–6, 8–13, 15–20 | AI-generated, language-free visuals + voice-over. 17 videos. |
+| **Generated** | 2–6, 8–13, 15–20 | Photoreal from the Higa Soul. Language-free visuals + voice-over. 17 videos. |
 
 Assumption to correct if wrong: "milestone" is read as the pre-programme
 intro plus days 1, 7, 14 and 21 — the welcome, the week-1 close that doubles
@@ -27,7 +27,7 @@ as the Longevity Profile reveal, the two-week mark, and graduation. If that is
 one too many, the intro and day 1 are the pair to merge; they cover
 overlapping ground.
 
-**What this decision buys.** The 17 illustrated videos carry no language in the
+**What this decision buys.** The 17 generated videos carry no language in the
 picture, so Chinese costs a second voice track and nothing else. The bilingual
 exposure is now confined to five presenter pieces — see §2.
 
@@ -40,11 +40,11 @@ than a detail. §3a is the cast bible that exists to prevent that.
 | | Count |
 |---|---|
 | Presenter pieces — intro, 1, 7, 14, 21 | 5 |
-| Illustrated daily videos — 2–6, 8–13, 15–20 | 17 |
+| Generated daily videos — 2–6, 8–13, 15–20 | 17 |
 | **Total programme videos** | **22** |
 | Exercise demonstrations still missing (§6) | up to 6 |
 
-All seventeen illustrated videos are wanted — confirmed 2026-08-10. No tighter
+All seventeen are wanted — confirmed 2026-08-10. No tighter
 set; every day gets its own.
 
 **Source of truth.** Day copy is `lib/program21.ts` (English) and
@@ -113,7 +113,7 @@ Then the same visual master serves both locales and only the audio track is
 produced twice. That turns "make 21 videos twice" into "make 21 videos, write
 42 scripts, record 42 voice tracks", which is a materially smaller job.
 
-**That is settled for the 17 illustrated videos** (§0): no words in frame, so
+**That is settled for the 17 generated videos** (§0): no words in frame, so
 one visual master serves both languages and only the voice-over is produced
 twice.
 
@@ -143,22 +143,40 @@ Ship English first. Backfill Mandarin at whatever pace suits.
 
 ---
 
-## 3. House style, already established
+## 3. House style
 
-Two clips exist and everything new should look like their family:
+**Photorealistic, using the Higa Soul. Decided 2026-08-10** — see §3b for the
+reasoning. This replaces the flat vector illustration the first four assets
+were made in; those are now legacy and are being migrated.
 
-- **Illustrated, not filmed.** Flat vector style, confident outlines, muted
-  palette.
-- **The same woman throughout.** White cropped hair, round tortoiseshell
-  glasses, sage-green t-shirt, navy cropped leggings, white trainers. Roughly
-  60–75. She is the programme's face.
-- **Plain rooms.** Wood-panelled wall, wood floor. An earlier take with a sofa,
-  side table and window was replaced precisely because the furniture competed
-  with the body at the size these render.
+What carries over from those four unchanged, because it was never about the
+rendering style:
+
+- **The same woman throughout.** She is the programme's face; a viewer should
+  recognise her by day 3. Attributes in §3a.
+- **Plain rooms.** Wood-panelled wall, wood floor, nothing else. An earlier
+  take with a sofa, side table and window was replaced precisely because the
+  furniture competed with the body at the size these render.
 - **No text in frame, ever.** One supplied diagram had "Size of the palm"
   baked in and the caption band was cropped off for the reason in §2.
 - **Full body in frame, head not clipped**, including at the tallest point of
   a movement.
+- **Props only where the exercise needs one** — armchair, wall, bath towel.
+
+And the one rule that keeps the migration small:
+
+> **People are photoreal. Diagrams stay diagrams.**
+>
+> The palm portion and the Longevity Plate are not competing registers — a
+> diagram is a different kind of object, not a worse-looking person. They need
+> no work, now or later.
+
+**Photoreal costs more care than illustration, in two specific ways.** Flat
+vector hides a multitude of sins; photorealism does not. Expect hands, feet and
+joint articulation to need more attempts, and expect **loop seams to be harder
+to hit** — the mean-absolute-difference threshold in §4 is stricter in practice
+on photoreal footage than on flat colour, because there is far more
+high-frequency detail for the eye to catch at the cut.
 
 Existing assets, in `public/howto/`:
 
@@ -216,7 +234,7 @@ shot):
 
 Read from the names, and the mapping onto §0 is almost too neat:
 
-- **Higa → the seventeen illustrated videos.** The woman described below.
+- **Higa → the seventeen daily videos.** The woman described below.
   Both a Soul and two Elements exist for her; `Higa-1` is the newest Element.
 - **Isaiah → the five presenter pieces.** The account holder, i.e. the
   presenter. Also has both a Soul and an Element.
@@ -240,7 +258,7 @@ lighting, full body with headroom, no props, no text all came back as asked.
 **As the Soul actually renders her**, which differs from the illustrated
 character the attributes below were originally derived from:
 
-| | Soul (photoreal) | Illustrated character (existing assets) |
+| | Soul (photoreal, canonical) | Retired illustration (legacy assets) |
 |---|---|---|
 | Ethnicity | Reads East Asian | Ambiguous, reads Western |
 | Age | Mid 50s to 60s | 60–75 |
@@ -284,24 +302,32 @@ a reference is ever unavailable.
 Appears in every movement, strength, nutrition and sleep video. She is the
 programme's face; a viewer should recognise her by day 3.
 
+**Canonical values are what the Soul actually produces**, verified against job
+`a1ee7c2a` on 2026-08-10 — not what the retired illustration looked like. Where
+the two differed, the Soul wins, because it is what will be generating.
+
 | Attribute | Locked value |
 |---|---|
-| Age read | 60–75 |
-| Hair | Short cropped pixie, fully white/silver, soft texture |
-| Glasses | Round, thin tortoiseshell/brown frames — always on |
-| Build | Average, soft, not athletic. Not a fitness model. |
+| Ethnicity | Reads East Asian. Part of the point — see §3b. |
+| Age read | Mid 50s to 60s |
+| Hair | Silver-grey, cropped short, side-parted |
+| Glasses | Round, thin tortoiseshell frames — always on |
+| Build | Average, not athletic. Not a fitness model. |
 | Top | Sage-green short-sleeve crew-neck t-shirt |
 | Bottom | Navy cropped leggings, mid-calf |
-| Feet | **White low-profile trainers with grey accents. Locked 2026-08-10.** Always, including floor exercises. The towel row still is barefoot and is the odd one out — regenerate it with trainers when convenient, or accept it as the single exception and never repeat it. |
+| Feet | **White low-profile trainers with grey accents. Locked 2026-08-10.** Always, including floor exercises. |
 | Expression | Calm, warm, faint smile. Capable and unhurried — never strained, never grinning. |
-| Skin | Light-medium |
+
+Superseded, for reference only: the retired illustration was a fully white
+pixie cut on an ethnically ambiguous figure reading 60–75, and its towel-row
+still was barefoot. Do not generate against any of that.
 
 ### The set
 
 | Attribute | Locked value |
 |---|---|
-| Wall | Vertical wood panelling, warm honey/amber tone |
-| Floor | Warm wood or terracotta, plain |
+| Wall | Vertical wood panelling, warm honey/amber tone, with a **darker wood dado rail at waist height** — present in the Soul's output, absent from the legacy assets, so lock it everywhere rather than in half the series |
+| Floor | Plain light wood |
 | Skirting | Darker wood band where wall meets floor |
 | Lighting | Flat, even, no dramatic shadow. A soft contact shadow under the subject only. |
 | Props | Only what the exercise needs — armchair, wall, bath towel. Nothing decorative. |
@@ -309,8 +335,9 @@ programme's face; a viewer should recognise her by day 3.
 
 ### Style
 
-Flat vector illustration with confident dark outlines, muted palette, no
-gradients beyond simple shading, no photorealism, no text anywhere in frame.
+Photorealistic, generated from the Higa Soul on `text2image_soul_v2` /
+`soul_cinema_studio`. Flat even lighting, no dramatic shadow, one soft contact
+shadow under the subject. Muted palette. No text anywhere in frame.
 
 ### Supporting cast and objects
 
@@ -318,8 +345,9 @@ Not every day is Margaret exercising. These recur and should be as pinned as
 she is:
 
 - **A friend or small group** — days 7 and 18 (connection, the Okinawan
-  *moai*). Same age range, same illustration style, same room or an equally
-  plain exterior.
+  *moai*). Same age range, same photoreal register, same room or an equally
+  plain exterior. These two days cannot use the Soul — one person per
+  generation — so they need the `Higa-1` Element.
 - **A plate** — day 12, the Singapore Longevity Plate. Half vegetables, a
   quarter protein, a quarter wholegrains, read from directly above.
 - **Hawker dishes** — days 5, 12 and 20, and the missing `hawker-protein`
@@ -344,39 +372,44 @@ she is:
 
 ---
 
-## 3b. Photoreal or illustrated? — open
+## 3b. Why photoreal — decided
 
-Raised 2026-08-10 by the first Soul generation. Everything else in this document
-is settled; this is not.
+Settled by the user 2026-08-10, after job `a1ee7c2a` showed the Soul renders
+photorealism. The seventeen daily videos are photoreal, and the human
+demonstrations migrate to match.
 
-**The case for going photoreal**, which is the recommendation:
+The reasoning, worth keeping because it will be questioned later:
 
 - **Trust.** This is health instruction for people in their sixties and
   seventies. A real-looking person carries authority a cartoon does not.
-- **Representation.** She reads East Asian. The illustrated character did not
-  clearly read as anything, and a Singaporean audience seeing a Singaporean
+- **Representation.** She reads East Asian. The retired illustration read as
+  nothing in particular, and for a Singaporean audience a Singaporean-looking
   woman is worth more than a stylistic preference.
-- **It costs nothing extra.** Photoreal AI is just as language-free as
-  illustration — she is demonstrating, not talking to camera — so §2's whole
-  argument survives intact.
-- **It unifies rather than splits.** The presenter days are a real human being.
-  Photoreal daily videos sit beside them naturally; illustrated ones are a
-  second register.
+- **It costs nothing linguistically.** She demonstrates rather than talks to
+  camera, so photoreal is exactly as language-free as illustration and §2's
+  whole argument survives untouched.
+- **It unifies rather than splits.** The five presenter days are a real human
+  being. Photoreal daily videos sit beside them naturally; illustrated ones
+  would have been a second register inside one product.
 
-**The cost, stated honestly:** the four existing assets are flat vector, so
-going photoreal makes them the odd ones out and they want regenerating —
-`sit-to-stand`, `wall-push-up` and `towel-row`. That is three generations, and
-this session has already replaced two of them twice, so it is not a large job.
+### The migration
 
-**A line that makes the migration smaller than it looks:** *people are
-photoreal, diagrams stay diagrams.* The palm portion and the Longevity Plate
-are not competing registers — a diagram is a different kind of object, not a
-worse-looking person. Only the human demonstrations need to move.
+Three human demonstrations to regenerate with the Soul. Everything else stays.
 
-**If illustration is preferred instead**, the seventeen must use the `Higa-1`
-Element on an illustration-capable model — Nano Banana, Seedream, Cinema Studio
-and so on — not the Soul, which cannot produce that style. That path keeps the
-existing four assets valid and loses the representation gain.
+| Asset | Action |
+|---|---|
+| `sit-to-stand` video + poster + two-pose still | Regenerate photoreal |
+| `wall-push-up` video + poster + two-pose still | Regenerate photoreal |
+| `towel-row` still | Regenerate photoreal — also fixes the barefoot exception |
+| `palm-portion`, `longevity-plate` | **No change.** Diagrams stay diagrams. |
+| `brisk-walk`, `one-leg-stand`, `finger-breathing` | Currently SVG. Produce photoreal rather than migrating anything. |
+
+Not urgent, and explicitly **not a blocker on the seventeen**. The legacy
+illustrated clips are correct instruction and can keep working while the daily
+videos ship. But note the one place the mismatch is visible within a single
+screen: **days 4 and 11** show a daily video and the `sit-to-stand` panel
+inches apart. If the migration slips, those two days are where someone notices,
+so do them first.
 
 ---
 
@@ -480,10 +513,10 @@ Cheaper per unit and reusable, so they are the better first spend.
 
 | Slug | Today | Used on days | Priority |
 |---|---|---|---|
-| `sit-to-stand-exercise` | **video** | 4, 11, 14, 17 | done |
-| `wall-push-up` | **video** | 4 | done |
-| `band-row` (towel row) | still image | 4, 11 | fine as a still — it is an isometric hold |
-| `protein-breakfast` | still image | 5 | done |
+| `sit-to-stand-exercise` | **video**, legacy illustrated | 4, 11, 14, 17 | migrate first — shares a screen with the day 4 and 11 videos |
+| `wall-push-up` | **video**, legacy illustrated | 4 | migrate |
+| `band-row` (towel row) | still image, legacy illustrated | 4, 11 | migrate; a still is still the right form, it is an isometric hold |
+| `protein-breakfast` | still image, diagram | 5 | **no change** — diagrams stay diagrams |
 | `brisk-walk` | SVG | **3, 8, 10, 16** | **highest** — four days, and the hardest to convey as a drawing |
 | `one-leg-stand` | SVG | 9 | high — safety matters, show the counter |
 | `finger-breathing` | SVG | 15 | medium — the SVG animates the tracing and works better than most |
@@ -522,19 +555,20 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 
 | Decided | Answer |
 |---|---|
-| Presenter or illustration | Presenter on intro, 1, 7, 14, 21. AI illustration for the other 17. |
+| Presenter or generated | Presenter on intro, 1, 7, 14, 21. AI-generated for the other 17. |
 | Character consistency | A reference character exists and drives every prompt. §3a is the acceptance checklist. |
 | Footwear | White low-profile trainers, always, including floor exercises. |
 | Language | English primary, Mandarin generated on demand. Ship English first, per-locale resolution with a fallback to the translated text. |
 | Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
 | How many | All seventeen. Every day gets its own video. |
+| Visual register | **Photoreal**, via the Higa Soul. The three human demonstrations migrate; diagrams stay diagrams. |
 
 Reference character locations are recorded in §3a, and the canonical one is
 settled: the Soul `Higa` for her, Element `Higa-1` where an Element is needed.
 
-**One decision has reopened.** The Soul turned out to be photoreal, not
-illustrated (§3a), which puts the visual register of the seventeen back in play.
-§3b lays out the fork and recommends going photoreal. Nothing else is waiting.
+All settled, including the visual register — the last one, raised and closed on
+2026-08-10 once a real generation existed to judge. Nothing is waiting on the
+user.
 
 ---
 
@@ -557,9 +591,10 @@ player is wrong.
 3. **Build the player against the pilot** — per-locale resolution, the
    collapsed text disclosure, `video_watched` set on playback, controls at
    ≥56px. One real asset makes this concrete in a way a placeholder does not.
-4. **The two demonstration gaps that render nothing or nearly nothing**:
-   `hawker-protein` (three days, renders nothing at all today) and the rest of
-   the `brisk-walk` reuse. Cheap, silent, no language, reused across days.
+4. **The demonstration work, in this order**: `hawker-protein` (three days,
+   renders nothing at all today), then `sit-to-stand` — the one legacy asset
+   that shares a screen with a daily video, on days 4 and 11 — then the rest of
+   §3b's migration. All silent, language-free and reused across days.
 5. **Batch the remaining sixteen illustrated videos.** By now the format,
    voice, player and character are all fixed, so this is production rather
    than design.
