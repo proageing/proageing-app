@@ -1232,7 +1232,7 @@ export const en = {
       countOnlyFull: "Count only full stands — all the way up, all the way back down.",
       seeResults: "See my results",
       standsIn30: "full stands in 30 seconds",
-      typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (illustrative reference).`,
+      typicalRange: (lo: number, hi: number) => `Typical range for your group: ${lo}–${hi} stands (Rikli & Jones, 1999).`,
       disclaimer:
         "This is an educational screening check, not a diagnosis. If you felt very unsteady during this test, please mention it to your doctor.",
       sources: "Sources: Rikli & Jones Senior Fitness Test, 1999 (typical range) · Cooper et al., BMJ, 2010 (mortality link).",
@@ -1290,6 +1290,14 @@ export const en = {
     linkFailed:
       "Your payment went through, but we couldn't send your sign-in link automatically. Enter the email you paid with and we'll send it now.",
     goToSignIn: "Send my sign-in link",
+  },
+
+  install: {
+    title: "Keep ProAgeing on your phone",
+    androidBody: "Add it to your home screen and it opens like an app — one tap, no browser, no typing the address.",
+    iosBody: "Tap the Share button at the bottom of Safari, then choose \"Add to Home Screen\".",
+    addButton: "Add to Home Screen",
+    notNow: "Not now",
   },
 
   consent: {

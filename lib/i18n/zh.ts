@@ -1204,7 +1204,7 @@ export const zh: Dictionary = {
       countOnlyFull: "只计算完整的站立——完全站起，再完全坐下。",
       seeResults: "查看我的结果",
       standsIn30: "30 秒内完整站立次数",
-      typicalRange: (lo: number, hi: number) => `你所在组别的典型范围：${lo}–${hi} 次（示例参考）。`,
+      typicalRange: (lo: number, hi: number) => `你所在组别的典型范围：${lo}–${hi} 次（Rikli & Jones，1999年）。`,
       disclaimer: "这是一项教育性的筛查检测，并非诊断。如果测试过程中你感到很不稳，请告诉你的医生。",
       sources: "资料来源：Rikli & Jones Senior Fitness Test，1999年（参考范围）· Cooper 等人，《英国医学期刊》，2010年（死亡率关联）。",
       result: {
@@ -1260,6 +1260,14 @@ export const zh: Dictionary = {
     linkFailed:
       "付款已完成，但登录链接没能自动发出。请输入你付款时用的邮箱，我们马上再发一次。",
     goToSignIn: "把登录链接发给我",
+  },
+
+  install: {
+    title: "把 ProAgeing 放到手机主屏幕",
+    androidBody: "加到主屏幕后，它打开起来就像一个应用——点一下就进，不用开浏览器，也不用输网址。",
+    iosBody: "点一下 Safari 下方的「分享」按钮，再选「加入主画面」。",
+    addButton: "加到主屏幕",
+    notNow: "暂时不用",
   },
 
   consent: {
