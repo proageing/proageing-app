@@ -53,7 +53,10 @@ export const PROTEIN_FOODS = [
   { key: "soyaMilk", grams: 7, group: "everyday" },
   { key: "peanuts", grams: 7, group: "everyday" },
   { key: "wholemealBread", grams: 8, group: "everyday" },
-  { key: "fishPalm", grams: 22, group: "everyday" },
+  // 22 -> 23, 2026-08-17: AFCD's barramundi (the same species Singapore calls
+  // sea bass) steamed no added fat is 22.9 g/100 g -- 22.9 on the same 100 g
+  // cooked "palm-sized" portion chickenPalm below uses. See proteinSources.ts.
+  { key: "fishPalm", grams: 23, group: "everyday" },
   { key: "chickenPalm", grams: 30, group: "everyday" },
   { key: "dhal", grams: 9, group: "everyday" },
   { key: "fishSoup", grams: 25, group: "hawker" },

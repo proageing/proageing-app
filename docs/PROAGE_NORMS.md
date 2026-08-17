@@ -427,7 +427,7 @@ recorded here.
    | `soyaMilk` | Unsweetened soya milk, 1 glass | 7 | everyday |
    | `peanuts` | Peanuts, small handful | 7 | everyday |
    | `wholemealBread` | Wholemeal bread, 2 slices | 8 | everyday |
-   | `fishPalm` | Fish, palm-sized | 22 | everyday |
+   | `fishPalm` | Fish, palm-sized | 23 | everyday |
    | `chickenPalm` | Chicken breast, palm-sized | 30 | everyday |
    | `dhal` | Dhal, 1 bowl | 9 | everyday |
    | `fishSoup` | Fish soup | 25 | hawker |
@@ -444,7 +444,7 @@ recorded here.
 
    > **`MISSING` — no serving weight is recorded for any row, and this is what blocks verification.** Every figure above is *grams of protein per typical serving*. Every food-composition database, including HPB's, publishes *grams of protein per 100 g of food*. Converting between the two needs the weight of the serving — how many grams a "palm-sized" piece of fish is, what a hawker chicken rice plate weighs, what one piece of tau kwa weighs. That number appears nowhere: not in `proteinCalculator.ts`, not in the code comments, not in `en.ts`. So even with a per-100 g source in hand, most rows still cannot be checked — the comparison has two unknowns and one equation. A handful of rows escape this because their serving weight is common knowledge (`egg`, `milk`, `wholemealBread`, `soyaMilk`); the deliberately vague ones (`fishPalm`, `chickenPalm`, `peanuts`, "small tub", "1 bowl") and every `hawker` row do not. Deciding the serving weights is a prerequisite to sourcing the table, not a follow-up to it.
 
-   > **`MISSING` — and the most substantive gap in this document.** **Seventeen of these 20 gram values have no source, anywhere** (as first written, all 19 of the then-19 had none; `egg` and the two chicken rice rows have since been checked against HPB — §3a). Not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The code comment says only *"Foods someone here actually eats, with protein rounded to whole grams… Figures are typical servings, not precise ones."* The displayed `sources` string cites PROT-AGE and ESPEN, but those are the source for the **target**, not for the food figures.
+   > **`MISSING` — and the most substantive gap in this document.** **Eleven of these 20 gram values have no source, anywhere** (as first written, all 19 of the then-19 had none; nine rows have since been checked, six against HPB — §3a — and six against AFCD — §3b, with one row, `egg`, confirmed by both independently). Not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The code comment says only *"Foods someone here actually eats, with protein rounded to whole grams… Figures are typical servings, not precise ones."* The displayed `sources` string cites PROT-AGE and ESPEN, but those are the source for the **target**, not for the food figures.
    >
    > This matters more than an ordinary citation gap. The target says a 70 kg person needs 70–84 g; these 19 numbers are what tells them whether they got there. An unsourced food table is the part a dietitian would question first, and the part that decides whether the tool's advice is actually followed.
    >
@@ -487,7 +487,100 @@ Four records, transcribed as supplied. Note that HPB publishes its own provenanc
 
 Note what a green run does **not** mean. Seventeen rows have no mapping, so the script's own summary line reads `3 verified, 17 still unsourced` — it reports the gap rather than passing quietly over it, and it prints HPB's `Borrowed` flag next to `egg` so a tick never makes that value look stronger than it is.
 
-**What is still open after this pass:** of 20 rows, one is fully sourced (`egg`), two have a sourced density on an assumed serving weight (the chicken rice pair), and **17 remain unsourced**. The next lookups worth doing, in order of how much they move the tally: `chickenPalm` (30 g, now the largest single value), `economyRice` (30 g), `fishPalm` (22 g), and plain `tau kwa` / firm beancurd to close the row above. Each needs a serving weight decided alongside it, per the note in §3 — and that weight now has a home with a required justification field (`ProteinSource.basis`, plus `servingSource` marking it `measured` / `conventional` / `assumed`), which is what stopped the serving weights from going unrecorded again.
+**What is still open after this pass:** of 20 rows, **9 are verified** — `egg` (HPB, cross-checked by AFCD), the chicken rice pair (HPB), and `chickenPalm`, `fishPalm`, `wholemealBread`, `peanuts`, `milk`, `tauKwa` (AFCD) — and **11 remain unsourced**: `softTofu`, `greekYoghurt`, `soyaMilk`, `dhal`, `fishSoup`, `yongTauFoo`, `fishBeeHoon`, `economyRice`, `leiCha`, `thosaiDhal`, `wantonMee`. The next lookups worth doing, in order of how much they move the tally, are all hawker dishes AFCD cannot supply: `economyRice` (30 g), `yongTauFoo` (28 g), `fishBeeHoon` (28 g), `fishSoup` (25 g) — these need a Singapore-specific source, which remains unreachable from this sandbox. Every serving weight, mapped or not, now has a home with a required justification field (`ProteinSource.basis`, plus `servingSource` marking it `measured` / `conventional` / `assumed`), which is what stopped serving weights from going unrecorded again.
+
+### 11.3b — A second dataset: Australia's AFCD, and where it may and may not be used
+
+**AFCD Release 3 (FSANZ), supplied as a bulk download, 2026-08-17.** A real
+national food composition table — Australia's, with documented per-record
+derivation (`Analysed` vs `Recipe`) — not a search-engine guess. It changes
+what is checkable here in a way HPB alone could not: HPB's four records cover
+egg and two chicken rice variants; AFCD is a full table, so anything that
+isn't particularly Singaporean can be looked up directly.
+
+**The boundary matters more than the table.** AFCD is the right authority for
+a plain chicken breast, a glass of milk, a peanut — foods that don't vary by
+cuisine. It is the **wrong** authority for a Singapore hawker dish: there is
+no yong tau foo, no lei cha, no thosai in an Australian composition table, and
+nothing in it should be stretched to stand in for one. This pass used AFCD
+only where the food itself is not Singapore-specific, and left every hawker
+row alone.
+
+**Six rows now verified against it, all on a searched-and-confirmed match, not
+a keyword hit:**
+
+| Our row | Our figure | AFCD record | Density | Serving | Verdict |
+|---|---|---|---|---|---|
+| `chickenPalm` | 30 g | Chicken, breast, lean flesh, grilled, no added fat | 29.8 g/100 g | 100 g *(conventional — standard cooked "palm-sized" portion)* | **Confirmed exactly.** 29.8 × 1.00 = 29.8 → 30. No change. |
+| `fishPalm` | 22 g → **23 g** | Barramundi, aquacultured, fillet, steamed, no added fat | 22.9 g/100 g | 100 g *(same convention as chickenPalm)* | **Corrected.** Barramundi is the species Singapore calls sea bass — a genuine species match, not an Australian stand-in. 22.9 × 1.00 = 22.9 → 23, one gram above the previous value. Changed in code; see below. |
+| `wholemealBread` | 8 g | Bread, from wholemeal flour | 10.4 g/100 g | 75 g *(conventional — 2 slices at ~37–38 g each)* | **Confirmed.** 10.4 × 0.75 = 7.8 → 8. No change. |
+| `peanuts` | 7 g | Nut, peanut, with skin, raw, unsalted | 24.7 g/100 g | 28 g *(conventional — the standard international "1 oz of nuts" serving)* | **Confirmed.** 24.7 × 0.28 = 6.92 → 7. No change. |
+| `milk` | 8 g | Milk, cow, fluid, regular fat (~3.5%) | 3.3 g/100 g | 250 g *(conventional — standard "glass of milk")* | **Confirmed.** 3.3 × 2.50 = 8.25 → 8. No change. |
+| `tauKwa` | 12 g | Tofu (soy bean curd), firm, as purchased | 12.8 g/100 g | 90 g *(assumed — a commonly cited weight for one commercial tau kwa piece)* | **Weakest of the six, flagged `assumed` rather than `conventional`.** AFCD carries exactly one tofu entry and does not identify it as Singapore-style pressed beancurd, so this is the closest available proxy, not a confirmed match. 12.8 × 0.90 = 11.52 → 12. No change to the figure, but treat the match itself as provisional. |
+
+**`fishPalm` is a correction, made the same way the chicken rice split was —
+the source disagreed with the table, so the table changed.** 22 g became
+23 g in `lib/assessments/proteinCalculator.ts`, `data/afcd-food-composition.csv`
+supplies the record, and both `proageing-site` pages were regenerated from
+their own build script. A one-gram difference is not evidence of a deeper
+error in the original figure; it is what re-deriving a rounded number from a
+slightly different route than whoever chose 22 g originally produces.
+
+**One independent cross-check, no change to the table.** AFCD's own egg
+record — `Egg, chicken, whole, raw`, `Analysed`, 12.6 g/100 g — agrees with
+HPB's borrowed 12.56 g/100 g to within 0.04 g. Two national tables, two
+different derivation methods, the same answer. This is the strongest evidence
+any row in this document has, and it changes nothing: `egg` was already
+verified from HPB alone, so this is a second, independent confirmation.
+
+**Three candidates were searched and deliberately rejected**, each kept in
+`data/afcd-food-composition.csv` with a note, the same convention as *Tau kwa
+pau* in the HPB file:
+
+- **`softTofu`** — AFCD carries exactly one tofu entry, and it is `firm`. Soft
+  or silken tofu is a genuinely different product with less protein per
+  100 g; using the firm figure would overstate it, not verify it.
+- **`greekYoghurt`** — AFCD's yoghurt entries are `natural` (5.1 g/100 g) or
+  flavoured. Greek yoghurt is strained and runs noticeably higher in protein
+  than natural yoghurt; the natural-yoghurt figure would understate it.
+- **`dhal`** — AFCD's lentil entries are dry or `boiled, drained`
+  (7.3 g/100 g). A bowl of dhal curry is diluted with liquid and oil, a
+  different preparation from drained plain lentils; applying that density
+  would overstate the figure.
+
+**One genuine disagreement was found, and it was not resolved here.**
+`soyaMilk` reads 7 g, one gram *less* than `milk`'s 8 g. But AFCD's
+unsweetened-adjacent soy beverage record is 3.7 g/100 g protein — **denser**
+than dairy milk's 3.3 g/100 g. At the same 250 mL "glass" convention that
+independently confirms `milk` at 8 g, the same convention gives soya milk
+**9 g**, not 7. Two readings are possible — the two rows assume different
+glass sizes, or `soyaMilk`'s 7 g deserves a second look — and this document
+does not pick one. `PROTEIN_SOURCES` leaves `soyaMilk` unmapped rather than
+force a serving weight that would make the disagreement disappear; see the
+comment in `lib/assessments/proteinSources.ts` for the arithmetic. Worth
+noting AFCD also does not record sweetened-versus-unsweetened, which our
+label specifies — a second reason not to treat the match as settled.
+
+**A pre-existing inconsistency this pass surfaced, not created.** The
+displayed `palmNote` reads *"25g is roughly a palm-sized piece of fish,
+chicken or tofu"* — but `chickenPalm` is 30 g and `fishPalm` is now 23 g,
+14 g apart from each other and both off the stated 25 g by a meaningful
+margin. This predates the AFCD pass; it was simply easier to see with two of
+the three rows now individually sourced rather than both unsourced together.
+Not fixed here — `palmNote` is displayed copy in `en.ts`/`zh.ts`, and
+changing it is a content decision, not a data-verification one.
+
+**Two engineering changes made to hold two datasets without letting them
+blur.** `SOURCE_DATA_FILE` became `SOURCE_DATA_FILES`, a map from a `dataset`
+field (`"hpb" | "afcd"`) to its CSV; every `ProteinSource` now names which
+dataset its record lives in, and `scripts/verify-protein-table.mjs` normalises
+each dataset's own column names (HPB's `source_flag`/`last_updated`, AFCD's
+`derivation`, no per-row date) into one display so a reader cannot tell which
+dataset backs a row without looking — deliberately, since the two are meant
+to be interchangeable *lookup mechanics*, never interchangeable *evidence*.
+Re-run against four new injected faults after the change — a gram value
+changed, a mapping pointing at a missing AFCD record, an unknown dataset name,
+a deleted AFCD file — all four caught, baseline and restore both green.
 
 4. **User-added items (`makeCustomFood`):** a free-text label **truncated to 40 characters** (`CUSTOM_NAME_MAX`) and grams **clamped 1–100** (`CUSTOM_GRAMS_MAX`), rounded. Falls back to a localised "Something else" label when the name is blank. These carry no source by definition — the user supplies the figure.
 
@@ -577,8 +670,11 @@ against primary sources; two held, one did not.
 | Sit-to-Stand | Disclaimer and dynamic range note both called the norms "illustrative for this prototype", hedging numbers that had already been confirmed against Rikli & Jones (1999). Understated the work rather than protecting against it. | **Fixed 2026-08-08** — removed from 4 strings on `proageing-site` (`sit-to-stand.html` + `zh/`, disclaimer *and* the `rangeNote` set in JS) and from `typicalRange` in the app's `en.ts`/`zh.ts`. Note the site carries the phrase **twice** per language, not once — the second is built in JavaScript and is easy to miss when grepping the rendered page. |
 | Balance | Same "illustrative" phrasing, but **left in place**. Unlike Sit-to-Stand these norms are not simply unhedged-and-correct: PROAGE_SCORE_SPEC.md records that the Seino mean±SD values yield negative 5th percentiles for the 80+ bands. The hedge is doing real work until that is resolved. | No change — deliberate |
 | Family History | No author/year citations by design — uses source tags (Singapore MOH / NCCN / International) instead; this is a structural difference from the other 8 checks, not a gap. | No change — not a gap |
-| **Protein Calculator** (tool) | **The 19 food gram values have no source anywhere** — not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The displayed citation covers the *target* (PROT-AGE / ESPEN), not the food figures. These are the numbers that tell someone whether they hit the target, so this is the largest open gap in this document. Provenance is unknown rather than merely uncited. | **Open, 3 of 20 now addressed and machine-checked (2026-08-17)** — the reference is settled: HPB's Singapore Food Insights Database, confirmed by Isaiah actually opening it, with four records recorded in §3a. `egg` = 7 g **verified** against it, and the chicken rice pair derived from it. The other 17 need per-item lookups, which only a human with a browser can do — the domain is blocked from the sandbox, as are USDA FoodData Central and OpenFoodFacts (checked 2026-08-17: all fail to connect). |
-| **Protein Calculator** (tool) | **No serving weight is recorded for any of the 20 rows.** Our figures are per serving; every composition database is per 100 g. Without the serving weight the two cannot be compared, so this blocks sourcing the table rather than following it. | **Open, but no longer unrecorded** — `lib/assessments/proteinSources.ts` now holds the serving weight for every mapped row, with a required `basis` and a `servingSource` of `measured`/`conventional`/`assumed`. Three rows have one. Weights still have to be decided for the vague rows (`fishPalm`, `chickenPalm`, "small handful", "1 bowl") and every remaining `hawker` row. |
+| **Protein Calculator** (tool) | **The 19 food gram values have no source anywhere** — not displayed, not in a code comment, not in `PROAGE_ASSESSMENT_SOURCES.docx`. The displayed citation covers the *target* (PROT-AGE / ESPEN), not the food figures. These are the numbers that tell someone whether they hit the target, so this is the largest open gap in this document. Provenance is unknown rather than merely uncited. | **Open, 9 of 20 now verified and machine-checked (2026-08-17)** — two references now in use: HPB's Singapore Food Insights Database (§3a, 4 records) and Australia's AFCD Release 3 (§3b, bulk download). `egg` is verified against both independently and agrees to within 0.04 g. The 11 remaining rows are all hawker dishes AFCD cannot supply — they need a Singapore-specific source, and HPB/SFA/`data.gov.sg` all still fail to connect from this sandbox (HSA was also checked and ruled out: its food-composition duties moved to SFA in 2019). |
+| **Protein Calculator** (tool) | **`fishPalm` was quietly wrong by 1 g.** AFCD's barramundi — the species Singapore calls sea bass, a genuine match — puts a 100 g steamed cooked portion at 23 g protein, not the 22 g the table showed. | **Fixed 2026-08-17** — `fishPalm` 22 → 23 g, on the same "100 g cooked, palm-sized" convention `chickenPalm` already used. Applied in the app and both `proageing-site` pages. |
+| **Protein Calculator** (tool) | **`soyaMilk` (7 g) is lower than `milk` (8 g), which AFCD's own densities don't support at equal volume** — soy beverage is 3.7 g/100 g, denser than dairy's 3.3. At the 250 mL convention that confirms `milk`, `soyaMilk` computes to 9 g, not 7. | **Open, and deliberately left open** — recorded as a disagreement rather than silently resolved either direction; needs a decision, not a verifier looking away. See §3b and `lib/assessments/proteinSources.ts`. |
+| **Protein Calculator** (tool) | **`palmNote` says "25g is roughly a palm-sized piece"**, but `chickenPalm` is 30 g and `fishPalm` is now individually-sourced at 23 g — 14 g apart from each other, both meaningfully off the stated 25 g. Pre-existing; the AFCD pass made it easier to see, not the cause of it. | **Open** — a displayed-copy decision, not a data-verification one; not changed here. |
+| **Protein Calculator** (tool) | **No serving weight is recorded for any of the 20 rows.** Our figures are per serving; every composition database is per 100 g. Without the serving weight the two cannot be compared, so this blocks sourcing the table rather than following it. | **Open, but no longer unrecorded** — `lib/assessments/proteinSources.ts` now holds the serving weight for every mapped row, with a required `basis` and a `servingSource` of `measured`/`conventional`/`assumed`. Nine rows have one. Weights still have to be decided for the 11 remaining hawker rows. |
 | **Protein Calculator** (tool) | **Two unlinked protein tables.** `PROTEIN_FOODS` (the calculator) and `howTo['hawker-protein'].portions` (the how-to) both hold protein figures for hawker dishes, with **no type-level connection**, so a correction to one silently leaves the other stale. Found by grep during the chicken rice split, not by any check. | **Both aligned 2026-08-17**, but the underlying fragility is **Open** — nothing stops them diverging again. |
 | **Protein Calculator** (tool) | **One `chickenRice` row could not carry both variants.** HPB measures roasted (8.22 g/100 g) and steamed (5.95) chicken rice separately — a **38%** spread, far wider than the whole-gram rounding the table is built on. The single 30 g row counted roasted about right and over-counted steamed by ~8 g. | **Fixed 2026-08-17** — split into `chickenRiceSteamed` (21 g) and `chickenRiceRoasted` (29 g), derived from HPB's densities on a stated 350 g-plate assumption. Applied in the app (`proteinCalculator.ts`, `en.ts`, `zh.ts`) and both `proageing-site` pages. |
 | **Protein Calculator** (tool) | "25g is roughly a palm-sized piece of fish, chicken or tofu" is displayed unsourced, and the 25–30 g per-sitting figure behind `perMeal` is code-comment-only with no citation named. | **Open** |
@@ -606,7 +702,28 @@ which settles the reference question, verifies `egg`, and turns up one genuine
 defect — the single `chickenRice` row straddling a 38% roasted/steamed spread.
 The `chickenRice` row was split the same day into steamed (21 g) and roasted
 (29 g). It also exposes the structural blocker: our figures are per serving,
-HPB's are per 100 g, and no serving weight is written down anywhere, so the
-remaining seventeen rows cannot be checked until those weights are decided. The lookups
-cannot be automated from a Claude session — `hpb.gov.sg` is blocked by the
-sandbox egress proxy.
+HPB's are per 100 g, and no serving weight is written down anywhere.
+
+**Second addendum, same day.** Isaiah then supplied a bulk download of
+Australia's AFCD Release 3 and asked for further sources to be found. HSA and
+SFA were checked and ruled out — HSA transferred food-composition duties to
+SFA in 2019, and `sfa.gov.sg`, `hpb.gov.sg` and `data.gov.sg` all still fail to
+connect from this sandbox, so no new Singapore-specific source became
+reachable. AFCD did move the needle, but only within its actual authority:
+six rows now verified (§3b), one correction made (`fishPalm` 22 → 23 g, on the
+same reasoning as the `chickenRice` split), one independent cross-check of
+`egg` (AFCD and HPB agree to 0.04 g), and one real disagreement surfaced and
+deliberately left open (`soyaMilk`) rather than quietly resolved. Three
+candidates were searched and rejected as the wrong product for the row —
+softTofu, Greek yoghurt, dhal — recorded rather than silently dropped, the
+same discipline as `Tau kwa pau` in §3a.
+
+**Where this leaves the table: 9 of 20 rows verified, 11 open.** All 11 are
+hawker dishes — `fishSoup`, `yongTauFoo`, `fishBeeHoon`, `economyRice`,
+`leiCha`, `thosaiDhal`, `wantonMee`, plus `softTofu`, `greekYoghurt`,
+`soyaMilk` and `dhal`, each rejected from AFCD for a stated reason rather than
+simply missing. Every one of them needs a Singapore-specific source, and every
+Singapore-specific source checked so far — HPB, SFA, `data.gov.sg` — is
+unreachable from this sandbox. The lookups cannot be automated from a Claude
+session; they need a human with a browser, the way the original four HPB
+records and this AFCD file both arrived.

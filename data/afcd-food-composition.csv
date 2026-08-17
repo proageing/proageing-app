@@ -1,0 +1,11 @@
+record,public_food_key,kcal_or_kj,protein_g_per_100g,derivation,retrieved,notes
+"Chicken, breast, lean flesh, grilled, no added fat",F002593,n/a,29.8,Analysed,2026-08-17,""
+"Barramundi, aquacultured, fillet, steamed with no added fat",F000387,n/a,22.9,Recipe,2026-08-17,"Barramundi is the same species Singapore calls sea bass (Lates calcarifer) -- a real species match, not an Australian stand-in for a different fish."
+"Tofu (soy bean curd), firm, as purchased",F009176,n/a,12.8,Analysed,2026-08-17,"AFCD's only tofu entry of any kind. Used as the closest available proxy for tau kwa, not a confirmed match -- AFCD does not identify a Singapore-style pressed beancurd specifically."
+"Bread, from wholemeal flour",F001553,n/a,10.4,Analysed,2026-08-17,""
+"Nut, peanut, with skin, raw, unsalted",F006107,n/a,24.7,Analysed,2026-08-17,""
+"Milk, cow, fluid, regular fat (~3.5%)",F005634,n/a,3.3,Analysed,2026-08-17,""
+"Egg, chicken, whole, raw",F003729,n/a,12.6,Analysed,2026-08-17,"Independent cross-check of HPB's egg record (12.56 g/100g, flagged Borrowed there). AFCD's own value is Analysed, not Borrowed, and the two agree to within 0.04 g -- the strongest confirmation any row in this table has."
+"Yoghurt, natural, regular fat (~3%)",F009694,n/a,5.1,Analysed,2026-08-17,"Deliberately NOT mapped to greekYoghurt. Greek yoghurt is strained and runs notably higher in protein than natural yoghurt; AFCD carries no Greek-style entry, and using this one would understate the true figure rather than verify it."
+"Soy beverage, regular fat (~3%), unfortified",F008721,n/a,3.7,Analysed,2026-08-17,"Deliberately NOT mapped to soyaMilk. At equal serving volume this is denser in protein than the milk record above (3.7 vs 3.3), which is the opposite of our table's ordering (soyaMilk 7g < milk 8g). A real disagreement, not a missing lookup -- see docs/PROAGE_NORMS.md. AFCD also does not distinguish sweetened from unsweetened, which our label specifies."
+"Lentil, dried, boiled, drained",F005177,n/a,7.3,Recipe,2026-08-17,"Deliberately NOT mapped to dhal. Boiled, drained lentils are a different preparation from a bowl of dhal curry, which is diluted with liquid and oil; applying this density to a curry-sized bowl would overstate the figure."
