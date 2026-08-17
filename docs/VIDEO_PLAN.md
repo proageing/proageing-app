@@ -339,17 +339,43 @@ with no days is a character nobody has decided how to use.
 |---|---|---|---|---|
 | **Higa** | Anchor demonstrator | `7dcf177e-4f4b-4d68-9751-3cfe6282b786` | `Higa-1` `e6711f2f-9b56-4c48-81d4-07c88f6b6ffc` | 3, 4, 8, 9, 10, 11, 14, 16, 17 |
 | **Isaiah** | Presenter | `c6b276ad-f699-4317-a95f-758bf09ab536` | `b373d660-93a7-4c68-8c14-51fb589169d5` | intro, 1, 7, 14, 21 |
-| *(to add)* | | | | |
+| **Rahimah** | Nutrition & breathing | *not yet trained* | *not yet created* | 5, 12, 15, 20 |
+| **Wei Ming** | Everyday activity & the reflective days | *not yet trained* | *not yet created* | 2, 6, 13, 19 |
+| **The moai** | Group, days about other people | **n/a — Element only** | *not yet created* | 7, 18 |
 
-**A proposal for who the additions should be**, for the user to confirm or
-replace — the point is that each has a job, not that these particular people
-are right:
+Names are working labels so prompts and file names have something unambiguous to
+say — "the woman" stopped being unambiguous the moment the cast grew past one.
+Change them freely; what must not change once a Soul is trained is the
+attribute block it was trained against.
 
-| Suggested | Why | Natural days |
+**Confirmed 2026-08-17: Higa, plus one Malay woman and one Chinese man.**
+Days were settled first and hold whoever fills the role.
+
+| Role to add | Why | Days | Count |
+|---|---|---|---|
+| **Wei Ming — a Chinese man, 55–70** | No man appears anywhere in a programme sold to both sexes. Day 13 is the strongest fit in the whole calendar — lifestyle activity is stairs, housework and the commute, the most ordinary physical day there is. Day 2 matters more than it looks: it ends on *ask your doctor about one biomarker*, and men are the least likely to. Days 6 and 19 are reflective, where a second recognisable face stops the series being single-voiced. | 2, 6, 13, 19 | 4 |
+| **Rahimah — a Malay woman, 50–65** | Nutrition days are where Singapore's diversity is most visible in real life, and 5/12/20 are exactly the three days the `hawker-protein` demonstration serves — one character covers that whole slug. **Day 15 is deliberate:** confining the only Malay character to the three food days would typecast her as "the food one", which is a worse outcome than not adding her. 15 is breathing, done in real time, and belongs to nobody in particular. | 5, 12, 15, 20 | 4 |
+| **The moai — a small mixed group, 50–70** | Days 7 and 18 are *about* other people. One person cannot depict a *moai*. Element path, not Soul — see the checklist. | 7, 18 | 2 |
+
+**Two corrections made 2026-08-17, both to this table rather than to reality.**
+An earlier version put the man on days 11, 13 and 17. Days 11 and 17 are Higa's,
+and they are precisely the progression days the anchor rule exists to protect —
+the proposal contradicted the rule three paragraphs above it. Separately, the
+earlier assignment left **days 2, 6, 15 and 19 with no character at all**. Both
+are fixed above.
+
+**Coverage, now complete.** Every day 1–21 has someone, and nobody appears once:
+
+| Character | Days | Count |
 |---|---|---|
-| A man, 55–70 | There is currently no man in a programme sold to both sexes, and strength work is where a male demonstrator matters most | 11, 13, 17 |
-| A Malay or Indian woman, 50–65 | Nutrition and hawker days are where Singapore's diversity is most visible, and this is the audience segment the food content speaks to most directly | 5, 12, 20 |
-| A small group, mixed, 50–70 | Days 7 and 18 are *about* other people — one person cannot depict a *moai* | 7, 18 |
+| Higa (anchor) | 3, 4, 8, 9, 10, 11, 14, 16, 17 | 9 |
+| Isaiah (presenter) | intro, 1, 7, 14, 21 | 5 |
+| Wei Ming — Chinese man, 55–70 | 2, 6, 13, 19 | 4 |
+| Rahimah — Malay woman, 50–65 | 5, 12, 15, 20 | 4 |
+| The moai — mixed group | 7, 18 | 2 |
+
+Days 7 and 14 carry two entries each on purpose: 7 is the presenter plus the
+group, 14 is the presenter plus Higa demonstrating. Both need the Element path.
 
 ### Adding a character — the checklist
 
@@ -394,6 +420,80 @@ Superseded, for reference only: the retired illustration was a fully white
 pixie cut on an ethnically ambiguous figure reading 60–75, and its towel-row
 still was barefoot. Do not generate against any of that.
 
+### Rahimah — nutrition and breathing
+
+Malay woman. Holds the three nutrition days plus day 15, so she is the face of
+the food content without being *only* the food content.
+
+**Not yet trained.** These values are the specification to train and generate
+*against*, and unlike Higa's they have not been confirmed by a returned
+generation — so treat any disagreement as the generation being wrong until a
+still has been inspected and this table updated to what the Soul actually does.
+Higa's block was rewritten once for exactly this reason.
+
+| Attribute | Target value |
+|---|---|
+| Ethnicity | Reads Malay Singaporean |
+| Age read | Early 50s to low 60s |
+| Hair | Dark brown, covered by a plain fitted headscarf in a muted colour — **decide once and lock it**, since it is the most recognisable thing about her silhouette |
+| Glasses | None |
+| Build | Average. Not athletic — the same rule as Higa, for the same reason. |
+| Top | Long-sleeve tunic top, dusty rose, loose enough to move in |
+| Bottom | Loose navy trousers, full length |
+| Feet | White low-profile trainers, matching the cast standard |
+| Expression | Warm, direct, unhurried. She is often talking about food, which should read as pleasure rather than instruction. |
+| Hands | Hers are the hands in the day 15 breathing shots and should match the palm-portion diagram's skin tone |
+
+A note that will matter on days 5, 12 and 20: the food in frame must be food she
+would plausibly eat. Nutrition content that puts a Malay character in front of a
+plate of char siew is worse than having no character at all.
+
+### Wei Ming — everyday activity and the reflective days
+
+Chinese man. Holds day 13 (stairs, housework, the commute — the most ordinary
+physical day in the calendar), day 2 (family history, which ends on *ask your
+doctor about one biomarker*), and days 6 and 19, where a second recognisable
+face keeps the series from being single-voiced.
+
+**Not yet trained** — same caveat as Rahimah's block above.
+
+| Attribute | Target value |
+|---|---|
+| Ethnicity | Reads Chinese Singaporean |
+| Age read | Late 50s to high 60s. Deliberately reads slightly older than Higa. |
+| Hair | Black going grey at the temples, short, neatly combed |
+| Glasses | None — keeps him distinct from Higa at a glance, which matters more than either choice on its own |
+| Build | Average, slight softness at the middle. He is a man who walks, not a man who trains. |
+| Top | Pale blue short-sleeve collared polo, tucked loosely |
+| Bottom | Stone-grey chinos |
+| Feet | White low-profile trainers, matching the cast standard |
+| Expression | Steady, a little dry. Days 2 and 19 are the two most serious days in the programme; he should look like someone you would take a straight answer from. |
+
+Day 13 is the one day that legitimately leaves the room — stairs and a commute
+cannot be shot against wood panelling. It is the documented exception to the
+set rule below, and the only one.
+
+### The moai — days 7 and 18
+
+Not a Soul. **Element only**, because a Soul takes one person per generation and
+these two days exist to show more than one person.
+
+| Attribute | Target value |
+|---|---|
+| Size | Four to five people. Enough to read as a group, few enough that faces stay legible at phone size. |
+| Mix | Mixed sexes, and **this is where an Indian face belongs** — the confirmed solo cast is East Asian, Malay and Chinese, so without it the programme has no Indian representation at all. |
+| Age read | 50 to 70, varied within it |
+| Wardrobe | The cast palette — sage, dusty rose, pale blue, stone, navy — so the group reads as the same world as the solo days |
+| Arrangement | Seated or standing in conversation, turned toward each other rather than at camera. Day 18 is about five friends for life, not a group photo. |
+| Feet | Trainers, but do not fight for uniformity here — a group in identical shoes reads as a uniform |
+
+**Whether the group can be built from the individual characters' Elements —
+so the *moai* is faces the viewer already knows from earlier days — is
+technically unverified.** It would be the stronger version by a wide margin. Do
+not plan on it until someone has confirmed that multi-Element generation
+actually holds several identities in one frame; the fallback is a single group
+Element generated from one image.
+
 ### The set
 
 | Attribute | Locked value |
@@ -404,12 +504,20 @@ still was barefoot. Do not generate against any of that.
 | Lighting | Flat, even, no dramatic shadow. A soft contact shadow under the subject only. |
 | Props | Only what the exercise needs — armchair, wall, bath towel. Nothing decorative. |
 | Rejected | A furnished living room with brown sofa, side table, window and cushions. It was generated, shipped, and replaced: at the size these render, furniture competes with the body, and the body is the instruction. |
+| **Documented exception** | **Day 13 only.** Lifestyle activity is stairs, housework and the commute, and none of those can be shot against wood panelling without lying about what the day is. Keep the wardrobe, lighting and palette identical so it still reads as the same series; the room is what gives. No other day may leave the set. |
 
 ### Style
 
-Photorealistic, generated from the Higa Soul on `text2image_soul_v2` /
-`soul_cinema_studio`. Flat even lighting, no dramatic shadow, one soft contact
-shadow under the subject. Muted palette. No text anywhere in frame.
+Photorealistic. Solo days generate from **that day's own Soul** on
+`text2image_soul_v2` / `soul_cinema_studio` — Higa's is the only one trained so
+far, and the register it returned (verified, job `a1ee7c2a`) is the target the
+others should match. Multi-person days (7, 14, 18) take the Element path on a
+non-Soul model instead, which is a hard constraint, not a stylistic choice.
+
+Flat even lighting, no dramatic shadow, one soft contact shadow under the
+subject. Muted palette. No text anywhere in frame. The cast palette is sage
+(Higa), dusty rose (Rahimah), pale blue and stone (Wei Ming) — different enough
+to tell people apart in a thumbnail, close enough to read as one series.
 
 ### Objects, which need pinning too
 
@@ -629,7 +737,8 @@ Cheaper per unit and reusable, so they are the better first spend.
 
 ## 8. Decision log
 
-All settled. Nothing here is waiting on the user; the next session can execute.
+Every decision is settled — the next session can execute without asking
+anything. What is *not* done is asset creation; see the note under the table.
 
 | Decided | Answer |
 |---|---|
@@ -640,14 +749,25 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 | Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
 | How many | All seventeen. Every day gets its own video. |
 | Visual register | **Photoreal**, via the Higa Soul. The three human demonstrations migrate; diagrams stay diagrams. |
-| Cast | Growing. Higa anchors; more characters are being added so the cast reflects a multi-ethnic audience of both sexes. Registry and casting rules in §3a. |
+| Cast | **Settled 2026-08-17: five entries.** Higa anchors (East Asian woman, 9 days). Isaiah presents (5). **Rahimah**, a Malay woman, takes 5, 12, 15, 20. **Wei Ming**, a Chinese man, takes 2, 6, 13, 19. **The moai**, a mixed group, takes 7 and 18. All 21 days covered; nobody appears once. §3a. |
+| Where an Indian face goes | The *moai* on days 7 and 18. The solo cast is East Asian, Malay and Chinese, so this is the only place it appears — which makes it a requirement of that group's spec, not a nice-to-have. |
+| Day 13 leaves the set | Yes, and it is the only day that may. Stairs and a commute cannot be shot against wood panelling. Wardrobe, lighting and palette stay identical. |
 
-Reference character locations are recorded in §3a, and the canonical one is
-settled: the Soul `Higa` for her, Element `Higa-1` where an Element is needed.
+Reference character locations are recorded in §3a. Higa's are live — Soul
+`7dcf177e`, Element `Higa-1` — as are Isaiah's.
 
-All settled, including the visual register — the last one, raised and closed on
-2026-08-10 once a real generation existed to judge. Nothing is waiting on the
-user.
+**What is decided versus what still has to be made.** Every *decision* is
+closed. Three assets are not: Rahimah's Soul and Element, Wei Ming's Soul and
+Element, and the *moai* Element all have to be created, and their attribute
+blocks in §3a are specifications rather than verified records. Higa's block had
+to be rewritten once against what her Soul actually returned; expect the same
+for these two, and update §3a to match reality rather than generating repeatedly
+against a table that turned out to be wrong.
+
+One open technical question, flagged rather than assumed: whether several
+Elements can hold several identities in one frame, which would let the *moai* be
+faces the viewer already knows. Worth ten minutes to establish before days 7 and
+18 are planned either way.
 
 ---
 
