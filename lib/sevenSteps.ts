@@ -74,7 +74,7 @@ export const SEVEN_STEPS: SevenStep[] = [
     science:
       "Brisk walking and other moderate intensity activities are associated with lowering the risk of health conditions that plague our longevity namely cardiovascular disease, diabetes, dementia, depression and cancer.",
     listHeading: "Move more, and move harder",
-    listItems: ["Pick up the pace until you are breathing harder but can still talk", "Build towards 150 minutes of moderate intensity activity a week", "Stand up every 30–60 minutes"],
+    listItems: ["Pick up the pace preferably to 90-100 steps per minute", "Build towards 150 minutes of moderate intensity activity a week", "Stand up every 30–60 minutes"],
     closing: "Healthy longevity comes from doing both — keeping the body in motion every day, and lifting the intensity often enough to challenge your heart and lungs.",
     assessments: [{ label: "VO2 Max & Resting HR", type: "vo2max" }],
   },
