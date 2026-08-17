@@ -184,19 +184,73 @@ pinned in writing and re-stated in every prompt. This section is that pin.
 It is derived from the four assets already approved, not invented — so
 anything generated against it matches what is live today.
 
-**A reference character already exists** — held by the user in the generation
-tool, 2026-08-10. Every one of the seventeen prompts must be driven from that
-reference rather than from a written description. Text alone will not hold a
-character across seventeen generations; that is the failure this avoids.
+**The references already exist in Higgsfield.** Recorded 2026-08-10 by querying
+the account rather than by being told, so these IDs are copied from the API and
+not retyped from memory. Every prompt must be driven from one of these rather
+than from a written description — text alone will not hold a character across
+seventeen generations, and that is the failure this section exists to avoid.
 
-> **Next session: record where the reference lives, here, before generating.**
-> A hand-off that says "a reference exists" without saying where is a hand-off
-> that gets ignored.
+### Where they live
 
-The written attributes below therefore serve two purposes rather than one:
-they are the **acceptance checklist** for judging whether a generation came
-back on-model, and the fallback description if the reference is ever
-unavailable. They are not the primary input any more.
+Two mechanisms, and they are **not interchangeable** — which one you pick
+dictates which models you can generate with.
+
+**Trained Soul characters** (identity-faithful, one person per generation):
+
+| Name | `soul_id` | Status |
+|---|---|---|
+| Higa | `7dcf177e-4f4b-4d68-9751-3cfe6282b786` | ready |
+| Isaiah | `c6b276ad-f699-4317-a95f-758bf09ab536` | ready |
+
+**Reference Elements** (single image, instant, several subjects allowed in one
+shot):
+
+| Name | `element_id` | Created |
+|---|---|---|
+| Higa-1 | `e6711f2f-9b56-4c48-81d4-07c88f6b6ffc` | 2026-08-10, newest |
+| Higa | `2570b873-518c-49f9-8262-41b96c5aa9fc` | 2026-08-08 |
+| Isaiah | `b373d660-93a7-4c68-8c14-51fb589169d5` | 2026-08-08 |
+| Zoid | `84cd1c46-52b8-4e78-9d44-7b03102d9bf6` | 2026-08-03 |
+
+### Which is which
+
+Read from the names, and the mapping onto §0 is almost too neat:
+
+- **Higa → the seventeen illustrated videos.** The woman described below.
+  Both a Soul and two Elements exist for her; `Higa-1` is the newest Element.
+- **Isaiah → the five presenter pieces.** The account holder, i.e. the
+  presenter. Also has both a Soul and an Element.
+- **Zoid** — unidentified, oldest, and probably unrelated to this programme.
+
+> **Confirm before generating.** This mapping is inferred from names. The image
+> URLs are on a CloudFront host the Claude Code sandbox cannot reach — the
+> egress proxy 403s it — so nobody has actually looked at these four pictures
+> to check. Open them in Higgsfield and confirm which element is her before
+> committing a batch. Also settle whether `Higa` or `Higa-1` is canonical;
+> having two invites the wrong one being used halfway through.
+
+### The constraint that changes the plan
+
+A trained Soul takes **one person per generation**. Multi-subject shots cannot
+use it and must use Elements instead.
+
+That lands on two specific days: **day 7** (reach out to one person) and
+**day 18** (the Okinawan *moai*, a group of about five friends) both need more
+than one person in frame. Plan those two for the Element path from the start
+rather than discovering it mid-batch. The same applies to any shot pairing her
+with a friend.
+
+Model compatibility follows from the choice: a Soul only generates on Soul V2
+and Soul Cinema, while Elements work across the Nano Banana, GPT Image,
+Seedream, Cinema Studio, Seedance and Kling families and **not** on the Soul
+models. So the reference decides the model, not the other way round.
+
+### What the written attributes are now for
+
+Since prompts are reference-led, the table below is no longer the primary
+input. It is the **acceptance checklist** — what to hold a returned generation
+against to see whether it came back on-model — and the fallback description if
+a reference is ever unavailable.
 
 ### Margaret — the primary subject
 
@@ -412,8 +466,10 @@ All settled. Nothing here is waiting on the user; the next session can execute.
 | Learn text | Video leads; text stays beneath, collapsed, behind a `HowToPanel`-style worded toggle. |
 | How many | All seventeen. Every day gets its own video. |
 
-Still to be recorded here by whoever picks this up: **where the reference
-character lives**.
+Reference character locations are recorded in §3a. One thing left for the user,
+and it needs eyes rather than a decision: confirm which saved element is her,
+and whether `Higa` or `Higa-1` is canonical. The sandbox cannot open the
+preview images.
 
 ---
 
