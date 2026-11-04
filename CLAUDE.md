@@ -80,18 +80,25 @@ so they import the real `.ts` modules with no dev dependency and work offline.
 |---|---|
 | `npx tsc --noEmit && npm run build` | The deploy gate. Always, before pushing. |
 | `npm run verify:protein` | The protein food table against vendored source data. |
+| `npm run verify:program` | The client-safe programme shape table against the real (server-only) EN and ZH content. |
 | `npm run verify:translations` | Numbers, citations and structure surviving into `zh.ts`. Has known false positives where the Chinese legitimately localises a journal name; read the output, don't just check the exit code. |
 
 ## Things that will bite you
 
 - **The day 7 profile reveal depends on which checks appear by that day.**
   `app/program/page.tsx`'s gate uses `assessmentTypesIntroducedBy(day)`, so
-  moving a check to a later day in `lib/program21.ts` can silently mean the
+  moving a check to a later day in `lib/program21Content.ts` can silently mean the
   reveal never fires. Moving vo2max from day 3 to day 16 nearly did exactly
   that.
-- **Programme content is in two files that must stay in step** —
-  `lib/program21.ts` and `lib/program21Zh.ts`. Day counts, assessment hrefs
-  and how-to slugs all have to match.
+- **Programme content is in three files that must stay in step** —
+  `lib/program21Content.ts`, `lib/program21ContentZh.ts` and the shape table
+  `lib/program21Structure.ts`. Day counts, assessment hrefs and flags all have
+  to match; `npm run verify:program` fails on drift.
+- **The 21-day lesson text is server-only, on purpose.** The two content
+  files import `server-only` and reach browsers one day at a time through
+  `/api/program/day`, which checks for a paid plan (or admin). Never import
+  them from a client component: it would put the paid text back in the public
+  JS bundle. Client code uses `lib/program21Structure.ts`.
 - **`_`-prefixed directories under `app/` are excluded from routing.** An
   `app/_devfigs/page.tsx` 404s; `app/devfigs/page.tsx` works. If you create a
   scratch route to preview a component, delete it before committing.

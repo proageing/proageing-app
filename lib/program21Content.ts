@@ -1,3 +1,9 @@
+// SERVER-ONLY. This file holds the programme text and must never be imported
+// from client code, or the paid content ships to every visitor in the JS
+// bundle. Browsers get a day at a time from /api/program/day, after a
+// paid-plan check. Client code needing only the shape of the programme
+// (which day has which checks) uses lib/program21Structure.ts.
+//
 // The 21-Day ProAgeing Challenge — daily content, built from the actual
 // Celebrate You! curriculum (proageing/CelebrateYouCourse) and the 7
 // ProAgeing Steps already implemented as assessments (lib/assessmentTypes.ts).
@@ -9,24 +15,10 @@
 // assessments that can plausibly shift in 21 days.
 
 
-import { PROGRAM21_DAYS_ZH } from "./program21Zh";
+import "server-only";
 
-export interface AssessmentLink {
-  label: string;
-  href: string;
-}
-
-export interface Program21Day {
-  day: number;
-  pillar: string;
-  learn: string;
-  assessments?: AssessmentLink[];
-  action: string;
-  reflect: string;
-  reflectExamples?: string[];
-  isProfileReveal?: boolean;
-  isClose?: boolean;
-}
+import { PROGRAM21_DAYS_ZH } from "./program21ContentZh";
+import type { Program21Day } from "./program21Structure";
 
 export const PROGRAM21_DAYS: Program21Day[] = [
   {

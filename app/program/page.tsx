@@ -19,7 +19,7 @@ import {
   type ProgramEnrollment,
 } from "@/lib/program";
 import { getCompletionSummary, type CompletionSummary, type MovementDirection } from "@/lib/programCompletion";
-import { contentForDay } from "@/lib/program21";
+import { structureForDay, type Program21Day } from "@/lib/program21Structure";
 import { howToSlugsForDay, isFirstAppearance } from "@/lib/howTo";
 import { HowToPanel } from "@/components/howto/HowToPanel";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
@@ -63,17 +63,17 @@ const PAYWALL_ENABLED = true;
 function assessmentTypesIntroducedBy(day: number): string[] {
   const types = new Set<string>();
   for (let d = 1; d <= day; d++) {
-    for (const a of contentForDay(d).assessments ?? []) {
-      types.add(a.href.split("/").pop()!);
+    for (const href of structureForDay(d).assessmentHrefs) {
+      types.add(href.split("/").pop()!);
     }
   }
   return [...types].filter((type) => ASSESSMENT_TYPES.some((a) => a.type === type));
 }
 
 function assessmentTypesForDay(day: number): string[] {
-  const content = contentForDay(day);
-  if (content.isClose || !content.assessments) return [];
-  return content.assessments.map((a) => a.href.split("/").pop()!);
+  const shape = structureForDay(day);
+  if (shape.isClose) return [];
+  return shape.assessmentHrefs.map((href) => href.split("/").pop()!);
 }
 
 // The Act card's Done checkbox pre-fills as checked when a day's linked
@@ -200,7 +200,7 @@ function ProgramPageInner() {
       // The 21-Day Challenge and 90-Day Transformation are both paid,
       // one-time purchases (docs/PLAN.md §5) — either grants access to the
       // programme content that exists today, which is the 21-day track
-      // (lib/program21.ts). 90-day-specific content hasn't been built yet.
+      // (lib/program21Content.ts). 90-day-specific content hasn't been built yet.
       //
       // The gate used to apply only when the address carried ?gate=1, which
       // the home-page card added and the Programme tab did not — so anyone
@@ -253,7 +253,7 @@ function ProgramPageInner() {
         setReflection(progress.checkin_note ?? "");
       }
       await refreshMomentum(active.id, day, today);
-      if (contentForDay(day).isClose) {
+      if (structureForDay(day).isClose) {
         setTestimonial((await getTestimonial(active.id, day)) ?? emptyTestimonial());
       }
       // Recomputed after loadDayState, which may have just backfilled a
@@ -281,6 +281,35 @@ function ProgramPageInner() {
     };
   }, [previewRequested, userId]);
 
+  // The lesson text is not in this page's code — it is paid content, served
+  // one day at a time by /api/program/day after a server-side plan check.
+  // Fetched whenever the viewed day or language changes.
+  const [dayText, setDayText] = useState<Program21Day | null>(null);
+  const [dayTextError, setDayTextError] = useState(false);
+  useEffect(() => {
+    if (loadState !== "ready") return;
+    let cancelled = false;
+    setDayTextError(false);
+    (async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const res = await fetch(`/api/program/day?day=${viewedDay}&locale=${locale}`, {
+          headers: { Authorization: `Bearer ${session?.access_token ?? ""}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const data = (await res.json()) as Program21Day;
+        if (!cancelled) setDayText(data);
+      } catch {
+        if (!cancelled) setDayTextError(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadState, viewedDay, locale]);
+
   const maxViewableDay = previewAll
     ? (enrollment?.program_length_days ?? PROGRAM_LENGTH_DAYS)
     : currentDay;
@@ -297,7 +326,7 @@ function ProgramPageInner() {
     setCompletedChecks(await listCompletedAssessments(userId, ASSESSMENT_TYPES.map((a) => a.type)));
     setReflection(progress?.checkin_note ?? "");
     await refreshMomentum(enrollment.id, day, currentDay);
-    if (contentForDay(day).isClose) {
+    if (structureForDay(day).isClose) {
       setTestimonial((await getTestimonial(enrollment.id, day)) ?? emptyTestimonial());
     } else {
       setTestimonial(emptyTestimonial());
@@ -339,7 +368,7 @@ function ProgramPageInner() {
       return;
     }
     await refreshMomentum(enrollment.id, viewedDay, currentDay);
-    if (contentForDay(viewedDay).isClose) {
+    if (structureForDay(viewedDay).isClose) {
       const { error: testimonialError } = await saveTestimonial(userId, enrollment.id, viewedDay, testimonial);
       if (testimonialError) {
         setSaving(false);
@@ -593,7 +622,19 @@ function ProgramPageInner() {
     );
   }
 
-  const content = contentForDay(viewedDay, locale);
+  // Waiting on (or failing to get) the day's text from the server.
+  if (!dayText || dayText.day !== viewedDay) {
+    return (
+      <main className="mx-auto max-w-xl overflow-x-hidden px-6 pb-28 pt-8">
+        <p role="status" className="text-base text-ink-soft dark:text-ink-dark-soft">
+          {dayTextError ? t.programme.dayLoadFailed : t.common.loading}
+        </p>
+        <TabBar />
+      </main>
+    );
+  }
+
+  const content = dayText;
   const isToday = viewedDay === currentDay;
 
   return (

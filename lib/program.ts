@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 
 // Phase themes from docs/PLAN.md §2, for a 90-day enrollment. PAUSED —
-// the 21-day programme (lib/program21.ts) is the active track for now;
+// the 21-day programme (lib/program21Content.ts) is the active track for now;
 // this is kept for when 90-day work resumes, not currently used by
 // app/program.
 export const PROGRAM_PHASES = [

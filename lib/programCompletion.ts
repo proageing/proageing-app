@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
-import { contentForDay } from "@/lib/program21";
+import { structureForDay } from "@/lib/program21Structure";
 import { formatEntryData } from "@/lib/formatResult";
 import { readingsTierFor, type ReadingsTier } from "@/lib/assessments/readingsTier";
 import type { AssessmentType } from "@/lib/importHistory";
@@ -49,9 +49,8 @@ function directionFor(first: ReadingsTier | null, latest: ReadingsTier | null): 
 // The checks day 21 asks the user to retake, read straight off the day's
 // own content so the two can't drift apart.
 function retakeTypes(programLengthDays: number): AssessmentType[] {
-  const close = contentForDay(programLengthDays);
-  if (!close.assessments) return [];
-  return close.assessments.map((a) => a.href.split("/").pop() as AssessmentType);
+  const close = structureForDay(programLengthDays);
+  return close.assessmentHrefs.map((href) => href.split("/").pop() as AssessmentType);
 }
 
 // Longest run of consecutive completed days anywhere in the programme —

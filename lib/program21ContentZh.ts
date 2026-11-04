@@ -1,4 +1,6 @@
-import type { Program21Day } from "./program21";
+import "server-only";
+
+import type { Program21Day } from "./program21Structure";
 
 // Chinese copy for the 21-Day Challenge.
 //

@@ -64,7 +64,7 @@ page cannot. Check the Vercel dashboard, or load the URL yourself.
 
 Well past the Phase 0 scaffold that `docs/PLAN.md` §9 describes. In the repo
 today: 9 assessment checks, 2 calculators (see `lib/tools.ts`), the 21-day
-programme with how-to content and video (`lib/program21.ts`,
+programme with how-to content and video (`lib/program21Content.ts`,
 `components/howto/`), the Longevity Profile and trends, Stripe checkout
 routes, and a bilingual EN/ZH dictionary.
 

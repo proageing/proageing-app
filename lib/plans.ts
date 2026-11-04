@@ -18,7 +18,7 @@ export interface Plan {
   // How long the programme runs. The Stripe webhook enrols the buyer with
   // this length so day 1 is the day they paid.
   lengthDays: number;
-  // 90-day programme content doesn't exist yet (lib/program21.ts only
+  // 90-day programme content doesn't exist yet (lib/program21Content.ts only
   // covers the 21-day track) — greyed out on /upgrade so nobody can pay
   // for something that isn't there to deliver.
   comingSoon?: boolean;

@@ -2,14 +2,15 @@
   "name": "proageing-app",
   "version": "0.1.0",
   "private": true,
-  "description": "ProAgeing 90-Day Transformation — premium healthy longevity programme (Next.js PWA + Supabase).",
+  "description": "ProAgeing 90-Day Transformation \u2014 premium healthy longevity programme (Next.js PWA + Supabase).",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "verify:protein": "node --experimental-strip-types scripts/verify-protein-table.mjs",
-    "verify:translations": "node --experimental-strip-types scripts/verify-translations.mjs"
+    "verify:translations": "node --experimental-strip-types scripts/verify-translations.mjs",
+    "verify:program": "node --experimental-strip-types scripts/verify-program-structure.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

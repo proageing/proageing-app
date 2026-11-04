@@ -32,7 +32,7 @@ Tagline direction: **"Add life to your years."** Avoid "anti-ageing" framing.
   be reinforced across the full 3 weeks), Day 21 retakes the assessments
   that can plausibly shift in 21 days and closes with a Keystone Habit
   declaration. Content grounded in the real Celebrate You! curriculum
-  (`proageing/CelebrateYouCourse`), not invented. See `lib/program21.ts`.
+  (`proageing/CelebrateYouCourse`), not invented. See `lib/program21Content.ts`.
   **Pricing changed 2026-07-29** (§5): no longer the free on-ramp — it's
   now a S$39 one-time purchase, gated behind the Stripe paywall
   (`app/program`'s `no-access` state). The 9 free assessment checks stay

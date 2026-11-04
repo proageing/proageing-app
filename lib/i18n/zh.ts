@@ -316,6 +316,7 @@ export const zh: Dictionary = {
   },
 
   programme: {
+    dayLoadFailed: "今天的课程没能加载出来。请检查网络，然后重新打开此页面。",
     notStarted: {
       eyebrow: "21 天挑战",
       title: "开始实践 ProAgeing 七大步骤",

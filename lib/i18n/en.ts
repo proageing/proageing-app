@@ -315,6 +315,7 @@ export const en = {
   },
 
   programme: {
+    dayLoadFailed: "We couldn't load today's lesson. Please check your connection and reopen this page.",
     notStarted: {
       eyebrow: "21-Day Challenge",
       title: "Start living the 7 ProAgeing Steps",

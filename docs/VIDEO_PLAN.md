@@ -2,7 +2,7 @@
 
 **Purpose.** Everything a fresh session needs to write production plans and
 video-generation prompts for the 21-Day Challenge, without first having to
-reverse-engineer the app. Read this, then `lib/program21.ts` for verbatim copy.
+reverse-engineer the app. Read this, then `lib/program21Content.ts` for verbatim copy.
 
 **Status.** Nothing in this document has been produced yet. Two exercise
 demonstration clips exist already (below) and set the house style; the daily
@@ -47,8 +47,8 @@ than a detail. §3a is the cast bible that exists to prevent that.
 All seventeen are wanted — confirmed 2026-08-10. No tighter
 set; every day gets its own.
 
-**Source of truth.** Day copy is `lib/program21.ts` (English) and
-`lib/program21Zh.ts` (Chinese). If this document and those files disagree,
+**Source of truth.** Day copy is `lib/program21Content.ts` (English) and
+`lib/program21ContentZh.ts` (Chinese). If this document and those files disagree,
 the files win — quote from them, don't retype from here.
 
 ---
@@ -133,7 +133,7 @@ So this is an engineering requirement, not just a production note:
 - **Resolve the video per locale**, e.g. `/program/day-03.en.mp4` and
   `-zh.mp4`, exactly as every other string in the app resolves.
 - **When a locale's video is missing, fall back to the translated Learn text** —
-  which already exists in `lib/program21Zh.ts` and is already correct. Never
+  which already exists in `lib/program21ContentZh.ts` and is already correct. Never
   fall back to the other language's audio.
 - That fallback is what lets English ship the day it is ready without shipping
   a bug, and it means each Mandarin video can be dropped in later with no code
