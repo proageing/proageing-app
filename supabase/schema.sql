@@ -138,6 +138,23 @@ alter table public.day_progress enable row level security;
 alter table public.testimonials enable row level security;
 alter table public.subscriptions enable row level security;
 
+-- True when the caller has a paid, active programme plan. security definer so
+-- the check does not depend on the caller's own read access to `subscriptions`.
+create or replace function public.has_paid_plan()
+returns boolean
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.subscriptions
+    where user_id = auth.uid()
+      and status = 'active'
+      and plan in ('21-day', '90-day')
+  );
+$$;
+
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -207,8 +224,15 @@ create policy "assessment_results: insert own" on public.assessment_results
 -- program_enrollments: own or admin; can update own (e.g. status to 'completed').
 create policy "program_enrollments: select own or admin" on public.program_enrollments
   for select using (user_id = auth.uid() or public.is_admin());
+-- Enrolling needs a paid plan (or admin). The Stripe webhook enrols buyers with
+-- the service role, which bypasses RLS, so paying customers are unaffected.
+-- Before 2026-11-04 this was only `user_id = auth.uid()`, so any signed-in
+-- member could enrol — and so run the whole paid programme — for free.
 create policy "program_enrollments: insert own" on public.program_enrollments
-  for insert with check (user_id = auth.uid());
+  for insert with check (
+    user_id = auth.uid()
+    and (public.has_paid_plan() or public.is_admin())
+  );
 create policy "program_enrollments: update own" on public.program_enrollments
   for update using (user_id = auth.uid()) with check (user_id = auth.uid());
 create policy "program_enrollments: admin write" on public.program_enrollments

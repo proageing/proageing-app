@@ -201,9 +201,20 @@ function ProgramPageInner() {
       // one-time purchases (docs/PLAN.md §5) — either grants access to the
       // programme content that exists today, which is the 21-day track
       // (lib/program21.ts). 90-day-specific content hasn't been built yet.
-      if (PAYWALL_ENABLED && searchParams.get("gate") === "1") {
-        const subscription = await getActiveSubscription(user.id);
-        if (!subscription || (subscription.plan !== "21-day" && subscription.plan !== "90-day")) {
+      //
+      // The gate used to apply only when the address carried ?gate=1, which
+      // the home-page card added and the Programme tab did not — so anyone
+      // signed in could open the tab and run the whole paid programme for
+      // free. It now applies on every route in. Admins are exempt so the
+      // programme can still be reviewed without buying it.
+      if (PAYWALL_ENABLED) {
+        const [subscription, adminRow] = await Promise.all([
+          getActiveSubscription(user.id),
+          supabase.from("profiles").select("is_admin").eq("id", user.id).maybeSingle(),
+        ]);
+        const isAdmin = Boolean(adminRow.data?.is_admin);
+        const paid = subscription && (subscription.plan === "21-day" || subscription.plan === "90-day");
+        if (!isAdmin && !paid) {
           setLoadState("no-access");
           return;
         }
