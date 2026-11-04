@@ -8,6 +8,7 @@ import { ASSESSMENT_TYPES } from "@/lib/assessmentTypes";
 import { greetingNameFromEmail } from "@/lib/formatResult";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { HomeCards } from "@/components/HomeCards";
 import { AffirmationCarousel } from "@/components/AffirmationCarousel";
 import { SevenStepsSection } from "@/components/SevenStepsSection";
@@ -128,6 +129,7 @@ export default function DashboardPage() {
         <SevenStepsSection />
       </div>
 
+      <InstallPrompt />
       <TabBar />
     </main>
   );

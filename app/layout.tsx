@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/i18n/context";
+import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
 
 export const metadata: Metadata = {
   title: "ProAgeing — Add life to your years",
@@ -27,7 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LocaleProvider>{children}</LocaleProvider>
+        <LocaleProvider>
+          {children}
+          {/* Registered app-wide so the browser's own install affordance
+              keeps working even for people who dismissed our prompt. */}
+          <ServiceWorkerRegistrar />
+        </LocaleProvider>
       </body>
     </html>
   );
